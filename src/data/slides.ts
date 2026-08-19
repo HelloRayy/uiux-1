@@ -12,36 +12,36 @@ export interface RegisteredSlide extends SlideCase {
 
 export const SLIDES_DATA: RegisteredSlide[] = [
   {
-    id: 'case-1-jakobs-law',
-    title: 'Studi Kasus 1: Pola Pencarian & Filter Produk',
-    category: "Jakob's Law (Mental Models)",
-    description: 'Bandingkan antarmuka pencarian & filter berikut. Pendekatan mana yang lebih cepat dipahami dan digunakan oleh pengguna baru tanpa perlu belajar ulang?',
+    id: 'case-1-login',
+    title: 'Studi Kasus 1: Form Login & Autentikasi',
+    category: 'Recognition vs Recall (Form UX)',
+    description: 'Bandingkan dua pendekatan desain formulir login di bawah ini. Mana yang memberikan kenyamanan & kejelasan terbaik bagi pengguna?',
     optionA: {
       label: 'Desain A',
-      title: 'Eksperimental & Custom Floating Filter',
-      description: 'Menyembunyikan filter dalam menu melayang kustom dengan ikon abstrak tanpa search bar konvensional.',
+      title: 'Minimalis Placeholder-Only',
+      description: 'Hanya mengandalkan placeholder teks tanpa label, tanpa toggle intip sandi, dan tombol submit abu-abu datar.',
       isCorrect: false,
       keyPoints: [
-        'Melanggar Mental Model: Pengguna bingung mencari letak kotak pencarian utama.',
-        'Mystery Meat UI: Ikon filter kustom tanpa teks keterangan membingungkan 70% pengguna baru.',
-        'Meningkatkan Cognitive Friction: Pengguna harus menebak cara membuka filter kategori.'
+        'Placeholder menghilang saat pengguna mulai mengetik (membebani working memory).',
+        'Kontras tombol rendah dan terkesan seperti tombol nonaktif/disabled.',
+        'Tidak ada toggle show/hide password, menyulitkan koreksi typo di smartphone.'
       ]
     },
     optionB: {
       label: 'Desain B',
-      title: 'Standard Search Bar + Horizontal Pills',
-      description: 'Search bar permanen di atas dengan deretan pill kategori horizontal yang langsung terlihat dan familiar.',
+      title: 'Explicit Labels & Accessible Controls',
+      description: 'Label jelas permanen di atas input, toggle intip kata sandi, dan tombol aksi utama dengan kontras tinggi.',
       isCorrect: true,
       keyPoints: [
-        "Jakob's Law: Memanfaatkan pola standar yang biasa digunakan pengguna di aplikasi populer (Airbnb, Tokopedia, Spotify).",
-        'Zero Learning Curve: Langsung dikenali dan siap digunakan dalam waktu kurang dari 1 detik.',
-        'High Discovery Rate: Kategori populer langsung terlihat tanpa perlu klik tombol tambahan.'
+        'Recognition over Recall: Label permanen memastikan konteks input tidak hilang saat mengetik.',
+        'Toggle intip kata sandi terbukti mengurangi hingga 80% kesalahan input pengguna.',
+        'Hierarki visual tombol utama tegas memandu fokus konversi (WCAG AAA compliant).'
       ]
     },
     mentorExplanation: {
-      summary: "Jakob's Law: Pengguna menghabiskan sebagian besar waktu mereka di aplikasi lain. Mereka mengharapkan produk Anda bekerja dengan pola yang sama seperti yang sudah biasa mereka gunakan.",
-      takeaway: 'Jangan mengorbankan kebiasaan mental pengguna demi terlihat berbeda. Inovasi visual harus tetap mempertahankan konvensi fungsi yang universal.',
-      uxPrinciples: ["Jakob's Law of Internet User Experience", 'Mental Models & Familiarity', 'Cognitive Fluency']
+      summary: 'Recognition rather than Recall (Nielsen Heuristic #6): Jangan pernah menggantikan label field dengan placeholder yang hilang saat diketik. Manusia jauh lebih cepat mengenali daripada mengingat.',
+      takeaway: 'Gunakan label eksplisit di atas input field, sediakan kontrol intip password, dan pastikan Primary CTA memiliki kontras yang kuat.',
+      uxPrinciples: ['Nielsen Heuristic #6: Recognition over recall', 'WCAG 2.1 Visual Contrast', 'Cognitive Load Reduction']
     },
     Component: LoginFormCase,
   },
