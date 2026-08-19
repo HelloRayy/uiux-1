@@ -80,36 +80,36 @@ export const SLIDES_DATA: RegisteredSlide[] = [
     Component: CheckoutCase,
   },
   {
-    id: 'case-3-pricing',
-    title: 'Studi Kasus 3: Pilihan Paket Langganan (Pricing Cards)',
-    category: 'Visual Anchoring & Decision Making',
-    description: 'Bandingkan tampilan 3 paket langganan ini. Desain mana yang paling cepat memandu mata pengguna mengambil keputusan tanpa merasa bingung?',
+    id: 'case-3-darkmode',
+    title: 'Studi Kasus 3: Desain Dark Mode (Kenyamanan Mata)',
+    category: 'Visual Ergonomics & Dark Mode',
+    description: 'Bandingkan dua implementasi mode gelap (Dark Mode) pada kartu artikel & metrik ini. Mana yang memberikan kenyamanan mata dan kedalaman visual terbaik?',
     optionA: {
       label: 'Desain A',
-      title: 'Flat Equal Weighting',
-      description: 'Ketiga kartu paket memiliki tinggi, warna, dan gaya tombol yang sama persis tanpa penekanan.',
+      title: 'True Black (#000000) & Pure White (#FFFFFF)',
+      description: 'Menggunakan latar belakang hitam pekat #000000 dengan teks putih murni #FFFFFF tanpa layer kedalaman elevasi.',
       isCorrect: false,
       keyPoints: [
-        'Choice Overload: Otak pengguna dipaksa membandingkan dan membaca semua teks satu per satu.',
-        'Tanpa Visual Anchor: Tidak ada titik fokus yang membimbing paket mana yang paling direkomendasikan.',
-        'Waktu Keputusan Lambat: Pengguna ragu-ragu dan cenderung menunda pembelian (Drop-off).'
+        'Halation Effect: Teks putih murni di atas hitam pekat memicu silau dan membuat mata cepat lelah di ruangan gelap.',
+        'Kehilangan Kedalaman (No Depth): Bayangan kartu tidak terlihat di atas latar belakang hitam 100%.',
+        'Kontras Ekstrem (21:1): Melebihi ambang batas nyaman mata untuk membaca teks dalam durasi lama.'
       ]
     },
     optionB: {
       label: 'Desain B',
-      title: 'Visual Anchor & Highlight Rekomendasi',
-      description: 'Paket rekomendasi (Pro) dibuat sedikit lebih tinggi, memiliki badge "Paling Populer", dan tombol aksi lebih menonjol.',
+      title: 'Layered Dark Surface (#0F172A / #1E293B)',
+      description: 'Latar belakang dark slate dengan permukaan kartu bertingkat dan teks off-white yang lembut bagi mata.',
       isCorrect: true,
       keyPoints: [
-        'Visual Anchoring: Mata pengguna otomatis tertuju pada paket unggulan dalam 3 detik pertama.',
-        'Social Proof: Badge "Paling Populer" memberikan rasa aman dan keyakinan psikologis.',
-        'Scannable Hierarchy: Memudahkan perbandingan fitur tanpa membuat mata cepat lelah.'
+        'Surface Elevation: Tingkatan warna abu-abu gelap (#1E293B di atas #0F172A) menciptakan kedalaman hirarki visual.',
+        'High Reading Comfort: Teks off-white (#F1F5F9) nyaman dibaca dalam durasi lama tanpa efek pendar silau.',
+        'Standar Industri Apple & Google: Material Design & iOS Dark Mode menggunakan surface abu-abu bertingkat.'
       ]
     },
     mentorExplanation: {
-      summary: 'Visual Anchoring: Otak manusia secara alami mencari titik fokus utama saat melihat banyak pilihan. Ciptakan satu kartu unggulan sebagai pemandu keputusan.',
-      takeaway: 'Saat menyajikan lebih dari 2 pilihan paket, selalu sorot satu paket terbaik dengan badge "Rekomendasi" dan tombol visual yang lebih tegas.',
-      uxPrinciples: ['Visual Anchoring & Contrast', 'Cognitive Load Reduction', 'Scannability Pattern']
+      summary: 'Dark Mode bukan sekadar mengubah background menjadi hitam pekat (#000000). Gunakan permukaan abu-abu gelap bertingkat untuk menjaga kedalaman visual dan kenyamanan mata.',
+      takeaway: 'Gunakan warna dark slate/grey (misal #121212 atau #0F172A) untuk background, naikkan kecerahan sedikit pada kartu di atasnya (#1E293B), dan gunakan teks off-white.',
+      uxPrinciples: ['Visual Ergonomics & Eye Fatigue', 'Material Design Dark Theme Elevation', 'WCAG Contrast Ratio for Dark Mode']
     },
     Component: PricingCase,
   },

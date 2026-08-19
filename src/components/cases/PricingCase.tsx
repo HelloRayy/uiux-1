@@ -1,5 +1,5 @@
 import React from 'react';
-import { Check } from 'lucide-react';
+import { Moon, TrendingUp, BookOpen, Clock } from 'lucide-react';
 
 interface CaseProps {
   variant: 'A' | 'B';
@@ -7,109 +7,84 @@ interface CaseProps {
 
 export const PricingCase: React.FC<CaseProps> = ({ variant }) => {
   if (variant === 'A') {
-    // VARIANT A: Flat Equal Weighting (No Visual Anchor)
+    // VARIANT A: Pure Black #000000 + Pure White #FFFFFF (Extreme Contrast / Halation Glare)
     return (
-      <div className="w-full max-w-md mx-auto text-slate-700 font-sans py-1 space-y-3">
-        <div className="text-center space-y-0.5 pb-1">
-          <div className="text-xs font-bold text-slate-900">Pilih Paket Berlangganan</div>
-          <div className="text-[10px] text-slate-500">Tentukan paket yang sesuai kebutuhan Anda</div>
-        </div>
-
-        {/* 3 Identical Cards */}
-        <div className="grid grid-cols-3 gap-2">
-          {/* Card 1: Starter */}
-          <div className="p-2.5 bg-slate-50 border border-slate-200 rounded-xl space-y-2 text-center">
-            <div className="text-[11px] font-bold text-slate-800">Starter</div>
-            <div className="text-xs font-bold text-slate-900">Rp 99k<span className="text-[9px] font-normal text-slate-400">/bln</span></div>
-            <div className="text-[9px] text-slate-500 space-y-1 pt-1 border-t border-slate-200">
-              <div>1 Proyek</div>
-              <div>Review Dasar</div>
+      <div className="w-full max-w-sm mx-auto font-sans py-1">
+        <div className="bg-[#000000] border-2 border-[#333333] rounded-3xl p-4 space-y-3.5 text-[#FFFFFF] shadow-none">
+          {/* Header */}
+          <div className="flex items-center justify-between pb-2 border-b border-[#333333]">
+            <div className="flex items-center gap-1.5 text-xs font-bold">
+              <Moon className="w-3.5 h-3.5 text-[#FFFFFF]" />
+              <span>Reader Mode</span>
             </div>
-            <button type="button" className="w-full py-1.5 bg-slate-200 text-slate-700 rounded-lg text-[10px] font-bold">
-              Pilih
-            </button>
+            <span className="text-[10px] font-mono text-[#888888]">
+              Pure Black #000
+            </span>
           </div>
 
-          {/* Card 2: Pro */}
-          <div className="p-2.5 bg-slate-50 border border-slate-200 rounded-xl space-y-2 text-center">
-            <div className="text-[11px] font-bold text-slate-800">Pro Mentorship</div>
-            <div className="text-xs font-bold text-slate-900">Rp 249k<span className="text-[9px] font-normal text-slate-400">/bln</span></div>
-            <div className="text-[9px] text-slate-500 space-y-1 pt-1 border-t border-slate-200">
-              <div>Semua Proyek</div>
-              <div>1-on-1 Mentor</div>
+          {/* Article Card without Depth Elevation */}
+          <div className="bg-[#000000] border border-[#444444] rounded-2xl p-3.5 space-y-2">
+            <div className="flex justify-between items-center text-[10px] text-[#AAAAAA]">
+              <span className="flex items-center gap-1"><BookOpen className="w-3 h-3" /> UX Principles</span>
+              <span className="flex items-center gap-1"><Clock className="w-3 h-3" /> 4 min</span>
             </div>
-            <button type="button" className="w-full py-1.5 bg-slate-200 text-slate-700 rounded-lg text-[10px] font-bold">
-              Pilih
-            </button>
+            <h4 className="text-sm font-bold text-[#FFFFFF] leading-snug">
+              Desain Antarmuka yang Nyaman untuk Mata di Malam Hari
+            </h4>
+            <p className="text-xs text-[#CCCCCC] leading-relaxed">
+              Memahami bagaimana kontras cahaya mempengaruhi kelelahan mata pengguna saat membaca konten panjang.
+            </p>
           </div>
 
-          {/* Card 3: Enterprise */}
-          <div className="p-2.5 bg-slate-50 border border-slate-200 rounded-xl space-y-2 text-center">
-            <div className="text-[11px] font-bold text-slate-800">Team</div>
-            <div className="text-xs font-bold text-slate-900">Rp 599k<span className="text-[9px] font-normal text-slate-400">/bln</span></div>
-            <div className="text-[9px] text-slate-500 space-y-1 pt-1 border-t border-slate-200">
-              <div>5 Akun Tim</div>
-              <div>Prioritas 24/7</div>
+          {/* Metric Bar */}
+          <div className="bg-[#000000] border border-[#444444] rounded-xl p-2.5 flex items-center justify-between text-xs">
+            <div className="flex items-center gap-1.5 text-[#AAAAAA]">
+              <TrendingUp className="w-3.5 h-3.5 text-[#FFFFFF]" />
+              <span>Tingkat Keterbacaan:</span>
             </div>
-            <button type="button" className="w-full py-1.5 bg-slate-200 text-slate-700 rounded-lg text-[10px] font-bold">
-              Pilih
-            </button>
+            <span className="font-mono font-bold text-[#FFFFFF]">21:1 Contrast</span>
           </div>
         </div>
       </div>
     );
   }
 
-  // VARIANT B: Visual Anchor & Highlight Rekomendasi (Center Card Focus)
+  // VARIANT B: Layered Dark Surface #0F172A + #1E293B + Off-White #F1F5F9 (Comfortable Elevation)
   return (
-    <div className="w-full max-w-md mx-auto text-slate-900 font-sans py-1 space-y-3">
-      <div className="text-center space-y-0.5 pb-1">
-        <div className="text-xs font-bold text-slate-900">Pilih Paket Berlangganan</div>
-        <div className="text-[10px] text-slate-500">Hemat hingga 40% dengan paket rekomendasi</div>
-      </div>
-
-      {/* 3 Cards with Center Highlight */}
-      <div className="grid grid-cols-3 gap-2 items-center">
-        {/* Card 1: Starter */}
-        <div className="p-2.5 bg-white border border-slate-200 rounded-xl space-y-2 text-center shadow-2xs">
-          <div className="text-[11px] font-bold text-slate-700">Starter</div>
-          <div className="text-xs font-bold text-slate-900">Rp 99k<span className="text-[9px] font-normal text-slate-400">/bln</span></div>
-          <div className="text-[9px] text-slate-600 space-y-1 pt-1 border-t border-slate-100">
-            <div>1 Proyek</div>
-            <div>Review Dasar</div>
+    <div className="w-full max-w-sm mx-auto font-sans py-1">
+      <div className="bg-[#0F172A] border-2 border-[#1E293B] rounded-3xl p-4 space-y-3.5 text-[#F1F5F9] shadow-md">
+        {/* Header */}
+        <div className="flex items-center justify-between pb-2 border-b border-[#1E293B]">
+          <div className="flex items-center gap-1.5 text-xs font-bold text-[#F1F5F9]">
+            <Moon className="w-3.5 h-3.5 text-sky-400" />
+            <span>Reader Mode</span>
           </div>
-          <button type="button" className="w-full py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-800 rounded-lg text-[10px] font-bold transition">
-            Pilih
-          </button>
+          <span className="text-[10px] font-semibold text-sky-400 bg-sky-950/60 px-2 py-0.5 rounded-full border border-sky-800/60">
+            Dark Slate Surface
+          </span>
         </div>
 
-        {/* Card 2: Pro (Visual Anchor Highlight) */}
-        <div className="p-3 bg-white border-2 border-[#0560FD] rounded-2xl space-y-2 text-center shadow-md relative -translate-y-1">
-          <div className="absolute -top-2.5 left-1/2 -translate-x-1/2 px-2 py-0.5 bg-[#0560FD] text-white text-[8px] font-bold rounded-full uppercase tracking-wider">
-            Paling Populer
+        {/* Elevated Surface Card with Soft Shadow */}
+        <div className="bg-[#1E293B] border border-[#334155] rounded-2xl p-3.5 space-y-2 shadow-sm">
+          <div className="flex justify-between items-center text-[10px] text-slate-400">
+            <span className="flex items-center gap-1 text-sky-400"><BookOpen className="w-3 h-3" /> UX Principles</span>
+            <span className="flex items-center gap-1"><Clock className="w-3 h-3" /> 4 min</span>
           </div>
-          <div className="text-[11px] font-bold text-blue-700">Pro Mentorship</div>
-          <div className="text-sm font-bold text-slate-900">Rp 249k<span className="text-[9px] font-normal text-slate-400">/bln</span></div>
-          <div className="text-[9px] text-slate-700 space-y-1 pt-1 border-t border-blue-50 font-medium">
-            <div className="flex items-center justify-center gap-0.5"><Check className="w-2.5 h-2.5 text-blue-600" /> Semua Proyek</div>
-            <div className="flex items-center justify-center gap-0.5"><Check className="w-2.5 h-2.5 text-blue-600" /> 1-on-1 Mentor</div>
-          </div>
-          <button type="button" className="w-full py-2 bg-[#0560FD] hover:bg-blue-700 text-white rounded-xl text-[10px] font-bold shadow-xs transition">
-            Mulai Sekarang
-          </button>
+          <h4 className="text-sm font-bold text-[#F8FAFC] leading-snug">
+            Desain Antarmuka yang Nyaman untuk Mata di Malam Hari
+          </h4>
+          <p className="text-xs text-slate-300 leading-relaxed">
+            Memahami bagaimana kontras cahaya mempengaruhi kelelahan mata pengguna saat membaca konten panjang.
+          </p>
         </div>
 
-        {/* Card 3: Team */}
-        <div className="p-2.5 bg-white border border-slate-200 rounded-xl space-y-2 text-center shadow-2xs">
-          <div className="text-[11px] font-bold text-slate-700">Team</div>
-          <div className="text-xs font-bold text-slate-900">Rp 599k<span className="text-[9px] font-normal text-slate-400">/bln</span></div>
-          <div className="text-[9px] text-slate-600 space-y-1 pt-1 border-t border-slate-100">
-            <div>5 Akun Tim</div>
-            <div>Prioritas 24/7</div>
+        {/* Metric Bar on Elevated Layer */}
+        <div className="bg-[#1E293B] border border-[#334155] rounded-xl p-2.5 flex items-center justify-between text-xs">
+          <div className="flex items-center gap-1.5 text-slate-400">
+            <TrendingUp className="w-3.5 h-3.5 text-sky-400" />
+            <span>Tingkat Keterbacaan:</span>
           </div>
-          <button type="button" className="w-full py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-800 rounded-lg text-[10px] font-bold transition">
-            Pilih
-          </button>
+          <span className="font-mono font-bold text-sky-300">12:1 Soft Contrast</span>
         </div>
       </div>
     </div>
