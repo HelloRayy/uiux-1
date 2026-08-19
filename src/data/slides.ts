@@ -12,178 +12,172 @@ export interface RegisteredSlide extends SlideCase {
 
 export const SLIDES_DATA: RegisteredSlide[] = [
   {
-    id: 'case-1-login',
-    title: 'Studi Kasus 1: Form Login & Autentikasi',
-    category: 'Form & Input UX',
-    description: 'Bandingkan dua pendekatan desain formulir login di bawah ini. Mana yang memberikan kenyamanan & kejelasan terbaik bagi pengguna?',
+    id: 'case-1-jakobs-law',
+    title: 'Studi Kasus 1: Pola Pencarian & Filter Produk',
+    category: "Jakob's Law (Mental Models)",
+    description: 'Bandingkan antarmuka pencarian & filter berikut. Pendekatan mana yang lebih cepat dipahami dan digunakan oleh pengguna baru tanpa perlu belajar ulang?',
     optionA: {
       label: 'Desain A',
-      title: 'Minimalis Tanpa Label',
-      description: 'Hanya mengandalkan placeholder teks, tombol submit abu-abu datar, dan tanpa opsi intip kata sandi.',
+      title: 'Eksperimental & Custom Floating Filter',
+      description: 'Menyembunyikan filter dalam menu melayang kustom dengan ikon abstrak tanpa search bar konvensional.',
       isCorrect: false,
       keyPoints: [
-        'Placeholder menghilang saat pengguna mulai mengetik (beban kognitif ingatan).',
-        'Kontras tombol rendah, terkesan seperti tombol nonaktif/disabled.',
-        'Tidak ada toggle show/hide password, menyulitkan pengecekan typo di mobile.',
-        'Pesan error tersembunyi dengan bahasa kode teknis yang membingungkan.'
+        'Melanggar Mental Model: Pengguna bingung mencari letak kotak pencarian utama.',
+        'Mystery Meat UI: Ikon filter kustom tanpa teks keterangan membingungkan 70% pengguna baru.',
+        'Meningkatkan Cognitive Friction: Pengguna harus menebak cara membuka filter kategori.'
       ]
     },
     optionB: {
       label: 'Desain B',
-      title: 'Explicit Labels & Accessible Feedback',
-      description: 'Label jelas di atas input, toggle intip kata sandi, tombol aksi tegas, dan umpan balik langsung.',
+      title: 'Standard Search Bar + Horizontal Pills',
+      description: 'Search bar permanen di atas dengan deretan pill kategori horizontal yang langsung terlihat dan familiar.',
       isCorrect: true,
       keyPoints: [
-        'Label permanen di atas field (sesuai standar WCAG Accessibility).',
-        'Fitur toggle intip kata sandi mengurangi 80% kesalahan input.',
-        'Hierarki visual tombol utama kontras tinggi dengan call-to-action jelas.',
-        'Inline validation yang ramah dan menuntun pengguna.'
+        "Jakob's Law: Memanfaatkan pola standar yang biasa digunakan pengguna di aplikasi populer (Airbnb, Tokopedia, Spotify).",
+        'Zero Learning Curve: Langsung dikenali dan siap digunakan dalam waktu kurang dari 1 detik.',
+        'High Discovery Rate: Kategori populer langsung terlihat tanpa perlu klik tombol tambahan.'
       ]
     },
     mentorExplanation: {
-      summary: 'Prinsip Recognition over Recall: Jangan biarkan pengguna mengingat apa yang harus mereka ketik hanya dari placeholder yang hilang saat diketik.',
-      takeaway: 'Gunakan label eksplisit, berikan kontrol visibilitas sandi, dan pastikan tombol aksi utama memiliki kontras minimal 4.5:1 terhadap latar belakang.',
-      uxPrinciples: ['Nielsen Heuristic #6: Recognition rather than recall', 'WCAG 2.1 Contrast (Minimum)', 'Error Prevention & Recovery']
+      summary: "Jakob's Law: Pengguna menghabiskan sebagian besar waktu mereka di aplikasi lain. Mereka mengharapkan produk Anda bekerja dengan pola yang sama seperti yang sudah biasa mereka gunakan.",
+      takeaway: 'Jangan mengorbankan kebiasaan mental pengguna demi terlihat berbeda. Inovasi visual harus tetap mempertahankan konvensi fungsi yang universal.',
+      uxPrinciples: ["Jakob's Law of Internet User Experience", 'Mental Models & Familiarity', 'Cognitive Fluency']
     },
     Component: LoginFormCase,
   },
   {
-    id: 'case-2-pricing',
-    title: 'Studi Kasus 2: Pricing / Subscription Cards',
-    category: 'Visual Hierarchy & Decision Making',
-    description: 'Bandingkan tampilan kartu paket harga layanan mentorship ini. Desain mana yang lebih memudahkan calon pengguna menentukan pilihan?',
+    id: 'case-2-fitts-law',
+    title: 'Studi Kasus 2: Penempatan Tombol Konfirmasi Checkout',
+    category: "Fitts's Law (Thumb Zone Ergonomics)",
+    description: 'Pada layar smartphone modern berukuran besar (6.7"), penempatan tombol konfirmasi pembayaran mana yang paling ergonomis dan minim kesalahan sentuh?',
     optionA: {
       label: 'Desain A',
-      title: 'Flat Equal Weighting',
-      description: 'Kedua kartu paket memiliki ukuran, warna latar, dan gaya tombol yang sama persis tanpa penekanan.',
+      title: 'Floating Top-Right Action Button',
+      description: 'Tombol konfirmasi pembayaran diletakkan melayang di pojok kanan atas dengan ukuran target 32px.',
       isCorrect: false,
       keyPoints: [
-        'Hick\'s Law: Pengguna butuh waktu lebih lama membaca dan membandingkan.',
-        'Tidak ada visual anchor / paket rekomendasi.',
-        'Format harga tidak transparan (apakah bulanan atau tahunan?).',
-        'Tombol CTA netral tanpa dorongan psikologis konversi.'
+        "Melanggar Fitts's Law: Jarak jangkauan jempol sangat jauh (Hard-to-Reach Zone di pojok atas).",
+        'Touch Target Kecil (32px): Berisiko tinggi salah klik atau tidak sengaja memencet elemen lain.',
+        'Memaksa Pengguna Memakai 2 Tangan saat posisi sedang berdiri atau berjalan.'
       ]
     },
     optionB: {
       label: 'Desain B',
-      title: 'Visual Anchor & Clear Differentiation',
-      description: 'Paket rekomendasi dipertegas dengan aksen warna, badge keunggulan, dan rincian fitur yang mudah di-scan.',
+      title: 'Sticky Full-Width Bottom Bar',
+      description: 'Tombol sticky selebar layar di tepi bawah (tinggi 52px) tepat di zona jangkauan jempol natural.',
       isCorrect: true,
       keyPoints: [
-        'Decoy Effect & Visual Anchoring: Paket unggulan langsung menarik perhatian mata dalam 3 detik pertama.',
-        'Badge \'Rekomendasi\' memberi rasa aman (Social Proof).',
-        'Penulisan harga transparan dengan periode langganan jelas.',
-        'Tombol aksi paket utama lebih menonjol (Primary CTA vs Secondary CTA).'
+        "Fitts's Law: Waktu sentuh menjadi sangat cepat karena ukuran target besar dan jarak dari posisi natural jempol dekat.",
+        'Ergonomic Thumb Zone: Tepi bawah layar adalah area sentuh paling nyaman untuk operasi 1 tangan.',
+        'Target Sentuh >48px: Memenuhi standar aksesibilitas Apple Human Interface Guidelines & WCAG.'
       ]
     },
     mentorExplanation: {
-      summary: 'Hierarki visual memandu mata pengguna ke keputusan tercepat tanpa merasa kewalahan (Cognitive Load).',
-      takeaway: 'Selalu ciptakan titik fokus (Focal Point) pada kartu produk/harga yang paling ingin kamu rekomendasikan ke audiens.',
-      uxPrinciples: ['Hick\'s Law (Decision Time)', 'Visual Anchoring & Contrast', 'Scannability Pattern']
+      summary: "Fitts's Law: Waktu yang dibutuhkan untuk mencapai target adalah fungsi dari jarak dan ukuran target tersebut. Semakin dekat dan besar targetnya, semakin cepat dan akurat pengguna menyentuhnya.",
+      takeaway: 'Layar smartphone makin tinggi, tetapi jempol manusia tidak bertambah panjang. Selalu tempatkan Primary Action krusial di area sticky bawah.',
+      uxPrinciples: ["Fitts's Law", 'Thumb Zone Ergonomics (Steven Hoober)', 'Touch Target Accessibility (WCAG 2.5.5)']
     },
     Component: PricingCase,
   },
   {
-    id: 'case-3-checkout',
-    title: 'Studi Kasus 3: Tombol Aksi Pembayaran (Checkout)',
-    category: 'Destructive Actions & Microcopy',
-    description: 'Perhatikan layout ringkasan pembayaran dan penataan tombol aksinya. Mana yang mencegah risiko salah klik pengguna?',
+    id: 'case-3-hicks-law',
+    title: 'Studi Kasus 3: Formulir Pengisian Profil & Onboarding',
+    category: "Hick's Law (Progressive Disclosure)",
+    description: 'Ketika pengguna diminta melengkapi data profil akun yang cukup panjang, pendekatan arsitektur formulir mana yang menghasilkan angka penyelesaian tertinggi?',
     optionA: {
       label: 'Desain A',
-      title: 'Equal Split Dangerous Buttons',
-      description: 'Tombol Batalkan dan Bayar ditempatkan berdampingan dengan ukuran dan saturasi warna yang sama kuat.',
+      title: 'Single Long Form (All-in-One Page)',
+      description: 'Menampilkan 12 field input sekaligus dalam satu halaman panjang yang harus di-scroll berkali-kali.',
       isCorrect: false,
       keyPoints: [
-        'Rawan fat-finger error: Jari pengguna bisa tidak sengaja memencet Batal saat ingin Bayar.',
-        'Aksi destruktif (Batal) diberi bobot visual sama besar dengan aksi utama.',
-        'Biaya tambahan muncul tiba-tiba tanpa rincian transparan.',
-        'Tidak ada jaminan keamanan transaksi.'
+        "Hick's Law: Waktu keputusan meningkat drastis seiring banyaknya input yang terlihat sekaligus.",
+        'Form Fatigue / Cognitive Overload: Pengguna merasa kewalahan melihat formulir yang tampak panjang dan melelahkan.',
+        'Tingkat Drop-off Tinggi: Pengguna cenderung menunda atau membatalkan pengisian di tengah jalan.'
       ]
     },
     optionB: {
       label: 'Desain B',
-      title: 'Primary Action Hierarchy & Trust Signals',
-      description: 'Tombol Bayar sebagai aksi utama yang dominan, aksi batal sebagai secondary text, serta badge keamanan terpercaya.',
+      title: 'Progressive Disclosure (3-Step Wizard)',
+      description: 'Membagi formulir menjadi 3 tahap terfokus dengan indikator progres yang jelas (3-4 field per tahap).',
       isCorrect: true,
       keyPoints: [
-        'Aksi utama (Primary) dan aksi sekunder (Secondary) terpisah dengan sangat tegas.',
-        'Rincian harga transparan (item, diskon, biaya admin, total) membangun kepercayaan (Trust).',
-        'Microcopy keamanan 256-bit mengurangi kecemasan checkout (Checkout Anxiety).'
+        "Progressive Disclosure: Mengurangi beban kognitif dengan hanya menampilkan data yang relevan di tahap tersebut.",
+        'Zeigarnik Effect & Goal Gradient: Indikator langkah (Langkah 1 dari 3) memotivasi pengguna menyelesaikan formulir.',
+        'Chunking Information: Otak manusia jauh lebih nyaman memproses 3-4 informasi per sesi daripada 12 sekaligus.'
       ]
     },
     mentorExplanation: {
-      summary: 'Jangan pernah mendudukkan aksi destruktif sejajar secara visual dengan aksi progresif utama dalam form krusial.',
-      takeaway: 'Bedakan Primary Action (solid button) dan Secondary/Cancel Action (subtle text link/ghost button) untuk mencegah accidental clicks.',
-      uxPrinciples: ['Fitts\'s Law & Touch Targets', 'Error Prevention (Nielsen #5)', 'Trust Building & Transparency']
+      summary: "Hick's Law: Waktu yang dibutuhkan untuk mengambil keputusan meningkat secara logaritmik seiring bertambahnya jumlah opsi/elemen yang dihadapi.",
+      takeaway: 'Gunakan Progressive Disclosure untuk memecah proses yang rumit menjadi langkah-langkah kecil yang terasa ringan bagi pengguna.',
+      uxPrinciples: ["Hick's Law (Decision Time)", 'Progressive Disclosure', "Miller's Law (Chunking 7±2)"]
     },
     Component: CheckoutCase,
   },
   {
-    id: 'case-4-navigation',
-    title: 'Studi Kasus 4: Navigasi Bawah Aplikasi Mobile',
-    category: 'Mobile Accessibility & Ergonomics',
-    description: 'Bandingkan bottom navigation bar di aplikasi mobile berikut. Mana yang paling ergonomis dan mudah dioperasikan satu tangan?',
+    id: 'case-4-doherty-threshold',
+    title: 'Studi Kasus 4: Pengalaman Waktu Tunggu Loading Data',
+    category: 'Doherty Threshold (Perceived Performance)',
+    description: 'Saat aplikasi sedang memuat feed data atau transaksi selama 1.5 detik, representasi loading mana yang memberikan pengalaman paling responsif?',
     optionA: {
       label: 'Desain A',
-      title: '8 Menu Dijejalkan Icon-Only',
-      description: '8 ikon dijejalkan dalam satu baris tanpa teks keterangan, dengan area sentuh kecil di bawah 24px.',
+      title: 'Blank Screen dengan Spinner Memutar',
+      description: 'Layar putih kosong dengan animasi spinner mutar abu-abu kecil di tengah layar.',
       isCorrect: false,
       keyPoints: [
-        'Mystery Meat Navigation: Ikon abstrak tanpa label teks membingungkan pengguna.',
-        'Touch target di bawah 48x48px melanggar standar aksesibilitas Google & Apple.',
-        'Jarak antar tombol terlalu rapat, rawan salah sentuh.'
+        'Perceived Time Terasa Lambat: Layar kosong membuat pengguna merasa waktu tunggu 2x lebih lama dari waktu sebenarnya.',
+        'Tidak Memberi Konteks Struktur: Pengguna tidak tahu bentuk konten seperti apa yang akan muncul.',
+        'Memicu Kecemasan Sistem Hang: Jika spinner berputar lebih dari 1 detik, pengguna mengira koneksi terputus.'
       ]
     },
     optionB: {
       label: 'Desain B',
-      title: '4 Menu Utama Berlabel & Accessible',
-      description: 'Maksimal 4-5 menu prioritas dengan ikon dan teks label yang jelas, target sentuh ergonomis.',
+      title: 'Shimmering Skeleton Placeholder Screen',
+      description: 'Kerangka visual berpendar (Skeleton UI) yang merepresentasikan tata letak kartu konten sebelum teks & gambar muncul.',
       isCorrect: true,
       keyPoints: [
-        'Rule of Thumb: 4-5 menu adalah batas ideal navigasi bawah mobile.',
-        'Kombinasi Icon + Label teks meningkatkan pemahaman instan hingga 95%.',
-        'Touch target 48px nyaman digunakan dengan jempol (Thumb Zone).',
-        'Fitur sekunder dikelompokkan rapi ke dalam menu \'Lainnya\'.'
+        'Doherty Threshold (<400ms feedback): Mata pengguna langsung menerima respons visual instan bahwa halaman sedang aktif dibangun.',
+        'Perceived Performance Lebih Cepat: Otak pengguna sudah mulai membaca struktur tata letak kartu sebelum data terisi.',
+        'Mencegah Cumulative Layout Shift (CLS): Ruang konten sudah teralokasi dengan ukuran presisi sehingga layar tidak meloncat.'
       ]
     },
     mentorExplanation: {
-      summary: 'Mobile navigation bukan tempat menaruh semua menu aplikasi. Batasi pada 3-5 tugas terpenting (Top Tasks).',
-      takeaway: 'Ikon tanpa label hanya boleh digunakan untuk konsep universal (seperti Search atau Home). Untuk fitur lain, selalu sertakan label teks.',
-      uxPrinciples: ['Thumb Zone Ergonomics (Steven Hoober)', 'Apple HIG / Material Design 3 Navigation Standard', 'Cognitive Overload Reduction']
+      summary: 'Doherty Threshold: Produktivitas dan kenyamanan pengguna meningkat drastis ketika sistem memberikan umpan balik visual dalam waktu di bawah 400 milidetik.',
+      takeaway: 'Skeleton Screen membuat waktu tunggu terasa jauh lebih singkat dibandingkan spinner statis karena memberikan ilusi proses yang sedang berjalan aktif.',
+      uxPrinciples: ['Doherty Threshold (<400ms pace)', 'Perceived Performance Optimization', 'Cumulative Layout Shift (CLS) Prevention']
     },
     Component: NavigationCase,
   },
   {
-    id: 'case-5-alert',
-    title: 'Studi Kasus 5: Pesan Error & Dialog Konfirmasi',
-    category: 'Error UX & Human-Centered Microcopy',
-    description: 'Ketika sistem mengalami gangguan koneksi, bagaimana dialog error seharusnya menyapa pengguna?',
+    id: 'case-5-law-of-proximity',
+    title: 'Studi Kasus 5: Struktur Hirarki Rincian Tagihan Biaya',
+    category: 'Law of Proximity & Common Region (Gestalt)',
+    description: 'Bandingkan ringkasan tagihan pembayaran berikut. Desain mana yang paling cepat dipindai dan tidak memicu kebingungan nominal total bagi pengguna?',
     optionA: {
       label: 'Desain A',
-      title: 'Technical Jargon & Ambiguous Dialog',
-      description: 'Menampilkan stack trace kode error mentah dengan tombol aksi \'OK\' dan \'Batal\'.',
+      title: 'Spasi Rata Tanpa Pengelompokan Visual',
+      description: 'Seluruh baris rincian item, biaya layanan, diskon promo, dan total akhir disajikan dengan jarak spasi yang seragam tanpa pembatas.',
       isCorrect: false,
       keyPoints: [
-        'Menakut-nakuti pengguna awam dengan istilah teknis internal.',
-        'Tombol \'OK\' dan \'Batal\' tidak memberikan kejelasan apa yang akan terjadi selanjutnya.',
-        'Tidak menawarkan jalan keluar atau solusi bagi pengguna.'
+        'Melanggar Law of Proximity: Mata pengguna kesulitan membedakan mana biaya dasar, potongan harga, dan biaya tambahan.',
+        'Tidak Ada Titik Fokus Total: Angka nominal total akhir tenggelam di antara baris-baris rincian lainnya.',
+        'Rawan Kesalahpahaman Biaya: Pengguna harus membaca teliti baris demi baris untuk memastikan tidak ada biaya tersembunyi.'
       ]
     },
     optionB: {
       label: 'Desain B',
-      title: 'Empathetic Language & Solution-Oriented',
-      description: 'Bahasa manusiawi, memberi rasa tenang bahwa data aman, dan menyediakan tombol solusi \'Coba Simpan Lagi\'.',
+      title: 'Gestalt Chunking & Common Region Container',
+      description: 'Pengelompokan tegas: Box item belanja terpisah, pill kupon diskon beraksen hijau, dan container total akhir dengan kontras tinggi.',
       isCorrect: true,
       keyPoints: [
-        'Empathetic Copywriting: Memberi tahu masalah dengan tenang tanpa menyalahkan pengguna.',
-        'Reassurance: Menegaskan bahwa draf tersimpan secara aman.',
-        'Actionable Recovery: Tombol aksi langsung menawarkan solusi (\'Coba Simpan Lagi\') daripada \'OK\' yang pasif.'
+        'Law of Proximity: Elemen-elemen yang saling berkaitan diletakkan berdekatan dan dipisahkan dari kelompok logika lainnya.',
+        'Law of Common Region: Batasan kartu (*card container*) mempertegas bahwa rincian pembayaran berada dalam satu kesatuan aman.',
+        'Clear Visual Anchor: Angka total akhir ditonjolkan dengan bobot visual tegas sehingga langsung terbaca dalam sekali lirik.'
       ]
     },
     mentorExplanation: {
-      summary: 'Error state adalah momen paling rentan pengguna meninggalkan aplikasi (Drop-off). Desainlah pesan error untuk menolong, bukan sekadar melapor.',
-      takeaway: 'Pesan error yang baik menjelaskan: 1) Apa yang terjadi dengan bahasa manusiawi, 2) Menenangkan data pengguna, 3) Memberi tombol aksi langsung untuk mencoba kembali.',
-      uxPrinciples: ['Nielsen Heuristic #9: Help users recognize, diagnose, and recover from errors', 'Empathetic UX Writing', 'Graceful Degradation']
+      summary: 'Law of Proximity & Common Region: Elemen-elemen yang berdekatan dan dilingkupi dalam batas visual yang sama akan diproses oleh otak manusia sebagai satu kesatuan fungsional.',
+      takeaway: 'Spasi bukan sekadar ruang kosong, melainkan alat pengelompokan informasi. Gunakan spasi dan container untuk membimbing mata pengguna membaca data finansial dengan percaya diri.',
+      uxPrinciples: ['Law of Proximity (Gestalt)', 'Law of Common Region', 'Visual Hierarchy & Financial Trust']
     },
     Component: ModalAlertCase,
   }
