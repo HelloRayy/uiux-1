@@ -39,12 +39,6 @@ export const PricingCase: React.FC<CaseProps> = ({ variant }) => {
             </div>
           </div>
 
-          {/* Bottom Thumb Area Left Empty */}
-          <div className="h-16 border-2 border-dashed border-slate-200 rounded-2xl flex flex-col items-center justify-center text-center p-2">
-            <span className="text-[10px] text-slate-400 font-mono">
-              [Area Jempol Bawah Kosong]
-            </span>
-          </div>
         </div>
       </div>
     );
