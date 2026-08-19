@@ -1,5 +1,5 @@
 import React from 'react';
-import { Tag, Receipt, Sparkles } from 'lucide-react';
+import { Tag, Receipt } from 'lucide-react';
 
 interface CaseProps {
   variant: 'A' | 'B';
@@ -7,16 +7,16 @@ interface CaseProps {
 
 export const ModalAlertCase: React.FC<CaseProps> = ({ variant }) => {
   if (variant === 'A') {
-    // ANTI-PATTERN DESIGN (Side A): Unchunked Uniform Spacing (Breaks Law of Proximity)
+    // VARIANT A: Flat Unchunked Rows
     return (
-      <div className="w-full max-w-sm mx-auto text-slate-700 font-sans py-1 space-y-2.5">
+      <div className="w-full max-w-sm mx-auto text-slate-700 font-sans py-1 space-y-3">
         <div className="pb-1 border-b border-slate-200 flex justify-between items-center">
           <div className="text-xs font-bold text-slate-900">Rincian Pembayaran</div>
-          <span className="text-[10px] font-mono text-slate-400">Tanpa Grouping</span>
+          <span className="text-[10px] font-mono text-slate-400">Ringkasan Tagihan</span>
         </div>
 
-        {/* Flat unchunked rows with identical spacing */}
-        <div className="space-y-2 text-xs bg-slate-50 p-3 rounded-xl border border-slate-200">
+        {/* Flat unchunked rows with uniform spacing */}
+        <div className="space-y-2.5 text-xs bg-slate-50 p-3.5 rounded-2xl border border-slate-200">
           <div className="flex justify-between">
             <span className="text-slate-600">Ergonomic Mouse Wireless</span>
             <span className="font-mono text-slate-800">Rp 350.000</span>
@@ -37,23 +37,16 @@ export const ModalAlertCase: React.FC<CaseProps> = ({ variant }) => {
             <span className="text-slate-600">Diskon Kupon Promo</span>
             <span className="font-mono text-slate-800">-Rp 50.000</span>
           </div>
-          <div className="flex justify-between">
-            <span className="text-slate-600">Total Pembayaran Akhir</span>
-            <span className="font-mono text-slate-800">Rp 477.000</span>
-          </div>
-        </div>
-
-        <div className="p-2 bg-amber-50 border border-amber-200 rounded-xl text-[10px] text-amber-900 space-y-0.5">
-          <div className="font-bold">⚠️ Melanggar Law of Proximity:</div>
-          <div className="text-slate-600 leading-snug">
-            Mata sulit membedakan item belanja, diskon, dan total akhir karena semua baris memiliki bobot dan spasi yang seragam.
+          <div className="flex justify-between font-bold text-slate-900 pt-2 border-t border-slate-200">
+            <span>Total Pembayaran Akhir</span>
+            <span className="font-mono text-sm">Rp 477.000</span>
           </div>
         </div>
       </div>
     );
   }
 
-  // BEST PRACTICE DESIGN (Side B): Gestalt Law of Proximity & Common Region
+  // VARIANT B: Gestalt Law of Proximity & Common Region
   return (
     <div className="w-full max-w-sm mx-auto text-slate-900 font-sans py-1 space-y-2.5">
       {/* Header */}
@@ -87,7 +80,7 @@ export const ModalAlertCase: React.FC<CaseProps> = ({ variant }) => {
         <span className="font-bold font-mono">-Rp 50.000</span>
       </div>
 
-      {/* Common Region 3: Final Total Container (Focal Point) */}
+      {/* Common Region 3: Final Total Container */}
       <div className="p-3 bg-white border-2 border-slate-900 rounded-xl space-y-1 shadow-xs">
         <div className="flex justify-between text-xs text-slate-500">
           <span>Subtotal + Ongkir</span>
@@ -101,11 +94,6 @@ export const ModalAlertCase: React.FC<CaseProps> = ({ variant }) => {
           <span className="text-xs font-bold text-slate-900">Total Pembayaran</span>
           <span className="text-base font-bold text-[#0560FD] font-mono">Rp 477.000</span>
         </div>
-      </div>
-
-      <div className="text-[10px] text-slate-500 text-center flex items-center justify-center gap-1">
-        <Sparkles className="w-3 h-3 text-[#0560FD]" />
-        <span>Gestalt Common Region membimbing mata membaca biaya secara transparan.</span>
       </div>
     </div>
   );

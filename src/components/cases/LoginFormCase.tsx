@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Search, SlidersHorizontal, Sparkles, Filter, Check, Star } from 'lucide-react';
+import { Search, SlidersHorizontal, Filter, Check, Star } from 'lucide-react';
 
 interface CaseProps {
   variant: 'A' | 'B';
@@ -9,28 +9,28 @@ export const LoginFormCase: React.FC<CaseProps> = ({ variant }) => {
   const [selectedCategory, setSelectedCategory] = useState('Semua');
 
   if (variant === 'A') {
-    // ANTI-PATTERN DESIGN (Side A): Experimental Floating Filter, Hidden Search, Breaks Mental Model
+    // VARIANT A: Eksperimental Filter & Minimalist Floating Action
     return (
       <div className="w-full max-w-md mx-auto text-slate-600 font-sans py-2 space-y-4">
-        {/* Abstract Top Navigation without standard search input */}
+        {/* Top Navigation without standard search input */}
         <div className="flex items-center justify-between pb-3 border-b border-slate-200">
           <div>
-            <h4 className="text-xs uppercase tracking-widest text-slate-400 font-bold font-mono">Eksplorasi Katalog</h4>
-            <p className="text-xs text-slate-400">Gesture swipe untuk mencari</p>
+            <h4 className="text-xs uppercase tracking-widest text-slate-700 font-bold font-mono">Eksplorasi Katalog</h4>
+            <p className="text-xs text-slate-400">Pilih simbol filter kategori</p>
           </div>
-          {/* Vague floating icon */}
+          {/* Floating filter icon */}
           <button
             type="button"
-            className="w-9 h-9 rounded-full bg-slate-100 border border-slate-200 flex items-center justify-center text-slate-500 hover:bg-slate-200 transition"
-            title="Menu Filter Kustom"
+            className="w-9 h-9 rounded-full bg-slate-100 border border-slate-200 flex items-center justify-center text-slate-600 hover:bg-slate-200 transition cursor-pointer"
+            title="Filter Menu"
           >
             <Filter className="w-4 h-4" />
           </button>
         </div>
 
-        {/* Abstract icon-only categories without text labels */}
+        {/* Custom symbolic categories */}
         <div className="space-y-1.5">
-          <div className="text-[11px] font-semibold text-slate-400">Filter Simbolik:</div>
+          <div className="text-[11px] font-semibold text-slate-500">Filter Kategori:</div>
           <div className="flex items-center gap-2">
             {['◆', '▲', '●', '★', '◼'].map((sym, idx) => (
               <div
@@ -43,28 +43,26 @@ export const LoginFormCase: React.FC<CaseProps> = ({ variant }) => {
               </div>
             ))}
           </div>
-          <p className="text-[11px] text-slate-400 italic">Ikon kustom tanpa label teks</p>
         </div>
 
-        {/* Product mock card */}
-        <div className="p-3.5 bg-slate-50 border border-slate-200 rounded-2xl space-y-2">
-          <div className="h-24 bg-slate-200/80 rounded-xl flex items-center justify-center text-slate-400 text-xs font-mono">
-            [Product Image Feed]
+        {/* Product Card */}
+        <div className="p-3.5 bg-slate-50 border border-slate-200 rounded-2xl space-y-2.5">
+          <div className="h-28 bg-slate-200/70 rounded-xl flex items-center justify-center text-slate-400 text-xs font-mono">
+            [Foto Produk Wireless Headphone]
           </div>
           <div className="flex justify-between items-center text-xs">
-            <span className="font-semibold text-slate-700">Wireless Headphone Pro</span>
-            <span className="font-mono text-slate-500">Rp 1.499.000</span>
+            <div>
+              <div className="font-bold text-slate-800">Wireless Headphone Pro</div>
+              <div className="text-[11px] text-slate-400">Audio • Premium Series</div>
+            </div>
+            <div className="font-bold text-slate-900 text-sm">Rp 1.499.000</div>
           </div>
-        </div>
-
-        <div className="p-2.5 bg-amber-50 border border-amber-200 rounded-xl text-[11px] text-amber-800 flex items-center gap-2">
-          <span>⚠️ Pengguna baru butuh waktu menebak letak kolom cari & arti simbol filter.</span>
         </div>
       </div>
     );
   }
 
-  // BEST PRACTICE DESIGN (Side B): Jakob's Law Standard (Search Bar + Category Pills)
+  // VARIANT B: Standard Search Bar + Category Pills
   const categories = [
     { name: 'Semua', icon: null },
     { name: '🔥 Terpopuler', icon: null },
@@ -119,9 +117,9 @@ export const LoginFormCase: React.FC<CaseProps> = ({ variant }) => {
         </div>
       </div>
 
-      {/* Product mock card */}
+      {/* Product Card */}
       <div className="p-3.5 bg-white border border-slate-200 rounded-2xl shadow-xs space-y-2.5">
-        <div className="h-24 bg-blue-50 border border-blue-100 rounded-xl flex items-center justify-center text-[#0560FD] text-xs font-semibold relative">
+        <div className="h-28 bg-blue-50 border border-blue-100 rounded-xl flex items-center justify-center text-[#0560FD] text-xs font-semibold relative">
           <span>Wireless Noise Cancelling Pro</span>
           <span className="absolute top-2 right-2 px-2 py-0.5 rounded-md bg-emerald-500 text-white text-[10px] font-bold">
             Diskon 25%
@@ -139,11 +137,6 @@ export const LoginFormCase: React.FC<CaseProps> = ({ variant }) => {
             <div className="text-[10px] text-slate-400 line-through">Rp 5.999.000</div>
           </div>
         </div>
-      </div>
-
-      <div className="p-2.5 bg-blue-50/80 border border-blue-200/70 rounded-xl text-[11px] text-blue-900 flex items-center gap-2 font-medium">
-        <Sparkles className="w-4 h-4 text-[#0560FD] shrink-0" />
-        <span>Pola universal (Search + Pills) dikenali instan tanpa instruksi tambahan.</span>
       </div>
     </div>
   );

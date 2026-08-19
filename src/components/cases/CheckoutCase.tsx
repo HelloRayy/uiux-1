@@ -1,5 +1,5 @@
 import React from 'react';
-import { ArrowRight, Sparkles, User, Mail, Phone, Layers } from 'lucide-react';
+import { ArrowRight, User, Mail, Phone, Layers } from 'lucide-react';
 
 interface CaseProps {
   variant: 'A' | 'B';
@@ -7,62 +7,58 @@ interface CaseProps {
 
 export const CheckoutCase: React.FC<CaseProps> = ({ variant }) => {
   if (variant === 'A') {
-    // ANTI-PATTERN DESIGN (Side A): Single Long 12-Field Form (Cognitive Overload)
+    // VARIANT A: Single Long Form
     return (
-      <div className="w-full max-w-sm mx-auto text-slate-700 font-sans py-1 space-y-2.5">
+      <div className="w-full max-w-sm mx-auto text-slate-700 font-sans py-1 space-y-3">
         <div className="pb-1 border-b border-slate-200 flex justify-between items-center">
           <div className="text-xs font-bold text-slate-900">Formulir Registrasi Lengkap</div>
-          <span className="text-[10px] font-mono text-slate-400">12 Input Sekaligus</span>
-        </div>
-
-        <div className="p-2 bg-amber-50 border border-amber-200 rounded-xl text-[10px] text-amber-900 flex items-center gap-1.5">
-          <span>⚠️ Hick's Law: 12 field sekaligus memicu kelelahan visual & form drop-off.</span>
+          <span className="text-[10px] font-mono text-slate-400">12 Input</span>
         </div>
 
         {/* Dense crowded inputs */}
         <div className="grid grid-cols-2 gap-2 text-[10px]">
           <div>
-            <label className="text-slate-500">Nama Depan</label>
-            <input type="text" placeholder="John" className="w-full p-1.5 bg-slate-50 border border-slate-200 rounded text-slate-600" />
+            <label className="text-slate-600 font-medium">Nama Depan</label>
+            <input type="text" placeholder="John" className="w-full p-2 bg-slate-50 border border-slate-300 rounded-lg text-slate-700 mt-0.5" />
           </div>
           <div>
-            <label className="text-slate-500">Nama Belakang</label>
-            <input type="text" placeholder="Doe" className="w-full p-1.5 bg-slate-50 border border-slate-200 rounded text-slate-600" />
+            <label className="text-slate-600 font-medium">Nama Belakang</label>
+            <input type="text" placeholder="Doe" className="w-full p-2 bg-slate-50 border border-slate-300 rounded-lg text-slate-700 mt-0.5" />
           </div>
           <div className="col-span-2">
-            <label className="text-slate-500">Nomor Induk Kependudukan (NIK)</label>
-            <input type="text" placeholder="3201..." className="w-full p-1.5 bg-slate-50 border border-slate-200 rounded text-slate-600" />
+            <label className="text-slate-600 font-medium">Nomor Induk Kependudukan (NIK)</label>
+            <input type="text" placeholder="3201..." className="w-full p-2 bg-slate-50 border border-slate-300 rounded-lg text-slate-700 mt-0.5" />
           </div>
           <div>
-            <label className="text-slate-500">Email Utama</label>
-            <input type="text" placeholder="john@..." className="w-full p-1.5 bg-slate-50 border border-slate-200 rounded text-slate-600" />
+            <label className="text-slate-600 font-medium">Email Utama</label>
+            <input type="text" placeholder="john@..." className="w-full p-2 bg-slate-50 border border-slate-300 rounded-lg text-slate-700 mt-0.5" />
           </div>
           <div>
-            <label className="text-slate-500">No. WhatsApp</label>
-            <input type="text" placeholder="0812..." className="w-full p-1.5 bg-slate-50 border border-slate-200 rounded text-slate-600" />
+            <label className="text-slate-600 font-medium">No. WhatsApp</label>
+            <input type="text" placeholder="0812..." className="w-full p-2 bg-slate-50 border border-slate-300 rounded-lg text-slate-700 mt-0.5" />
           </div>
           <div className="col-span-2">
-            <label className="text-slate-500">Alamat Lengkap KTP</label>
-            <input type="text" placeholder="Jl. Sudirman No..." className="w-full p-1.5 bg-slate-50 border border-slate-200 rounded text-slate-600" />
+            <label className="text-slate-600 font-medium">Alamat Lengkap KTP</label>
+            <input type="text" placeholder="Jl. Sudirman No..." className="w-full p-2 bg-slate-50 border border-slate-300 rounded-lg text-slate-700 mt-0.5" />
           </div>
           <div>
-            <label className="text-slate-500">Provinsi</label>
-            <input type="text" placeholder="DKI Jakarta" className="w-full p-1.5 bg-slate-50 border border-slate-200 rounded text-slate-600" />
+            <label className="text-slate-600 font-medium">Provinsi</label>
+            <input type="text" placeholder="DKI Jakarta" className="w-full p-2 bg-slate-50 border border-slate-300 rounded-lg text-slate-700 mt-0.5" />
           </div>
           <div>
-            <label className="text-slate-500">Kode Pos</label>
-            <input type="text" placeholder="12190" className="w-full p-1.5 bg-slate-50 border border-slate-200 rounded text-slate-600" />
+            <label className="text-slate-600 font-medium">Kode Pos</label>
+            <input type="text" placeholder="12190" className="w-full p-2 bg-slate-50 border border-slate-300 rounded-lg text-slate-700 mt-0.5" />
           </div>
         </div>
 
-        <button type="button" className="w-full py-2 bg-slate-200 text-slate-500 rounded-xl text-xs font-bold border border-slate-300">
-          Simpan Semua Data (Panjang)
+        <button type="button" className="w-full py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xs font-bold shadow-xs cursor-pointer">
+          Simpan Seluruh Data
         </button>
       </div>
     );
   }
 
-  // BEST PRACTICE DESIGN (Side B): Progressive Disclosure (3-Step Wizard)
+  // VARIANT B: 3-Step Progressive Disclosure Wizard
   return (
     <div className="w-full max-w-sm mx-auto text-slate-900 font-sans py-1 space-y-3.5">
       {/* 3-Step Indicator with Progress Bar */}
@@ -85,7 +81,7 @@ export const CheckoutCase: React.FC<CaseProps> = ({ variant }) => {
         </div>
       </div>
 
-      {/* Focused, High-Clarity Inputs for Step 1 */}
+      {/* Focused Inputs for Step 1 */}
       <div className="p-3.5 bg-slate-50 border border-slate-200/90 rounded-2xl space-y-3 text-xs">
         <div>
           <label className="block font-bold text-slate-800 mb-1">Nama Lengkap</label>
@@ -135,11 +131,6 @@ export const CheckoutCase: React.FC<CaseProps> = ({ variant }) => {
         <span>Lanjut ke Langkah 2 (Alamat)</span>
         <ArrowRight className="w-3.5 h-3.5" />
       </button>
-
-      <div className="text-[11px] text-slate-500 text-center flex items-center justify-center gap-1">
-        <Sparkles className="w-3.5 h-3.5 text-[#0560FD]" />
-        <span>Hanya 3 input per langkah: Ringan & cepat diselesaikan.</span>
-      </div>
     </div>
   );
 };
