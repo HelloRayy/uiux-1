@@ -216,10 +216,10 @@ export const HostView: React.FC = () => {
         )}
 
         {/* ========================================================================= */}
-        {/* CASE 2: TUTORIAL SCREEN (Identical Split-Screen A vs B Layout as Page 1)  */}
+        {/* CASE 2: TUTORIAL SCREEN (Split-Screen A vs B + Mobile Controller Preview) */}
         {/* ========================================================================= */}
         {roomState.status === 'TUTORIAL' && (
-          <div className="w-full mx-auto animate-fade-in">
+          <div className="w-full mx-auto animate-fade-in space-y-6">
             <SplitScreenViewer
               slide={currentSlide}
               showExplanation={false}
@@ -230,6 +230,56 @@ export const HostView: React.FC = () => {
               votesB={votesCountB}
               totalVotes={totalVotes}
             />
+
+            {/* Mobile Input Controller Preview Card */}
+            <div className="w-full max-w-xl mx-auto p-4 sm:p-5 bg-white border-2 border-slate-300 rounded-3xl shadow-sm space-y-3.5">
+              <div className="flex items-center justify-between px-1 pb-2 border-b border-slate-100">
+                <div className="flex items-center gap-2">
+                  <Smartphone className="w-4 h-4 text-[#0560FD]" />
+                  <span className="text-xs font-bold text-slate-900">
+                    Tampilan Tombol Input di Layar HP Peserta
+                  </span>
+                </div>
+                <span className="text-[10px] font-mono font-semibold text-slate-500 bg-slate-100 px-2 py-0.5 rounded-full">
+                  Mobile Controller
+                </span>
+              </div>
+
+              {/* 2-Column Mock Touch Pads Preview */}
+              <div className="grid grid-cols-2 gap-3 w-full">
+                {/* Mock Pad A */}
+                <div className="p-3 bg-slate-50 border-2 border-slate-300 rounded-2xl flex flex-col items-center justify-between text-center space-y-2 shadow-2xs">
+                  <div className="w-8 h-8 rounded-xl bg-slate-800 text-white font-bold text-xs flex items-center justify-center">
+                    A
+                  </div>
+                  <div className="space-y-0.5">
+                    <div className="text-xs font-bold text-slate-900">Pad Desain A</div>
+                    <div className="text-[10px] text-slate-500 font-normal">Memilih Sisi Kiri</div>
+                  </div>
+                  <span className="text-[9px] font-semibold text-blue-600 bg-blue-50 px-2 py-0.5 rounded-full border border-blue-200">
+                    Ketuk di HP
+                  </span>
+                </div>
+
+                {/* Mock Pad B */}
+                <div className="p-3 bg-slate-50 border-2 border-slate-300 rounded-2xl flex flex-col items-center justify-between text-center space-y-2 shadow-2xs">
+                  <div className="w-8 h-8 rounded-xl bg-slate-800 text-white font-bold text-xs flex items-center justify-center">
+                    B
+                  </div>
+                  <div className="space-y-0.5">
+                    <div className="text-xs font-bold text-slate-900">Pad Desain B</div>
+                    <div className="text-[10px] text-slate-500 font-normal">Memilih Sisi Kanan</div>
+                  </div>
+                  <span className="text-[9px] font-semibold text-amber-600 bg-amber-50 px-2 py-0.5 rounded-full border border-amber-200">
+                    Ketuk di HP
+                  </span>
+                </div>
+              </div>
+
+              <p className="text-[11px] text-slate-500 text-center font-normal">
+                💡 Di setiap studi kasus, ketuk Pad A atau Pad B di smartphone Anda dalam waktu 30 detik.
+              </p>
+            </div>
           </div>
         )}
 
