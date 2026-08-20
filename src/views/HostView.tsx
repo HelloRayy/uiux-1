@@ -15,9 +15,6 @@ import {
   Sparkles,
   RotateCcw,
   BookOpen,
-  Monitor,
-  Timer,
-  ArrowRight,
 } from 'lucide-react';
 
 export const HostView: React.FC = () => {
@@ -219,137 +216,20 @@ export const HostView: React.FC = () => {
         )}
 
         {/* ========================================================================= */}
-        {/* CASE 2: TUTORIAL / PANDUAN SCREEN (Step-by-step for verbal explanation)    */}
+        {/* CASE 2: TUTORIAL SCREEN (Identical Split-Screen A vs B Layout as Page 1)  */}
         {/* ========================================================================= */}
         {roomState.status === 'TUTORIAL' && (
-          <div className="w-full max-w-5xl mx-auto py-6 sm:py-8 px-4 animate-fade-in my-auto space-y-8">
-            {/* Header */}
-            <div className="text-center space-y-3">
-              <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-blue-50 border border-blue-200/80 text-xs font-bold text-[#0560FD] shadow-xs">
-                <Sparkles className="w-4 h-4" />
-                <span>Panduan Sesi Interaktif UI/UX</span>
-              </div>
-              <h2 className="text-3xl sm:text-5xl font-bold text-[#151619] tracking-tight">
-                Cara Bermain & Voting Desain
-              </h2>
-              <p className="text-sm sm:text-base text-slate-600 max-w-xl mx-auto font-normal leading-relaxed">
-                Uji intuisi & logika desain Anda dalam 4 langkah sederhana:
-              </p>
-            </div>
-
-            {/* 4 Step Cards Grid */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5">
-              {/* Step 1 */}
-              <div className="p-5 bg-white border border-slate-200/90 rounded-3xl space-y-3.5 shadow-sm hover:shadow-md transition flex flex-col justify-between">
-                <div className="space-y-3">
-                  <div className="w-12 h-12 rounded-2xl bg-blue-50 border border-blue-100 text-[#0560FD] flex items-center justify-center font-bold text-lg">
-                    1
-                  </div>
-                  <div className="space-y-1">
-                    <h3 className="text-base font-bold text-slate-900">Gabung Sesi</h3>
-                    <p className="text-xs text-slate-600 leading-relaxed font-normal">
-                      Scan QR Code di layar proyektor pakai HP, lalu masukkan nama panggilan Anda.
-                    </p>
-                  </div>
-                </div>
-                <div className="text-[11px] font-semibold text-blue-600 flex items-center gap-1.5 font-mono pt-2 border-t border-slate-100">
-                  <Smartphone className="w-3.5 h-3.5" />
-                  <span>Scan via Kamera HP</span>
-                </div>
-              </div>
-
-              {/* Step 2 */}
-              <div className="p-5 bg-white border border-slate-200/90 rounded-3xl space-y-3.5 shadow-sm hover:shadow-md transition flex flex-col justify-between">
-                <div className="space-y-3">
-                  <div className="w-12 h-12 rounded-2xl bg-amber-50 border border-amber-100 text-amber-600 flex items-center justify-center font-bold text-lg">
-                    2
-                  </div>
-                  <div className="space-y-1">
-                    <h3 className="text-base font-bold text-slate-900">Amati Desain A vs B</h3>
-                    <p className="text-xs text-slate-600 leading-relaxed font-normal">
-                      Di layar proyektor akan muncul dua pendekatan desain UI yang saling berkompetisi.
-                    </p>
-                  </div>
-                </div>
-                <div className="text-[11px] font-semibold text-amber-600 flex items-center gap-1.5 font-mono pt-2 border-t border-slate-100">
-                  <Monitor className="w-3.5 h-3.5" />
-                  <span>Lihat Layar Proyektor</span>
-                </div>
-              </div>
-
-              {/* Step 3 */}
-              <div className="p-5 bg-white border border-slate-200/90 rounded-3xl space-y-3.5 shadow-sm hover:shadow-md transition flex flex-col justify-between">
-                <div className="space-y-3">
-                  <div className="w-12 h-12 rounded-2xl bg-emerald-50 border border-emerald-100 text-emerald-600 flex items-center justify-center font-bold text-lg">
-                    3
-                  </div>
-                  <div className="space-y-1">
-                    <h3 className="text-base font-bold text-slate-900">Beri Vote (30 Detik)</h3>
-                    <p className="text-xs text-slate-600 leading-relaxed font-normal">
-                      Gunakan insting & logika Anda. Ketuk Pad A atau B di HP sebelum countdown habis.
-                    </p>
-                  </div>
-                </div>
-                <div className="text-[11px] font-semibold text-emerald-600 flex items-center gap-1.5 font-mono pt-2 border-t border-slate-100">
-                  <Timer className="w-3.5 h-3.5" />
-                  <span>Countdown 30 Detik</span>
-                </div>
-              </div>
-
-              {/* Step 4 */}
-              <div className="p-5 bg-white border border-slate-200/90 rounded-3xl space-y-3.5 shadow-sm hover:shadow-md transition flex flex-col justify-between">
-                <div className="space-y-3">
-                  <div className="w-12 h-12 rounded-2xl bg-purple-50 border border-purple-100 text-purple-600 flex items-center justify-center font-bold text-lg">
-                    4
-                  </div>
-                  <div className="space-y-1">
-                    <h3 className="text-base font-bold text-slate-900">Bedah Rahasia UX</h3>
-                    <p className="text-xs text-slate-600 leading-relaxed font-normal">
-                      Lihat statistik voting audiens & bedah rahasia di balik desain terbaik bersama mentor!
-                    </p>
-                  </div>
-                </div>
-                <div className="text-[11px] font-semibold text-purple-600 flex items-center gap-1.5 font-mono pt-2 border-t border-slate-100">
-                  <Trophy className="w-3.5 h-3.5" />
-                  <span>Reveal & Discussion</span>
-                </div>
-              </div>
-            </div>
-
-            {/* Bottom Action Bar */}
-            <div className="p-5 sm:p-6 bg-white border-2 border-slate-900 rounded-3xl flex flex-col sm:flex-row items-center justify-between gap-4 shadow-md">
-              <div className="flex items-center gap-3.5 text-left">
-                <div className="w-12 h-12 rounded-2xl bg-slate-900 text-white flex items-center justify-center shrink-0 shadow-xs">
-                  <Sparkles className="w-6 h-6" />
-                </div>
-                <div>
-                  <h4 className="text-base font-bold text-slate-900">Sudah Siap Menguji Insting Desain?</h4>
-                  <p className="text-xs text-slate-500 font-normal">
-                    {totalParticipants > 0 ? `${totalParticipants} peserta sudah terhubung di proyektor.` : 'Pastikan peserta sudah scan QR Code.'}
-                  </p>
-                </div>
-              </div>
-
-              <div className="flex items-center gap-3 w-full sm:w-auto">
-                <button
-                  type="button"
-                  onClick={() => setShowQRCode(true)}
-                  className="px-4 py-3.5 bg-slate-100 hover:bg-slate-200 text-slate-800 rounded-2xl text-xs font-bold transition flex items-center justify-center gap-1.5 cursor-pointer"
-                  title="Tampilkan QR Code (Tekan Q)"
-                >
-                  <QrCode className="w-4 h-4" />
-                  <span>QR Code</span>
-                </button>
-                <button
-                  type="button"
-                  onClick={() => jumpToRound(0)}
-                  className="flex-1 sm:flex-none px-6 py-3.5 bg-[#0560FD] hover:bg-blue-700 active:scale-95 text-white rounded-2xl text-sm font-bold shadow-md shadow-blue-500/25 transition cursor-pointer flex items-center justify-center gap-2"
-                >
-                  <span>Mulai Studi Kasus 1</span>
-                  <ArrowRight className="w-4 h-4" />
-                </button>
-              </div>
-            </div>
+          <div className="w-full mx-auto animate-fade-in">
+            <SplitScreenViewer
+              slide={currentSlide}
+              showExplanation={false}
+              showResults={totalVotes > 0}
+              percentA={percentA}
+              percentB={percentB}
+              votesA={votesCountA}
+              votesB={votesCountB}
+              totalVotes={totalVotes}
+            />
           </div>
         )}
 

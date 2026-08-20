@@ -5,10 +5,46 @@ import { CheckoutCase } from '../components/cases/CheckoutCase';
 import { PricingCase } from '../components/cases/PricingCase';
 import { NavigationCase } from '../components/cases/NavigationCase';
 import { ModalAlertCase } from '../components/cases/ModalAlertCase';
+import { TutorialCase } from '../components/cases/TutorialCase';
 
 export interface RegisteredSlide extends SlideCase {
   Component: React.FC<{ variant: 'A' | 'B' }>;
 }
+
+export const TUTORIAL_SLIDE: RegisteredSlide = {
+  id: 'case-0-tutorial',
+  title: 'Panduan & Simulasi: Cara Melakukan Voting',
+  category: 'Panduan Sesi Interaktif UI/UX',
+  description: 'Di setiap studi kasus, amati 2 desain di proyektor lalu ketuk Pad A atau Pad B di smartphone Anda dalam 30 detik. Coba lakukan vote percobaan sekarang!',
+  optionA: {
+    label: 'Desain A',
+    title: 'Pilihan Sisi Kiri (Pad A)',
+    description: 'Ketuk Pad A pada layar smartphone Anda untuk memilih desain di sebelah kiri.',
+    isCorrect: true,
+    keyPoints: [
+      'Gunakan tombol A di HP untuk memilih desain di sebelah kiri.',
+      'Waktu berpikir adalah 30 detik di setiap studi kasus.',
+      'Setelah waktu habis, hasil persentase voting audiens akan muncul secara live.'
+    ]
+  },
+  optionB: {
+    label: 'Desain B',
+    title: 'Pilihan Sisi Kanan (Pad B)',
+    description: 'Ketuk Pad B pada layar smartphone Anda untuk memilih desain di sebelah kanan.',
+    isCorrect: true,
+    keyPoints: [
+      'Gunakan tombol B di HP untuk memilih desain di sebelah kanan.',
+      'Pilih berdasarkan insting, kenyamanan, dan logika UX Anda.',
+      'Mentor akan membedah prinsip dan rahasia desain terbaik bersama Anda.'
+    ]
+  },
+  mentorExplanation: {
+    summary: 'Selamat datang di UI/UX SplitVote! Sesi ini bertujuan mengasah intuisi desain dan memahami alasan ilmiah di balik keputusan UI/UX nyata di industri.',
+    takeaway: 'Jangan ragu memilih sesuai insting Anda. Setelah voting, kita akan bedah bersama setiap studi kasus!',
+    uxPrinciples: ['Interactive Learning', 'Real-time Intuition', 'Scientific UX Reasoning']
+  },
+  Component: TutorialCase,
+};
 
 export const SLIDES_DATA: RegisteredSlide[] = [
   {

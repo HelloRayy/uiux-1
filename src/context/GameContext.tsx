@@ -2,7 +2,7 @@ import React, { createContext, useContext, useEffect, useState, useRef, useMemo 
 import { GameRoomState, Participant, VoteOption } from '../types';
 import { realtimeService, INITIAL_ROOM_STATE } from '../services/realtimeService';
 import { soundEffects } from '../services/audioService';
-import { SLIDES_DATA, RegisteredSlide } from '../data/slides';
+import { SLIDES_DATA, RegisteredSlide, TUTORIAL_SLIDE } from '../data/slides';
 import { parseRoute, navigateTo } from '../utils/navigation';
 
 interface GameContextType {
@@ -216,7 +216,9 @@ export const GameProvider: React.FC<{ children: React.ReactNode }> = ({ children
     Math.max(0, roomState.currentSlideIndex || 0),
     SLIDES_DATA.length - 1
   );
-  const currentSlide = SLIDES_DATA[currentSlideIndex] || SLIDES_DATA[0];
+  const currentSlide = roomState.status === 'TUTORIAL'
+    ? TUTORIAL_SLIDE
+    : (SLIDES_DATA[currentSlideIndex] || SLIDES_DATA[0]);
 
   // Calculated Stats
   const votesObj = roomState.votes || {};
