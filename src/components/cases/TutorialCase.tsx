@@ -1,5 +1,5 @@
 import React from 'react';
-import { Smartphone, CheckCircle, Sparkles, HandMetal } from 'lucide-react';
+import { Mail, User, Calendar, Clock, Sparkles } from 'lucide-react';
 
 interface CaseProps {
   variant: 'A' | 'B';
@@ -7,69 +7,104 @@ interface CaseProps {
 
 export const TutorialCase: React.FC<CaseProps> = ({ variant }) => {
   if (variant === 'A') {
-    // VARIANT A: Clean Visual Mockup for Left Side (Option A)
+    // VARIANT A: Minimalist Flat Registration Form (Real App UI)
     return (
-      <div className="w-full max-w-sm mx-auto font-sans py-1">
-        <div className="bg-white border-2 border-blue-200 rounded-3xl p-5 space-y-4 shadow-sm text-center">
-          {/* Header */}
-          <div className="w-12 h-12 rounded-2xl bg-blue-50 text-[#0560FD] flex items-center justify-center mx-auto border border-blue-100">
-            <Smartphone className="w-6 h-6" />
-          </div>
+      <div className="w-full max-w-sm mx-auto text-slate-700 font-sans py-1 space-y-3.5">
+        <div className="pb-1 border-b border-slate-200 flex justify-between items-center">
+          <span className="text-[10px] font-mono uppercase tracking-wider text-slate-400">REGISTRATION FORM</span>
+          <span className="text-[10px] text-slate-400">Step 1</span>
+        </div>
 
-          <div className="space-y-1">
-            <div className="text-base font-bold text-slate-900">Desain A (Sisi Kiri)</div>
-            <p className="text-xs text-slate-600 leading-relaxed font-normal">
-              Perhatikan tampilan antarmuka di sisi kiri. Jika menurut Anda desain ini lebih baik, ketuk tombol <strong>A</strong> di HP Anda.
-            </p>
-          </div>
-
-          {/* Interactive Mock Button */}
-          <div className="p-3 bg-slate-50 border border-slate-200 rounded-2xl space-y-2">
-            <div className="text-[11px] font-semibold text-slate-500">Contoh Elemen UI:</div>
-            <div className="py-2.5 px-4 bg-[#0560FD] text-white rounded-xl text-xs font-bold shadow-xs flex items-center justify-center gap-2">
-              <Sparkles className="w-3.5 h-3.5" />
-              <span>Pilihan Desain A</span>
-            </div>
-          </div>
-
-          <div className="text-[11px] font-semibold text-blue-600 flex items-center justify-center gap-1 font-mono">
-            <CheckCircle className="w-3.5 h-3.5" />
-            <span>Pad A pada Smartphone Anda</span>
+        {/* Minimalist Flat Form */}
+        <div className="space-y-2.5">
+          <input
+            type="text"
+            placeholder="user@example.com"
+            className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-xs text-slate-700 focus:outline-none"
+          />
+          <input
+            type="password"
+            placeholder="••••••••"
+            className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-xs text-slate-700 focus:outline-none"
+          />
+          <div className="flex items-center justify-between text-[11px] text-slate-500 pt-0.5">
+            <label className="flex items-center gap-1.5 cursor-pointer">
+              <input type="checkbox" className="rounded text-slate-600" />
+              <span>Ingat saya</span>
+            </label>
+            <span className="text-slate-400 hover:underline cursor-pointer">Reset?</span>
           </div>
         </div>
+
+        {/* Flat Submit Button */}
+        <button
+          type="button"
+          className="w-full py-2.5 bg-slate-200 hover:bg-slate-300 text-slate-700 rounded-xl text-xs font-bold transition cursor-pointer"
+        >
+          Submit
+        </button>
       </div>
     );
   }
 
-  // VARIANT B: Clean Visual Mockup for Right Side (Option B)
+  // VARIANT B: Rich Human-Centered Event Card (Real App UI)
   return (
-    <div className="w-full max-w-sm mx-auto font-sans py-1">
-      <div className="bg-white border-2 border-amber-200 rounded-3xl p-5 space-y-4 shadow-sm text-center">
-        {/* Header */}
-        <div className="w-12 h-12 rounded-2xl bg-amber-50 text-amber-600 flex items-center justify-center mx-auto border border-amber-100">
-          <Smartphone className="w-6 h-6" />
+    <div className="w-full max-w-sm mx-auto text-slate-900 font-sans py-1 space-y-3">
+      {/* Event Header */}
+      <div className="space-y-1">
+        <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 bg-blue-50 text-[#0560FD] rounded-full text-[10px] font-bold border border-blue-200/80">
+          <Sparkles className="w-3 h-3" />
+          <span>Workshop UI/UX Fundamental</span>
         </div>
-
-        <div className="space-y-1">
-          <div className="text-base font-bold text-slate-900">Desain B (Sisi Kanan)</div>
-          <p className="text-xs text-slate-600 leading-relaxed font-normal">
-            Perhatikan tampilan antarmuka di sisi kanan. Jika menurut Anda desain ini lebih baik, ketuk tombol <strong>B</strong> di HP Anda.
-          </p>
+        <h4 className="text-base font-bold text-slate-900 leading-snug">
+          Daftar Sesi Mentoring Desain
+        </h4>
+        <div className="flex items-center gap-3 text-[10px] text-slate-500 font-medium">
+          <span className="flex items-center gap-1"><Calendar className="w-3 h-3 text-slate-400" /> Hari Ini</span>
+          <span className="flex items-center gap-1"><Clock className="w-3 h-3 text-slate-400" /> 19:30 WIB</span>
         </div>
+      </div>
 
-        {/* Interactive Mock Button */}
-        <div className="p-3 bg-slate-50 border border-slate-200 rounded-2xl space-y-2">
-          <div className="text-[11px] font-semibold text-slate-500">Contoh Elemen UI:</div>
-          <div className="py-2.5 px-4 bg-amber-600 text-white rounded-xl text-xs font-bold shadow-xs flex items-center justify-center gap-2">
-            <HandMetal className="w-3.5 h-3.5" />
-            <span>Pilihan Desain B</span>
+      {/* Structured Input Fields */}
+      <div className="space-y-2 text-xs">
+        <div>
+          <label className="block font-bold text-slate-800 mb-1">Nama Lengkap</label>
+          <div className="relative">
+            <User className="w-3.5 h-3.5 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" />
+            <input
+              type="text"
+              placeholder="Contoh: Raditya Pratama"
+              defaultValue="Raditya Pratama"
+              className="w-full pl-9 pr-3 py-2 bg-slate-50 border border-slate-300 rounded-xl text-xs font-medium text-slate-900 focus:outline-none focus:border-[#0560FD] focus:bg-white"
+            />
           </div>
         </div>
 
-        <div className="text-[11px] font-semibold text-amber-600 flex items-center justify-center gap-1 font-mono">
-          <CheckCircle className="w-3.5 h-3.5" />
-          <span>Pad B pada Smartphone Anda</span>
+        <div>
+          <label className="block font-bold text-slate-800 mb-1">Alamat Email</label>
+          <div className="relative">
+            <Mail className="w-3.5 h-3.5 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" />
+            <input
+              type="email"
+              placeholder="nama@email.com"
+              defaultValue="raditya@student.id"
+              className="w-full pl-9 pr-3 py-2 bg-slate-50 border border-slate-300 rounded-xl text-xs font-medium text-slate-900 focus:outline-none focus:border-[#0560FD] focus:bg-white"
+            />
+          </div>
         </div>
+      </div>
+
+      {/* Prominent Action Button */}
+      <div className="space-y-1.5 pt-1">
+        <button
+          type="button"
+          className="w-full py-2.5 bg-[#0560FD] hover:bg-blue-700 active:scale-[0.99] text-white rounded-xl text-xs font-bold shadow-md shadow-blue-500/25 transition cursor-pointer flex items-center justify-center gap-1.5"
+        >
+          <span>Daftar Sesi Sekarang (Gratis)</span>
+        </button>
+        <p className="text-[10px] text-slate-600 text-center">
+          Sudah terdaftar? <span className="text-[#0560FD] font-semibold cursor-pointer">Masuk di sini</span>
+        </p>
       </div>
     </div>
   );
