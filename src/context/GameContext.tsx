@@ -1,9 +1,9 @@
-import React, { createContext, useContext, useEffect, useState, useMemo, useRef } from 'react';
+import React, { createContext, useContext, useEffect, useState, useRef, useMemo } from 'react';
 import { GameRoomState, Participant, VoteOption } from '../types';
 import { realtimeService, INITIAL_ROOM_STATE } from '../services/realtimeService';
-import { SLIDES_DATA, RegisteredSlide } from '../data/slides';
 import { soundEffects } from '../services/audioService';
-import { navigateTo, parseRoute } from '../utils/navigation';
+import { SLIDES_DATA, RegisteredSlide } from '../data/slides';
+import { parseRoute, navigateTo } from '../utils/navigation';
 
 interface GameContextType {
   roomState: GameRoomState;
@@ -14,16 +14,18 @@ interface GameContextType {
   isFirebase: boolean;
   soundEnabled: boolean;
   toggleSound: () => void;
-  // Stats
+  // Computed statistics
   totalVotes: number;
   votesCountA: number;
   votesCountB: number;
   percentA: number;
   percentB: number;
   totalParticipants: number;
-  // Actions
-  joinAsParticipant: (nickname: string) => Promise<Participant>;
+  // User Actions
+  joinAsParticipant: (nickname: string) => Promise<void>;
   submitMyVote: (option: VoteOption) => Promise<void>;
+  // Host / Admin Actions
+  openTutorial: () => Promise<void>;
   startRound: (duration?: number) => Promise<void>;
   endRound: () => Promise<void>;
   nextRound: () => Promise<void>;
@@ -34,38 +36,22 @@ interface GameContextType {
 
 const GameContext = createContext<GameContextType | undefined>(undefined);
 
-const PARTICIPANT_STORAGE_KEY = 'uiux_participant_session';
+const LOCAL_STORAGE_USER_KEY = 'uiux_splitvote_user';
 
-interface GameProviderProps {
-  children: React.ReactNode;
-  initialRoute?: ReturnType<typeof parseRoute>;
-}
-
-export const GameProvider: React.FC<GameProviderProps> = ({ children, initialRoute }) => {
-  // Initialize state directly from dynamic URL if direct slide number was passed (e.g. /1, /2, /3)
-  const [roomState, setRoomState] = useState<GameRoomState>(() => {
-    if (initialRoute?.slideNumber) {
-      return {
-        ...INITIAL_ROOM_STATE,
-        currentSlideIndex: initialRoute.slideNumber - 1,
-        status: 'VOTING',
-        timerRunning: true,
-        timerRemaining: 30,
-      };
-    }
-    return INITIAL_ROOM_STATE;
-  });
-
+export const GameProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const [roomState, setRoomState] = useState<GameRoomState>(INITIAL_ROOM_STATE);
   const [myParticipant, setMyParticipant] = useState<Participant | null>(null);
   const [soundEnabled, setSoundEnabled] = useState<boolean>(true);
   const timerIntervalRef = useRef<number | null>(null);
 
-  // Restore participant session from localStorage if available
+  // Restore existing user from local storage
   useEffect(() => {
     try {
-      const saved = localStorage.getItem(PARTICIPANT_STORAGE_KEY);
-      if (saved) {
-        setMyParticipant(JSON.parse(saved));
+      const savedUser = localStorage.getItem(LOCAL_STORAGE_USER_KEY);
+      if (savedUser) {
+        const parsed = JSON.parse(savedUser);
+        setMyParticipant(parsed);
+        realtimeService.joinParticipant(parsed, 'MAIN');
       }
     } catch {
       // ignore
@@ -76,10 +62,19 @@ export const GameProvider: React.FC<GameProviderProps> = ({ children, initialRou
   useEffect(() => {
     const handleUrlChange = () => {
       const parsed = parseRoute(window.location.pathname);
-      if (parsed.slideNumber !== null) {
+      if (parsed.isTutorial) {
+        setRoomState((prev) => ({
+          ...prev,
+          status: 'TUTORIAL',
+          currentSlideIndex: 0,
+        }));
+        if (parsed.role === 'HOST' || parsed.role === 'ADMIN') {
+          realtimeService.showTutorial('MAIN');
+        }
+      } else if (parsed.slideNumber !== null) {
         const targetIndex = parsed.slideNumber - 1;
         setRoomState((prev) => {
-          if (prev.currentSlideIndex !== targetIndex || prev.status === 'LOBBY') {
+          if (prev.currentSlideIndex !== targetIndex || prev.status === 'LOBBY' || prev.status === 'TUTORIAL') {
             return {
               ...prev,
               currentSlideIndex: targetIndex,
@@ -114,6 +109,8 @@ export const GameProvider: React.FC<GameProviderProps> = ({ children, initialRou
       if (currentRoute.role === 'HOST') {
         if (updatedState.status === 'LOBBY' && window.location.pathname !== '/') {
           navigateTo('/');
+        } else if (updatedState.status === 'TUTORIAL' && window.location.pathname !== '/tutorial') {
+          navigateTo('/tutorial');
         } else if (
           (updatedState.status === 'VOTING' || updatedState.status === 'REVEAL') &&
           typeof updatedState.currentSlideIndex === 'number'
@@ -124,7 +121,9 @@ export const GameProvider: React.FC<GameProviderProps> = ({ children, initialRou
           }
         }
       } else if (currentRoute.role === 'ADMIN') {
-        if (
+        if (updatedState.status === 'TUTORIAL' && window.location.pathname !== '/admin/tutorial') {
+          navigateTo('/admin/tutorial');
+        } else if (
           (updatedState.status === 'VOTING' || updatedState.status === 'REVEAL') &&
           typeof updatedState.currentSlideIndex === 'number'
         ) {
@@ -141,10 +140,12 @@ export const GameProvider: React.FC<GameProviderProps> = ({ children, initialRou
     };
   }, []);
 
-  // Initial sync on mount if host loads a direct slide like /1 or /2
+  // Initial sync on mount if host loads a direct route
   useEffect(() => {
     const currentRoute = parseRoute(window.location.pathname);
-    if (currentRoute.role === 'HOST' && currentRoute.slideNumber !== null) {
+    if (currentRoute.isTutorial) {
+      realtimeService.showTutorial('MAIN');
+    } else if (currentRoute.role === 'HOST' && currentRoute.slideNumber !== null) {
       const targetIdx = currentRoute.slideNumber - 1;
       realtimeService.nextSlide(targetIdx, 'MAIN', true);
     }
@@ -215,56 +216,51 @@ export const GameProvider: React.FC<GameProviderProps> = ({ children, initialRou
     Math.max(0, roomState.currentSlideIndex || 0),
     SLIDES_DATA.length - 1
   );
-  const currentSlide: RegisteredSlide = SLIDES_DATA[currentSlideIndex] || SLIDES_DATA[0];
+  const currentSlide = SLIDES_DATA[currentSlideIndex] || SLIDES_DATA[0];
 
-  // Calculated Statistics
-  const totalParticipants = useMemo(() => {
-    return Object.keys(roomState.participants || {}).length;
-  }, [roomState.participants]);
+  // Calculated Stats
+  const votesObj = roomState.votes || {};
+  const totalVotes = Object.keys(votesObj).length;
+  
+  const votesCountA = useMemo(() => {
+    return Object.values(votesObj).filter((v) => v === 'A').length;
+  }, [votesObj]);
 
-  const { votesCountA, votesCountB, totalVotes, percentA, percentB } = useMemo(() => {
-    const votes = Object.values(roomState.votes || {});
-    const countA = votes.filter((v) => v === 'A').length;
-    const countB = votes.filter((v) => v === 'B').length;
-    const total = countA + countB;
-    const pA = total > 0 ? Math.round((countA / total) * 100) : 0;
-    const pB = total > 0 ? 100 - pA : 0;
-    return {
-      votesCountA: countA,
-      votesCountB: countB,
-      totalVotes: total,
-      percentA: pA,
-      percentB: pB,
-    };
-  }, [roomState.votes]);
+  const votesCountB = useMemo(() => {
+    return Object.values(votesObj).filter((v) => v === 'B').length;
+  }, [votesObj]);
 
-  const myVote: VoteOption | null = useMemo(() => {
-    if (!myParticipant) return null;
-    return roomState.votes?.[myParticipant.id] || null;
-  }, [roomState.votes, myParticipant]);
+  const percentA = totalVotes > 0 ? Math.round((votesCountA / totalVotes) * 100) : 50;
+  const percentB = totalVotes > 0 ? 100 - percentA : 50;
+
+  const totalParticipants = Object.keys(roomState.participants || {}).length;
+
+  const myVote = myParticipant ? (votesObj[myParticipant.id] as VoteOption) || null : null;
 
   const toggleSound = () => {
-    const next = !soundEnabled;
-    setSoundEnabled(next);
-    soundEffects.setEnabled(next);
+    const nextState = !soundEnabled;
+    setSoundEnabled(nextState);
+    soundEffects.setEnabled(nextState);
   };
 
-  const joinAsParticipant = async (nickname: string): Promise<Participant> => {
-    const participant: Participant = {
+  // User Actions
+  const joinAsParticipant = async (nickname: string) => {
+    const newParticipant: Participant = {
       id: 'p_' + Math.random().toString(36).substring(2, 9),
-      nickname,
+      nickname: nickname.trim(),
       joinedAt: Date.now(),
       lastActive: Date.now(),
     };
-    await realtimeService.joinParticipant(participant, roomState.roomId);
-    setMyParticipant(participant);
+    
     try {
-      localStorage.setItem(PARTICIPANT_STORAGE_KEY, JSON.stringify(participant));
+      localStorage.setItem(LOCAL_STORAGE_USER_KEY, JSON.stringify(newParticipant));
     } catch {
       // ignore
     }
-    soundEffects.playJoin();
-    return participant;
+
+    setMyParticipant(newParticipant);
+    soundEffects.playVoteSubmitted();
+    await realtimeService.joinParticipant(newParticipant, roomState.roomId);
   };
 
   const submitMyVote = async (option: VoteOption) => {
@@ -274,6 +270,16 @@ export const GameProvider: React.FC<GameProviderProps> = ({ children, initialRou
   };
 
   // Admin / Host actions with dynamic URL synchronization
+  const openTutorial = async () => {
+    const parsed = parseRoute(window.location.pathname);
+    if (parsed.role === 'HOST') {
+      navigateTo('/tutorial');
+    } else if (parsed.role === 'ADMIN') {
+      navigateTo('/admin/tutorial');
+    }
+    await realtimeService.showTutorial(roomState.roomId);
+  };
+
   const startRound = async (duration: number = 30) => {
     soundEffects.playTick(false);
     const targetIdx = roomState.currentSlideIndex || 0;
@@ -295,6 +301,15 @@ export const GameProvider: React.FC<GameProviderProps> = ({ children, initialRou
   };
 
   const nextRound = async () => {
+    if (roomState.status === 'LOBBY') {
+      await openTutorial();
+      return;
+    }
+    if (roomState.status === 'TUTORIAL') {
+      await jumpToRound(0);
+      return;
+    }
+
     const nextIdx = Math.min(SLIDES_DATA.length - 1, currentSlideIndex + 1);
     
     const parsed = parseRoute(window.location.pathname);
@@ -308,6 +323,15 @@ export const GameProvider: React.FC<GameProviderProps> = ({ children, initialRou
   };
 
   const prevRound = async () => {
+    if (roomState.status === 'TUTORIAL') {
+      await resetAll();
+      return;
+    }
+    if (currentSlideIndex === 0) {
+      await openTutorial();
+      return;
+    }
+
     const prevIdx = Math.max(0, currentSlideIndex - 1);
     
     const parsed = parseRoute(window.location.pathname);
@@ -363,6 +387,7 @@ export const GameProvider: React.FC<GameProviderProps> = ({ children, initialRou
         totalParticipants,
         joinAsParticipant,
         submitMyVote,
+        openTutorial,
         startRound,
         endRound,
         nextRound,

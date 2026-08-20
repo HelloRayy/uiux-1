@@ -20,7 +20,7 @@ export function App() {
   const routeInfo = parseRoute(currentPath);
 
   return (
-    <GameProvider initialRoute={routeInfo}>
+    <GameProvider>
       {routeInfo.role === 'ADMIN' ? (
         <AdminView />
       ) : routeInfo.role === 'PLAY' ? (

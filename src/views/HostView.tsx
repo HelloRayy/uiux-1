@@ -14,6 +14,10 @@ import {
   Smartphone,
   Sparkles,
   RotateCcw,
+  BookOpen,
+  Monitor,
+  Timer,
+  ArrowRight,
 } from 'lucide-react';
 
 export const HostView: React.FC = () => {
@@ -27,7 +31,7 @@ export const HostView: React.FC = () => {
     percentA,
     percentB,
     totalParticipants,
-    startRound,
+    openTutorial,
     endRound,
     nextRound,
     prevRound,
@@ -57,9 +61,11 @@ export const HostView: React.FC = () => {
         e.preventDefault();
         if (showQRCode) {
           setShowQRCode(false);
-          startRound(30);
+          openTutorial();
         } else if (roomState.status === 'LOBBY') {
-          startRound(30);
+          openTutorial();
+        } else if (roomState.status === 'TUTORIAL') {
+          jumpToRound(0);
         } else if (roomState.status === 'VOTING') {
           endRound();
         } else if (roomState.status === 'REVEAL') {
@@ -134,7 +140,7 @@ export const HostView: React.FC = () => {
               </p>
 
               {/* CTA Button */}
-              <div className="pt-2 flex justify-center">
+              <div className="pt-2 flex justify-center items-center gap-3">
                 <button
                   type="button"
                   onClick={() => setShowQRCode(true)}
@@ -165,24 +171,24 @@ export const HostView: React.FC = () => {
                     </span>
                   </div>
                   <span className="px-3 py-1 rounded-full bg-blue-50 text-[#0560FD] text-xs font-bold font-mono border border-blue-200">
-                    Video Demo Placeholder
+                    Sesi Interaktif UI/UX
                   </span>
                 </div>
 
                 {/* Center interactive video play trigger */}
                 <div className="my-auto flex flex-col items-center justify-center text-center space-y-3">
                   <div
-                    onClick={() => startRound(30)}
+                    onClick={() => openTutorial()}
                     className="w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-[#0560FD] text-white flex items-center justify-center shadow-xl shadow-blue-500/30 group-hover:scale-110 transition-transform duration-300 cursor-pointer"
                   >
                     <Play className="w-7 h-7 sm:w-9 sm:h-9 fill-white ml-1" />
                   </div>
                   <div className="space-y-1">
                     <h4 className="text-base sm:text-lg font-bold text-slate-900 font-sans">
-                      Interactive Platform Video Preview
+                      Mulai Sesi & Buka Panduan
                     </h4>
                     <p className="text-xs sm:text-sm text-slate-500 font-sans">
-                      Klik play atau tekan Spacebar untuk memulai sesi studi kasus
+                      Klik tombol play atau tekan Spacebar untuk membuka panduan interaktif
                     </p>
                   </div>
                 </div>
@@ -213,7 +219,142 @@ export const HostView: React.FC = () => {
         )}
 
         {/* ========================================================================= */}
-        {/* CASE 2: VOTING SCREEN (ACTIVE ROUND - PURE CLEAN VISUAL)                  */}
+        {/* CASE 2: TUTORIAL / PANDUAN SCREEN (Step-by-step for verbal explanation)    */}
+        {/* ========================================================================= */}
+        {roomState.status === 'TUTORIAL' && (
+          <div className="w-full max-w-5xl mx-auto py-6 sm:py-8 px-4 animate-fade-in my-auto space-y-8">
+            {/* Header */}
+            <div className="text-center space-y-3">
+              <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-blue-50 border border-blue-200/80 text-xs font-bold text-[#0560FD] shadow-xs">
+                <Sparkles className="w-4 h-4" />
+                <span>Panduan Sesi Interaktif UI/UX</span>
+              </div>
+              <h2 className="text-3xl sm:text-5xl font-bold text-[#151619] tracking-tight">
+                Cara Bermain & Voting Desain
+              </h2>
+              <p className="text-sm sm:text-base text-slate-600 max-w-xl mx-auto font-normal leading-relaxed">
+                Uji intuisi & logika desain Anda dalam 4 langkah sederhana:
+              </p>
+            </div>
+
+            {/* 4 Step Cards Grid */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5">
+              {/* Step 1 */}
+              <div className="p-5 bg-white border border-slate-200/90 rounded-3xl space-y-3.5 shadow-sm hover:shadow-md transition flex flex-col justify-between">
+                <div className="space-y-3">
+                  <div className="w-12 h-12 rounded-2xl bg-blue-50 border border-blue-100 text-[#0560FD] flex items-center justify-center font-bold text-lg">
+                    1
+                  </div>
+                  <div className="space-y-1">
+                    <h3 className="text-base font-bold text-slate-900">Gabung Sesi</h3>
+                    <p className="text-xs text-slate-600 leading-relaxed font-normal">
+                      Scan QR Code di layar proyektor pakai HP, lalu masukkan nama panggilan Anda.
+                    </p>
+                  </div>
+                </div>
+                <div className="text-[11px] font-semibold text-blue-600 flex items-center gap-1.5 font-mono pt-2 border-t border-slate-100">
+                  <Smartphone className="w-3.5 h-3.5" />
+                  <span>Scan via Kamera HP</span>
+                </div>
+              </div>
+
+              {/* Step 2 */}
+              <div className="p-5 bg-white border border-slate-200/90 rounded-3xl space-y-3.5 shadow-sm hover:shadow-md transition flex flex-col justify-between">
+                <div className="space-y-3">
+                  <div className="w-12 h-12 rounded-2xl bg-amber-50 border border-amber-100 text-amber-600 flex items-center justify-center font-bold text-lg">
+                    2
+                  </div>
+                  <div className="space-y-1">
+                    <h3 className="text-base font-bold text-slate-900">Amati Desain A vs B</h3>
+                    <p className="text-xs text-slate-600 leading-relaxed font-normal">
+                      Di layar proyektor akan muncul dua pendekatan desain UI yang saling berkompetisi.
+                    </p>
+                  </div>
+                </div>
+                <div className="text-[11px] font-semibold text-amber-600 flex items-center gap-1.5 font-mono pt-2 border-t border-slate-100">
+                  <Monitor className="w-3.5 h-3.5" />
+                  <span>Lihat Layar Proyektor</span>
+                </div>
+              </div>
+
+              {/* Step 3 */}
+              <div className="p-5 bg-white border border-slate-200/90 rounded-3xl space-y-3.5 shadow-sm hover:shadow-md transition flex flex-col justify-between">
+                <div className="space-y-3">
+                  <div className="w-12 h-12 rounded-2xl bg-emerald-50 border border-emerald-100 text-emerald-600 flex items-center justify-center font-bold text-lg">
+                    3
+                  </div>
+                  <div className="space-y-1">
+                    <h3 className="text-base font-bold text-slate-900">Beri Vote (30 Detik)</h3>
+                    <p className="text-xs text-slate-600 leading-relaxed font-normal">
+                      Gunakan insting & logika Anda. Ketuk Pad A atau B di HP sebelum countdown habis.
+                    </p>
+                  </div>
+                </div>
+                <div className="text-[11px] font-semibold text-emerald-600 flex items-center gap-1.5 font-mono pt-2 border-t border-slate-100">
+                  <Timer className="w-3.5 h-3.5" />
+                  <span>Countdown 30 Detik</span>
+                </div>
+              </div>
+
+              {/* Step 4 */}
+              <div className="p-5 bg-white border border-slate-200/90 rounded-3xl space-y-3.5 shadow-sm hover:shadow-md transition flex flex-col justify-between">
+                <div className="space-y-3">
+                  <div className="w-12 h-12 rounded-2xl bg-purple-50 border border-purple-100 text-purple-600 flex items-center justify-center font-bold text-lg">
+                    4
+                  </div>
+                  <div className="space-y-1">
+                    <h3 className="text-base font-bold text-slate-900">Bedah Rahasia UX</h3>
+                    <p className="text-xs text-slate-600 leading-relaxed font-normal">
+                      Lihat statistik voting audiens & bedah rahasia di balik desain terbaik bersama mentor!
+                    </p>
+                  </div>
+                </div>
+                <div className="text-[11px] font-semibold text-purple-600 flex items-center gap-1.5 font-mono pt-2 border-t border-slate-100">
+                  <Trophy className="w-3.5 h-3.5" />
+                  <span>Reveal & Discussion</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Bottom Action Bar */}
+            <div className="p-5 sm:p-6 bg-white border-2 border-slate-900 rounded-3xl flex flex-col sm:flex-row items-center justify-between gap-4 shadow-md">
+              <div className="flex items-center gap-3.5 text-left">
+                <div className="w-12 h-12 rounded-2xl bg-slate-900 text-white flex items-center justify-center shrink-0 shadow-xs">
+                  <Sparkles className="w-6 h-6" />
+                </div>
+                <div>
+                  <h4 className="text-base font-bold text-slate-900">Sudah Siap Menguji Insting Desain?</h4>
+                  <p className="text-xs text-slate-500 font-normal">
+                    {totalParticipants > 0 ? `${totalParticipants} peserta sudah terhubung di proyektor.` : 'Pastikan peserta sudah scan QR Code.'}
+                  </p>
+                </div>
+              </div>
+
+              <div className="flex items-center gap-3 w-full sm:w-auto">
+                <button
+                  type="button"
+                  onClick={() => setShowQRCode(true)}
+                  className="px-4 py-3.5 bg-slate-100 hover:bg-slate-200 text-slate-800 rounded-2xl text-xs font-bold transition flex items-center justify-center gap-1.5 cursor-pointer"
+                  title="Tampilkan QR Code (Tekan Q)"
+                >
+                  <QrCode className="w-4 h-4" />
+                  <span>QR Code</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => jumpToRound(0)}
+                  className="flex-1 sm:flex-none px-6 py-3.5 bg-[#0560FD] hover:bg-blue-700 active:scale-95 text-white rounded-2xl text-sm font-bold shadow-md shadow-blue-500/25 transition cursor-pointer flex items-center justify-center gap-2"
+                >
+                  <span>Mulai Studi Kasus 1</span>
+                  <ArrowRight className="w-4 h-4" />
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* ========================================================================= */}
+        {/* CASE 3: VOTING SCREEN (ACTIVE ROUND - PURE CLEAN VISUAL)                  */}
         {/* ========================================================================= */}
         {roomState.status === 'VOTING' && (
           <div className="w-full mx-auto animate-fade-in">
@@ -222,7 +363,7 @@ export const HostView: React.FC = () => {
         )}
 
         {/* ========================================================================= */}
-        {/* CASE 3: REVEAL SCREEN (INTEGRATED ON-CARD RESULTS + EXPLANATION)          */}
+        {/* CASE 4: REVEAL SCREEN (INTEGRATED ON-CARD RESULTS + EXPLANATION)          */}
         {/* ========================================================================= */}
         {roomState.status === 'REVEAL' && (
           <div className="w-full mx-auto space-y-6 animate-fade-in">
@@ -240,7 +381,7 @@ export const HostView: React.FC = () => {
         )}
 
         {/* ========================================================================= */}
-        {/* CASE 4: FINISHED SCREEN                                                   */}
+        {/* CASE 5: FINISHED SCREEN                                                   */}
         {/* ========================================================================= */}
         {roomState.status === 'FINISHED' && (
           <div className="max-w-2xl mx-auto text-center space-y-6 py-12 animate-fade-in">
@@ -276,15 +417,30 @@ export const HostView: React.FC = () => {
           <span className="hidden sm:inline">Lobby</span>
         </button>
 
+        {/* Tutorial / Panduan Button */}
+        <button
+          type="button"
+          onClick={openTutorial}
+          className={`px-3 py-1.5 rounded-full transition flex items-center gap-1.5 cursor-pointer ${
+            roomState.status === 'TUTORIAL'
+              ? 'bg-[#0560FD] text-white shadow-xs font-bold'
+              : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100'
+          }`}
+          title="Buka Panduan Sesi"
+        >
+          <BookOpen className="w-3.5 h-3.5" />
+          <span className="hidden sm:inline">Panduan</span>
+        </button>
+
         <div className="w-[1px] h-4 bg-slate-200 mx-0.5" />
 
         {/* Previous Slide */}
         <button
           type="button"
           onClick={prevRound}
-          disabled={roomState.status === 'LOBBY' || (roomState.currentSlideIndex || 0) === 0}
+          disabled={roomState.status === 'LOBBY'}
           className="p-1.5 text-slate-600 hover:text-slate-900 hover:bg-slate-100 disabled:opacity-30 disabled:pointer-events-none rounded-full transition cursor-pointer"
-          title="Kasus Sebelumnya (←)"
+          title="Sebelumnya (←)"
         >
           <ChevronLeft className="w-4 h-4" />
         </button>
@@ -292,7 +448,7 @@ export const HostView: React.FC = () => {
         {/* Slide Quick Jumper Pills (1 to 5) */}
         <div className="flex items-center gap-1">
           {Array.from({ length: totalSlides }).map((_, idx) => {
-            const isActive = roomState.status !== 'LOBBY' && (roomState.currentSlideIndex || 0) === idx;
+            const isActive = roomState.status !== 'LOBBY' && roomState.status !== 'TUTORIAL' && (roomState.currentSlideIndex || 0) === idx;
             return (
               <button
                 key={idx}
@@ -315,25 +471,35 @@ export const HostView: React.FC = () => {
         <button
           type="button"
           onClick={nextRound}
-          disabled={(roomState.currentSlideIndex || 0) >= totalSlides - 1}
+          disabled={roomState.status !== 'LOBBY' && roomState.status !== 'TUTORIAL' && (roomState.currentSlideIndex || 0) >= totalSlides - 1}
           className="p-1.5 text-slate-600 hover:text-slate-900 hover:bg-slate-100 disabled:opacity-30 disabled:pointer-events-none rounded-full transition cursor-pointer"
-          title="Kasus Berikutnya (→)"
+          title="Berikutnya (→)"
         >
           <ChevronRight className="w-4 h-4" />
         </button>
 
         <div className="w-[1px] h-4 bg-slate-200 mx-0.5" />
 
-        {/* Primary Round Action Button (Spacebar Trigger) */}
+        {/* Primary Action Button (Spacebar Trigger) */}
         {roomState.status === 'LOBBY' ? (
           <button
             type="button"
-            onClick={() => startRound(30)}
+            onClick={openTutorial}
             className="px-4 py-1.5 bg-[#0560FD] hover:bg-blue-700 text-white rounded-full transition flex items-center gap-1.5 cursor-pointer shadow-xs font-semibold"
-            title="Mulai Sesi (Tekan Spacebar)"
+            title="Buka Panduan (Tekan Spacebar)"
+          >
+            <BookOpen className="w-3.5 h-3.5" />
+            <span>Panduan</span>
+          </button>
+        ) : roomState.status === 'TUTORIAL' ? (
+          <button
+            type="button"
+            onClick={() => jumpToRound(0)}
+            className="px-4 py-1.5 bg-[#0560FD] hover:bg-blue-700 text-white rounded-full transition flex items-center gap-1.5 cursor-pointer shadow-xs font-semibold"
+            title="Mulai Kasus 1 (Tekan Spacebar)"
           >
             <Play className="w-3.5 h-3.5 fill-white" />
-            <span>Mulai Ronde</span>
+            <span>Mulai Kasus 1</span>
           </button>
         ) : roomState.status === 'VOTING' ? (
           <button
@@ -453,12 +619,12 @@ export const HostView: React.FC = () => {
               type="button"
               onClick={() => {
                 setShowQRCode(false);
-                startRound(30);
+                openTutorial();
               }}
-              className="w-full sm:w-auto px-6 py-3 bg-[#0560FD] hover:bg-blue-700 active:scale-95 text-white rounded-full font-semibold text-sm shadow-lg shadow-blue-500/25 transition flex items-center justify-center gap-2.5 cursor-pointer"
+              className="px-6 py-3 bg-[#0560FD] hover:bg-blue-700 active:scale-95 text-white rounded-2xl font-semibold text-sm shadow-md shadow-blue-500/25 transition cursor-pointer flex items-center gap-2"
             >
-              <Play className="w-4 h-4 fill-white" />
-              <span>Mulai Ronde Pertama (Space)</span>
+              <span>Buka Panduan Sesi</span>
+              <ChevronRight className="w-4 h-4" />
             </button>
           </div>
         </div>

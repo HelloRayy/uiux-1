@@ -1,4 +1,4 @@
-export type GameStatus = 'LOBBY' | 'VOTING' | 'REVEAL' | 'FINISHED';
+export type GameStatus = 'LOBBY' | 'TUTORIAL' | 'VOTING' | 'REVEAL' | 'FINISHED';
 
 export type VoteOption = 'A' | 'B';
 

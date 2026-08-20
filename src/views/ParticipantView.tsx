@@ -1,16 +1,15 @@
 import React, { useState } from 'react';
 import { useGame } from '../context/GameContext';
 import {
+  Timer,
   CheckCircle2,
   Sparkles,
   Smartphone,
   Trophy,
-  Users,
-  Lightbulb,
   ArrowRight,
   Vote,
-  Timer,
   Monitor,
+  BookOpen,
 } from 'lucide-react';
 
 export const ParticipantView: React.FC = () => {
@@ -20,38 +19,24 @@ export const ParticipantView: React.FC = () => {
     totalSlides,
     myParticipant,
     myVote,
-    joinAsParticipant,
-    submitMyVote,
-    totalVotes,
-    votesCountA,
-    votesCountB,
     percentA,
     percentB,
+    totalVotes,
+    joinAsParticipant,
+    submitMyVote,
   } = useGame();
 
   const [nicknameInput, setNicknameInput] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [errorMsg, setErrorMsg] = useState('');
 
-  // Handle Nickname Registration
+  // Handle Nickname Onboarding
   const handleJoin = async (e: React.FormEvent) => {
     e.preventDefault();
-    const cleanName = nicknameInput.trim();
-    if (!cleanName) {
-      setErrorMsg('Silakan masukkan nama panggilan Anda.');
-      return;
-    }
-    if (cleanName.length < 2) {
-      setErrorMsg('Nama terlalu pendek (minimal 2 karakter).');
-      return;
-    }
+    if (!nicknameInput.trim() || isSubmitting) return;
 
-    setIsSubmitting(true);
-    setErrorMsg('');
     try {
-      await joinAsParticipant(cleanName);
-    } catch {
-      setErrorMsg('Gagal bergabung. Coba lagi.');
+      setIsSubmitting(true);
+      await joinAsParticipant(nicknameInput.trim());
     } finally {
       setIsSubmitting(false);
     }
@@ -104,6 +89,8 @@ export const ParticipantView: React.FC = () => {
             <span className="text-xs font-semibold text-slate-600 bg-slate-100 px-3 py-1 rounded-full border border-slate-200/80 font-mono">
               {roomState.status === 'LOBBY'
                 ? 'Lobby'
+                : roomState.status === 'TUTORIAL'
+                ? 'Panduan'
                 : `Kasus ${currentIdx} / ${totalSlides}`}
             </span>
           </div>
@@ -139,34 +126,29 @@ export const ParticipantView: React.FC = () => {
                 </label>
                 <input
                   type="text"
-                  placeholder="Contoh: Rian UX, Sarah..."
+                  required
+                  maxLength={15}
                   value={nicknameInput}
-                  onChange={(e) => {
-                    setNicknameInput(e.target.value);
-                    if (errorMsg) setErrorMsg('');
-                  }}
-                  maxLength={20}
-                  className="w-full px-4 py-3 bg-slate-50 border border-slate-300 rounded-2xl text-sm font-semibold text-slate-900 placeholder-slate-400 focus:outline-none focus:border-slate-800 focus:bg-white"
+                  onChange={(e) => setNicknameInput(e.target.value)}
+                  placeholder="Contoh: Rayhan"
+                  className="w-full px-4 py-3 bg-slate-50 border border-slate-300 rounded-xl text-slate-900 text-sm focus:outline-none focus:border-slate-800 focus:bg-white transition"
                   autoFocus
                 />
-                {errorMsg && (
-                  <p className="text-xs text-rose-600 font-semibold mt-1">{errorMsg}</p>
-                )}
               </div>
 
               <button
                 type="submit"
-                disabled={isSubmitting || !nicknameInput.trim()}
-                className="w-full py-3.5 bg-slate-800 hover:bg-slate-900 active:bg-slate-950 disabled:opacity-50 text-white rounded-2xl font-semibold text-sm shadow-xs cursor-pointer flex items-center justify-center gap-2"
+                disabled={!nicknameInput.trim() || isSubmitting}
+                className="w-full py-3.5 bg-slate-900 hover:bg-black active:scale-[0.99] disabled:opacity-50 text-white rounded-xl font-semibold text-sm shadow-sm transition flex items-center justify-center gap-2 cursor-pointer"
               >
-                <span>{isSubmitting ? 'Menghubungkan...' : 'Masuk ke Arena Voting'}</span>
+                <span>Masuk ke Sesi</span>
                 <ArrowRight className="w-4 h-4" />
               </button>
             </form>
 
-            <div className="pt-2 border-t border-slate-100 flex items-center justify-center gap-2 text-xs text-slate-500 font-normal">
-              <Users className="w-4 h-4 text-slate-600" />
-              <span>Realtime Interactive Voting</span>
+            <div className="pt-2 text-[11px] text-slate-600 flex items-center justify-center gap-1.5 font-normal">
+              <span className="w-2 h-2 rounded-full bg-emerald-500" />
+              <span>Real-time Live Sync Cloud</span>
             </div>
           </div>
         ) : (
@@ -191,15 +173,39 @@ export const ParticipantView: React.FC = () => {
                   </p>
                 </div>
 
-                <div className="p-3 bg-slate-50 border border-slate-200 rounded-2xl text-xs text-slate-600 flex items-center justify-center gap-2 font-medium">
-                  <Sparkles className="w-4 h-4 text-slate-700" />
+                <div className="p-3 bg-slate-50 border border-slate-200 rounded-2xl text-xs text-slate-700 flex items-center justify-center gap-2 font-medium">
+                  <Sparkles className="w-4 h-4 text-slate-800" />
                   <span>Siapkan fokusmu untuk memilih desain terbaik!</span>
                 </div>
               </div>
             )}
 
             {/* ========================================================================= */}
-            {/* CASE B: VOTING STATE (LIGHTWEIGHT NATIVE GREY PADS, NO HEAVY MOTION)      */}
+            {/* CASE B: TUTORIAL / PANDUAN STATE                                          */}
+            {/* ========================================================================= */}
+            {roomState.status === 'TUTORIAL' && (
+              <div className="w-full bg-white border border-slate-200/90 rounded-3xl p-6 sm:p-8 text-center space-y-5 shadow-sm my-auto animate-fade-in">
+                <div className="w-14 h-14 rounded-2xl bg-blue-50 text-[#0560FD] flex items-center justify-center mx-auto border border-blue-100">
+                  <BookOpen className="w-7 h-7" />
+                </div>
+                <div className="space-y-1.5">
+                  <h3 className="text-lg sm:text-xl font-bold text-slate-900">
+                    Perhatikan Layar Proyektor 🖥️
+                  </h3>
+                  <p className="text-xs sm:text-sm text-slate-600 font-normal leading-relaxed">
+                    Mentor sedang menjelaskan panduan cara bermain. Siapkan fokusmu, studi kasus pertama akan segera dimulai!
+                  </p>
+                </div>
+
+                <div className="p-3 bg-blue-50/70 border border-blue-100 rounded-2xl text-xs text-blue-800 flex items-center justify-center gap-2 font-semibold">
+                  <Sparkles className="w-4 h-4 text-[#0560FD]" />
+                  <span>Status: Kamu Siap Memilih</span>
+                </div>
+              </div>
+            )}
+
+            {/* ========================================================================= */}
+            {/* CASE C: VOTING STATE (LIGHTWEIGHT NATIVE GREY PADS, NO HEAVY MOTION)      */}
             {/* ========================================================================= */}
             {roomState.status === 'VOTING' && (
               <div className="w-full flex-1 flex flex-col justify-between py-2">
@@ -259,20 +265,24 @@ export const ParticipantView: React.FC = () => {
                         A
                       </div>
 
-                      {/* Title & Status */}
-                      <div className="space-y-0.5 my-auto">
-                        <div className="text-base sm:text-lg font-bold tracking-tight text-slate-900">Desain A</div>
-                        <div className={`text-[11px] font-normal ${myVote === 'A' ? 'text-slate-700 font-medium' : 'text-slate-400'}`}>
-                          {myVote === 'A' ? 'Terpilih ✓' : 'Ketuk Memilih'}
+                      {/* Descriptive Label */}
+                      <div className="space-y-0.5">
+                        <div className="text-sm font-bold text-slate-900">
+                          {currentSlide.optionA.label}
+                        </div>
+                        <div className="text-[11px] text-slate-500 font-normal line-clamp-1">
+                          {currentSlide.optionA.title}
                         </div>
                       </div>
 
-                      {/* Indicator Dot */}
-                      <div>
+                      {/* Selected Pill Indicator */}
+                      <div className="h-5 flex items-center justify-center">
                         {myVote === 'A' ? (
-                          <span className="w-2.5 h-2.5 rounded-full bg-emerald-600 inline-block" />
+                          <span className="text-[10px] font-semibold text-slate-900 bg-white border border-slate-300 px-2 py-0.5 rounded-full">
+                            ✓ Terpilih
+                          </span>
                         ) : (
-                          <span className="w-2 h-2 rounded-full bg-slate-300 inline-block" />
+                          <span className="text-[10px] text-slate-400">Pilih A</span>
                         )}
                       </div>
                     </button>
@@ -294,20 +304,24 @@ export const ParticipantView: React.FC = () => {
                         B
                       </div>
 
-                      {/* Title & Status */}
-                      <div className="space-y-0.5 my-auto">
-                        <div className="text-base sm:text-lg font-bold tracking-tight text-slate-900">Desain B</div>
-                        <div className={`text-[11px] font-normal ${myVote === 'B' ? 'text-slate-700 font-medium' : 'text-slate-400'}`}>
-                          {myVote === 'B' ? 'Terpilih ✓' : 'Ketuk Memilih'}
+                      {/* Descriptive Label */}
+                      <div className="space-y-0.5">
+                        <div className="text-sm font-bold text-slate-900">
+                          {currentSlide.optionB.label}
+                        </div>
+                        <div className="text-[11px] text-slate-500 font-normal line-clamp-1">
+                          {currentSlide.optionB.title}
                         </div>
                       </div>
 
-                      {/* Indicator Dot */}
-                      <div>
+                      {/* Selected Pill Indicator */}
+                      <div className="h-5 flex items-center justify-center">
                         {myVote === 'B' ? (
-                          <span className="w-2.5 h-2.5 rounded-full bg-emerald-600 inline-block" />
+                          <span className="text-[10px] font-semibold text-slate-900 bg-white border border-slate-300 px-2 py-0.5 rounded-full">
+                            ✓ Terpilih
+                          </span>
                         ) : (
-                          <span className="w-2 h-2 rounded-full bg-slate-300 inline-block" />
+                          <span className="text-[10px] text-slate-400">Pilih B</span>
                         )}
                       </div>
                     </button>
@@ -317,86 +331,83 @@ export const ParticipantView: React.FC = () => {
             )}
 
             {/* ========================================================================= */}
-            {/* CASE C: REVEAL STATE (Clean Simple Result Cards)                          */}
+            {/* CASE D: REVEAL STATE (READ-ONLY CLEAN SUMMARY)                            */}
             {/* ========================================================================= */}
             {roomState.status === 'REVEAL' && (
-              <div className="w-full space-y-3.5 my-auto">
-                {/* Dual Results for Mobile */}
-                <div className="grid grid-cols-2 gap-3 w-full">
-                  <div className={`p-4 rounded-2xl border ${
-                    votesCountA >= votesCountB ? 'bg-slate-50 border-2 border-slate-400 shadow-xs' : 'bg-white border border-slate-200'
-                  }`}>
-                    <div className="flex items-center gap-1.5">
-                      <span className="w-2 h-2 rounded-full bg-slate-800" />
-                      <span className="text-xs font-semibold text-slate-900 uppercase font-mono">
-                        Desain A
-                      </span>
-                    </div>
-                    <div className="text-2xl font-bold text-slate-900 mt-1">
-                      {totalVotes > 0 ? `${percentA}%` : '0%'}
-                    </div>
-                    <span className="text-[11px] text-slate-500 font-normal">{votesCountA} suara</span>
-                  </div>
+              <div className="w-full bg-white border border-slate-200/90 rounded-3xl p-5 sm:p-6 text-center space-y-4 shadow-sm my-auto">
+                <div className="w-12 h-12 rounded-2xl bg-slate-100 text-slate-800 flex items-center justify-center mx-auto border border-slate-200">
+                  <CheckCircle2 className="w-6 h-6 text-emerald-600" />
+                </div>
 
-                  <div className={`p-4 rounded-2xl border ${
-                    votesCountB >= votesCountA ? 'bg-slate-50 border-2 border-slate-400 shadow-xs' : 'bg-white border border-slate-200'
-                  }`}>
-                    <div className="flex items-center gap-1.5">
-                      <span className="w-2 h-2 rounded-xs bg-slate-800" />
-                      <span className="text-xs font-semibold text-slate-900 uppercase font-mono">
-                        Desain B
-                      </span>
-                    </div>
-                    <div className="text-2xl font-bold text-slate-900 mt-1">
-                      {totalVotes > 0 ? `${percentB}%` : '0%'}
-                    </div>
-                    <span className="text-[11px] text-slate-500 font-normal">{votesCountB} suara</span>
+                <div className="space-y-1">
+                  <h3 className="text-lg font-bold text-slate-900">
+                    Voting Telah Ditutup!
+                  </h3>
+                  <p className="text-xs text-slate-600 font-normal">
+                    {myVote ? (
+                      <span>Anda memilih <strong className="text-slate-900 font-semibold">Desain {myVote}</strong>.</span>
+                    ) : (
+                      <span>Anda tidak sempat memberikan vote pada kasus ini.</span>
+                    )}
+                  </p>
+                </div>
+
+                {/* Live Vote Result Ratio Bars */}
+                <div className="p-3.5 bg-slate-50 border border-slate-200 rounded-2xl space-y-2.5">
+                  <div className="flex justify-between items-center text-xs font-semibold text-slate-800">
+                    <span>Desain A: {percentA}%</span>
+                    <span>Desain B: {percentB}%</span>
+                  </div>
+                  <div className="w-full h-2.5 bg-slate-200 rounded-full overflow-hidden flex">
+                    <div
+                      className="h-full bg-slate-400 transition-all duration-500"
+                      style={{ width: `${percentA}%` }}
+                    />
+                    <div
+                      className="h-full bg-[#0560FD] transition-all duration-500"
+                      style={{ width: `${percentB}%` }}
+                    />
+                  </div>
+                  <div className="text-[10px] text-slate-600 text-center font-normal">
+                    Total {totalVotes} voting tercatat dari audiens
                   </div>
                 </div>
 
-                {/* Personal Vote Feedback */}
-                {myVote && (
-                  <div className="w-full p-3.5 bg-white border border-slate-200 rounded-2xl text-xs space-y-1 shadow-xs">
-                    <div className="flex items-center justify-between">
-                      <span className="text-slate-600 font-medium">Pilihan Kamu:</span>
-                      <span className="font-semibold text-slate-900 px-2.5 py-0.5 rounded-lg bg-slate-100 border border-slate-200 font-mono flex items-center gap-1.5">
-                        <span className="w-1.5 h-1.5 rounded-full bg-slate-800" />
-                        Desain {myVote}
-                      </span>
-                    </div>
-                  </div>
-                )}
-
-                {/* Mentor Takeaway Summary */}
-                <div className="w-full p-4 bg-white border border-slate-200 rounded-2xl space-y-1.5 shadow-xs">
-                  <div className="flex items-center gap-2 text-xs font-semibold text-slate-900">
-                    <Lightbulb className="w-4 h-4 text-slate-700" />
-                    <span>Poin Edukasi Mentor</span>
-                  </div>
-                  <p className="text-xs text-slate-600 leading-relaxed font-normal">
-                    {currentSlide.mentorExplanation.summary}
-                  </p>
+                <div className="text-xs text-slate-600 flex items-center justify-center gap-1.5 font-normal pt-1">
+                  <Sparkles className="w-3.5 h-3.5 text-[#0560FD]" />
+                  <span>Simak penjelasan mentor di layar proyektor!</span>
                 </div>
               </div>
             )}
 
             {/* ========================================================================= */}
-            {/* CASE D: GAME FINISHED                                                     */}
+            {/* CASE E: FINISHED STATE                                                    */}
             {/* ========================================================================= */}
             {roomState.status === 'FINISHED' && (
-              <div className="w-full bg-white border border-slate-200/90 rounded-3xl p-6 sm:p-8 text-center space-y-4 shadow-sm my-auto">
+              <div className="w-full bg-white border border-slate-200/90 rounded-3xl p-6 sm:p-8 text-center space-y-5 shadow-sm my-auto">
                 <div className="w-14 h-14 rounded-2xl bg-slate-100 text-slate-800 flex items-center justify-center mx-auto border border-slate-200">
                   <Trophy className="w-7 h-7" />
                 </div>
-                <h3 className="text-xl font-bold text-slate-900">Sesi Telah Selesai! 🎉</h3>
-                <p className="text-xs sm:text-sm text-slate-600 font-normal">
-                  Terima kasih, {myParticipant.nickname}! Kamu telah menyelesaikan seluruh studi kasus UI/UX hari ini.
-                </p>
+                <div className="space-y-1.5">
+                  <h3 className="text-lg sm:text-xl font-bold text-slate-900">
+                    Sesi Mentoring Selesai! 🎉
+                  </h3>
+                  <p className="text-xs sm:text-sm text-slate-600 font-normal leading-relaxed">
+                    Terima kasih telah aktif berpartisipasi dalam sesi voting dan studi kasus hari ini.
+                  </p>
+                </div>
               </div>
             )}
           </div>
         )}
       </main>
+
+      {/* ========================================================================= */}
+      {/* BOTTOM FOOTER BRANDING                                                    */}
+      {/* ========================================================================= */}
+      <footer className="py-2.5 text-center text-[10px] text-slate-600 border-t border-slate-200/60 bg-white">
+        SplitVote UI/UX Interactive • Live Mobile Client
+      </footer>
     </div>
   );
 };

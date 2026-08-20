@@ -200,6 +200,29 @@ export class RealtimeService {
     }
   }
 
+  // Admin: Show Tutorial Page
+  public async showTutorial(roomId: string = DEFAULT_ROOM_ID) {
+    const now = Date.now();
+    const updates = {
+      status: 'TUTORIAL' as GameStatus,
+      currentSlideIndex: 0,
+      timerRunning: false,
+      timerRemaining: 30,
+      timerStartedAt: undefined,
+      votes: {},
+      updatedAt: now,
+    };
+
+    if (this.isFirebase && this.db) {
+      const roomRef = ref(this.db, `rooms/${roomId}`);
+      await update(roomRef, updates);
+    } else {
+      const state = getLocalRoomState();
+      const nextState = { ...state, ...updates };
+      saveLocalRoomState(nextState);
+    }
+  }
+
   // Admin: Start round voting
   public async startVoting(duration: number = 30, roomId: string = DEFAULT_ROOM_ID) {
     const now = Date.now();

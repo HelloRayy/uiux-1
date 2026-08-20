@@ -12,11 +12,19 @@ export function parseRoute(pathname: string) {
 
   // Admin route: /admin or /admin/1, /admin/2, /control, /mentor
   if (clean.startsWith('/admin') || clean.startsWith('/control') || clean.startsWith('/mentor')) {
+    if (clean === '/admin/tutorial' || clean === '/admin/panduan' || clean === '/admin/intro') {
+      return {
+        role: 'ADMIN' as const,
+        slideNumber: 0,
+        isTutorial: true,
+      };
+    }
     const match = clean.match(/\/admin\/(\d+)/) || clean.match(/\/control\/(\d+)/);
     const slideNumber = match ? parseInt(match[1], 10) : null;
     return {
       role: 'ADMIN' as const,
       slideNumber: slideNumber && slideNumber >= 1 ? slideNumber : null,
+      isTutorial: false,
     };
   }
 
@@ -27,6 +35,16 @@ export function parseRoute(pathname: string) {
     return {
       role: 'PLAY' as const,
       slideNumber: slideNumber && slideNumber >= 1 ? slideNumber : null,
+      isTutorial: false,
+    };
+  }
+
+  // Tutorial Direct Route: /tutorial, /panduan, /intro, /0
+  if (clean === '/tutorial' || clean === '/panduan' || clean === '/intro' || clean === '/0') {
+    return {
+      role: 'HOST' as const,
+      slideNumber: 0,
+      isTutorial: true,
     };
   }
 
@@ -37,6 +55,7 @@ export function parseRoute(pathname: string) {
     return {
       role: 'HOST' as const,
       slideNumber: slideNumber >= 1 ? slideNumber : 1,
+      isTutorial: false,
     };
   }
 
@@ -44,5 +63,6 @@ export function parseRoute(pathname: string) {
   return {
     role: 'HOST' as const,
     slideNumber: null, // null means Lobby (Landing Page Hero)
+    isTutorial: false,
   };
 }
