@@ -22,6 +22,7 @@ export const ParticipantView2: React.FC = () => {
   const {
     roomState,
     currentSlide,
+    totalSlides,
     myParticipant,
     myVote,
     myScore,
@@ -39,6 +40,10 @@ export const ParticipantView2: React.FC = () => {
   const [activeCard, setActiveCard] = useState<'A' | 'B'>('A');
   const [isIdle, setIsIdle] = useState(false);
   const idleTimerRef = useRef<number | null>(null);
+
+  const slideInfoText = roomState.status === 'TUTORIAL'
+    ? 'Tutorial • Pemanasan'
+    : `Ronde ${(roomState.currentSlideIndex || 0) + 1} dari ${totalSlides} • ${currentSlide.topic}`;
 
   // Embla Carousel Engine for Fullscreen Swipe
   const [emblaRef, emblaApi] = useEmblaCarousel({
@@ -319,7 +324,14 @@ export const ParticipantView2: React.FC = () => {
 
                 {/* Bottom Area: Title + Subtitle + FAB Button Pair (Image 2 Replica) */}
                 <div className="w-full max-w-sm mx-auto pt-2 space-y-2.5">
-                  <div className="text-center space-y-0.5">
+                  <div className="text-center space-y-1">
+                    {/* Slide Info Chip above title */}
+                    <div className="flex items-center justify-center">
+                      <span className="text-[11px] font-bold text-primary bg-primary/10 px-3 py-0.5 rounded-full border border-primary/20 shadow-2xs">
+                        {slideInfoText}
+                      </span>
+                    </div>
+
                     <h3 className="text-base sm:text-lg font-black tracking-tight text-slate-900 leading-tight">
                       Desain A: {currentSlide.optionA.title}
                     </h3>
@@ -385,7 +397,14 @@ export const ParticipantView2: React.FC = () => {
 
                 {/* Bottom Area: Title + Subtitle + FAB Button Pair (Image 2 Replica) */}
                 <div className="w-full max-w-sm mx-auto pt-2 space-y-2.5">
-                  <div className="text-center space-y-0.5">
+                  <div className="text-center space-y-1">
+                    {/* Slide Info Chip above title */}
+                    <div className="flex items-center justify-center">
+                      <span className="text-[11px] font-bold text-indigo-600 bg-indigo-50 px-3 py-0.5 rounded-full border border-indigo-200 shadow-2xs">
+                        {slideInfoText}
+                      </span>
+                    </div>
+
                     <h3 className="text-base sm:text-lg font-black tracking-tight text-slate-900 leading-tight">
                       Desain B: {currentSlide.optionB.title}
                     </h3>
