@@ -288,7 +288,7 @@ export const ParticipantView2: React.FC = () => {
               {/* ------------------------------------------------------------- */}
               {/* SLIDE A: FULLSCREEN DESAIN A                                  */}
               {/* ------------------------------------------------------------- */}
-              <div className="min-w-0 shrink-0 grow-0 basis-full h-full w-full flex flex-col justify-between p-4 pb-3 bg-white text-slate-900 relative rounded-t-[32px]">
+              <div className="min-w-0 shrink-0 grow-0 basis-full h-full w-full flex flex-col justify-between p-4 pb-8 sm:pb-10 bg-white text-slate-900 relative rounded-t-[32px]">
                 {/* Top-Left Pill Badge ("Match 86%" Replica) */}
                 <div className="absolute top-4 left-4 z-30">
                   <div className="bg-slate-900/90 text-white text-[11px] font-bold px-3 py-1 rounded-full shadow-md backdrop-blur-md flex items-center gap-1.5">
@@ -304,14 +304,14 @@ export const ParticipantView2: React.FC = () => {
                 </div>
 
                 {/* Center Visual Mockup Canvas (Full Height Flex) */}
-                <div className="flex-1 w-full my-auto flex items-center justify-center overflow-y-auto py-8">
+                <div className="flex-1 w-full my-auto flex items-center justify-center overflow-y-auto py-6">
                   <div className="w-full max-w-sm mx-auto">
                     <Component variant="A" />
                   </div>
                 </div>
 
                 {/* Bottom Area: Title with Green Dot + Subtitle + FAB Buttons (Image 2 Replica) */}
-                <div className="w-full max-w-sm mx-auto pt-2 space-y-2.5">
+                <div className="w-full max-w-sm mx-auto pt-1 pb-1 space-y-3">
                   <div className="text-left space-y-0.5 pl-1">
                     <h3 className="text-lg sm:text-xl font-black tracking-tight text-slate-900 flex items-center gap-2">
                       <span>Desain A: {currentSlide.optionA.title}</span>
@@ -369,7 +369,7 @@ export const ParticipantView2: React.FC = () => {
               {/* ------------------------------------------------------------- */}
               {/* SLIDE B: FULLSCREEN DESAIN B                                  */}
               {/* ------------------------------------------------------------- */}
-              <div className="min-w-0 shrink-0 grow-0 basis-full h-full w-full flex flex-col justify-between p-4 pb-3 bg-white text-slate-900 relative rounded-t-[32px]">
+              <div className="min-w-0 shrink-0 grow-0 basis-full h-full w-full flex flex-col justify-between p-4 pb-8 sm:pb-10 bg-white text-slate-900 relative rounded-t-[32px]">
                 {/* Top-Left Pill Badge ("Match 86%" Replica) */}
                 <div className="absolute top-4 left-4 z-30">
                   <div className="bg-slate-900/90 text-white text-[11px] font-bold px-3 py-1 rounded-full shadow-md backdrop-blur-md flex items-center gap-1.5">
@@ -385,14 +385,14 @@ export const ParticipantView2: React.FC = () => {
                 </div>
 
                 {/* Center Visual Mockup Canvas (Full Height Flex) */}
-                <div className="flex-1 w-full my-auto flex items-center justify-center overflow-y-auto py-8">
+                <div className="flex-1 w-full my-auto flex items-center justify-center overflow-y-auto py-6">
                   <div className="w-full max-w-sm mx-auto">
                     <Component variant="B" />
                   </div>
                 </div>
 
                 {/* Bottom Area: Title with Green Dot + Subtitle + FAB Buttons (Image 2 Replica) */}
-                <div className="w-full max-w-sm mx-auto pt-2 space-y-2.5">
+                <div className="w-full max-w-sm mx-auto pt-1 pb-1 space-y-3">
                   <div className="text-left space-y-0.5 pl-1">
                     <h3 className="text-lg sm:text-xl font-black tracking-tight text-slate-900 flex items-center gap-2">
                       <span>Desain B: {currentSlide.optionB.title}</span>
