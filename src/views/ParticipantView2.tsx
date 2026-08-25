@@ -11,9 +11,9 @@ import {
   Clock,
   ArrowRight,
   HelpCircle,
-  ChevronLeft,
-  ChevronRight,
-  RotateCcw,
+  Check,
+  X,
+  Repeat,
 } from 'lucide-react';
 import { Button } from '../components/ui/button';
 import { Card } from '../components/ui/card';
@@ -98,7 +98,7 @@ export const ParticipantView2: React.FC = () => {
   const isCorrect = myVote ? myVote === currentSlide.correctOption : false;
 
   // =========================================================================
-  // 1. INTEGRATED ONBOARDING SCREEN (LIGHT MODE SHADCN STYLE)
+  // 1. INTEGRATED ONBOARDING SCREEN (LIGHT MODE SHADCN DATING APP HERO)
   // =========================================================================
   if (!myParticipant) {
     return (
@@ -121,9 +121,9 @@ export const ParticipantView2: React.FC = () => {
           </h1>
         </header>
 
-        {/* Center Visual Mockup Cards Preview (Light Mode) */}
+        {/* Center Visual Mockup Cards Preview (Dating App Stack Style) */}
         <div className="relative z-10 my-auto py-6 flex justify-center items-center">
-          <div className="relative w-64 h-52 sm:w-72 sm:h-60">
+          <div className="relative w-64 h-56 sm:w-72 sm:h-64">
             {/* Background Layered Card A */}
             <div className="absolute inset-0 bg-slate-100 border-2 border-slate-300 rounded-3xl p-4 shadow-sm -rotate-6 scale-95 opacity-80 flex flex-col justify-between">
               <div className="flex justify-between items-center text-[10px] font-mono text-slate-500">
@@ -189,13 +189,13 @@ export const ParticipantView2: React.FC = () => {
   }
 
   // =========================================================================
-  // 2. MAIN PARTICIPANT GAME VIEW (LIGHT MODE IMMERSIVE SWIPEABLE CANVAS)
+  // 2. MAIN PARTICIPANT GAME VIEW (DATING-APP CARD DECK WITH SIDE PEEK)
   // =========================================================================
   return (
-    <div className="min-h-screen bg-slate-50 text-slate-900 flex flex-col justify-between font-sans relative overflow-hidden selection:bg-primary selection:text-white">
+    <div className="min-h-screen bg-slate-100 text-slate-900 flex flex-col justify-between font-sans relative overflow-x-hidden selection:bg-primary selection:text-white pb-6">
       {/* Top Floating App Bar with Idle Fade-Out */}
       <header
-        className={`fixed top-0 left-0 right-0 z-40 px-4 py-3 bg-white/90 backdrop-blur-md border-b border-slate-200 flex items-center justify-between transition-opacity duration-300 ${
+        className={`fixed top-0 left-0 right-0 z-40 px-4 py-2.5 bg-white/90 backdrop-blur-md border-b border-slate-200 flex items-center justify-between transition-opacity duration-300 ${
           isIdle && (roomState.status === 'VOTING' || roomState.status === 'TUTORIAL') ? 'opacity-20 hover:opacity-100' : 'opacity-100'
         }`}
       >
@@ -216,7 +216,7 @@ export const ParticipantView2: React.FC = () => {
 
         {/* Realtime Player Score & Rank Badge */}
         <div className="flex items-center gap-2">
-          <Badge variant="secondary" className="font-mono text-xs font-bold gap-1 bg-white border border-slate-200 text-slate-800 shadow-2xs">
+          <Badge variant="secondary" className="font-mono text-xs font-bold gap-1 bg-slate-50 border border-slate-200 text-slate-800 shadow-2xs">
             <Trophy className="w-3.5 h-3.5 text-amber-500" />
             <span>{myScore} Pts</span>
           </Badge>
@@ -228,13 +228,13 @@ export const ParticipantView2: React.FC = () => {
         </div>
       </header>
 
-      {/* Main Swipeable Viewport */}
-      <main className="flex-1 w-full max-w-md mx-auto pt-16 pb-28 px-4 flex flex-col justify-between">
+      {/* Main Container */}
+      <main className="flex-1 w-full max-w-sm mx-auto pt-14 px-3 flex flex-col justify-center">
         {/* ========================================================================= */}
         {/* STATE A: LOBBY STANDBY                                                    */}
         {/* ========================================================================= */}
         {roomState.status === 'LOBBY' && (
-          <Card className="p-6 text-center space-y-4 my-auto border-slate-200 bg-white text-slate-900 shadow-sm">
+          <Card className="p-6 text-center space-y-4 my-auto border-slate-200 bg-white text-slate-900 shadow-md rounded-3xl">
             <div className="w-14 h-14 rounded-2xl bg-primary/10 text-primary flex items-center justify-center mx-auto animate-pulse">
               <Clock className="w-7 h-7" />
             </div>
@@ -253,99 +253,167 @@ export const ParticipantView2: React.FC = () => {
         )}
 
         {/* ========================================================================= */}
-        {/* STATE B: TUTORIAL / VOTING - SWIPEABLE IMMERSIVE CARD + FLOATING CTA       */}
+        {/* STATE B: TUTORIAL / VOTING - DATING-APP TALL CARD STACK WITH PEEK          */}
         {/* ========================================================================= */}
         {(roomState.status === 'VOTING' || roomState.status === 'TUTORIAL') && (
-          <div className="space-y-3 flex-1 flex flex-col justify-between animate-fade-in">
+          <div className="space-y-2.5 flex-1 flex flex-col justify-center animate-fade-in py-2">
             {/* Header Question with Idle Fade-Out */}
             <div
-              className={`space-y-1 text-center transition-opacity duration-300 ${
+              className={`text-center space-y-0.5 transition-opacity duration-300 ${
                 isIdle ? 'opacity-20 hover:opacity-100' : 'opacity-100'
               }`}
             >
-              <Badge variant="outline" className="text-[10px] font-semibold text-primary bg-primary/5 border-primary/20">
+              <Badge variant="outline" className="text-[10px] font-semibold text-primary bg-white border-primary/20 shadow-2xs">
                 {currentSlide.topic}
               </Badge>
-              <h3 className="text-sm font-bold text-slate-900 leading-tight">
+              <h3 className="text-xs sm:text-sm font-bold text-slate-900 leading-tight">
                 {currentSlide.title}
               </h3>
             </div>
 
-            {/* SWIPE PAGINATION PILL SELECTOR (Light Mode Shadcn Style) */}
-            <div className="flex items-center justify-center gap-2">
-              <div className="inline-flex p-1 bg-slate-200/80 border border-slate-300 rounded-full shadow-inner">
-                <button
-                  type="button"
+            {/* DATING-APP SWIPEABLE CARD DECK CONTAINER */}
+            <div className="relative w-full h-[510px] flex items-center justify-center touch-pan-y select-none">
+              {/* SIDE PEEKING CARD: CARD A (WHEN CARD B IS ACTIVE) */}
+              {activeCard === 'B' && (
+                <div
                   onClick={() => setActiveCard('A')}
-                  className={`px-4 py-1 rounded-full text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 ${
-                    activeCard === 'A'
-                      ? 'bg-primary text-white shadow-xs'
-                      : 'text-slate-600 hover:text-slate-900'
-                  }`}
+                  className="absolute -left-14 top-4 bottom-4 w-[70%] bg-slate-200/90 border-2 border-slate-300 rounded-3xl p-3 shadow-md opacity-60 scale-90 -rotate-3 cursor-pointer z-10 overflow-hidden flex flex-col justify-between pointer-events-auto transition-all"
                 >
-                  <span>Desain A</span>
-                  {activeCard === 'A' && <span className="w-1.5 h-1.5 rounded-full bg-white animate-pulse" />}
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setActiveCard('B')}
-                  className={`px-4 py-1 rounded-full text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 ${
-                    activeCard === 'B'
-                      ? 'bg-indigo-600 text-white shadow-xs'
-                      : 'text-slate-600 hover:text-slate-900'
-                  }`}
-                >
-                  <span>Desain B</span>
-                  {activeCard === 'B' && <span className="w-1.5 h-1.5 rounded-full bg-white animate-pulse" />}
-                </button>
-              </div>
-            </div>
+                  <div className="flex items-center gap-1.5 text-[11px] font-bold text-slate-600">
+                    <span className="w-5 h-5 rounded-md bg-primary text-white text-[10px] flex items-center justify-center">A</span>
+                    <span className="truncate">{currentSlide.optionA.title}</span>
+                  </div>
+                  <div className="my-auto opacity-50 pointer-events-none scale-75 origin-center">
+                    <Component variant="A" />
+                  </div>
+                  <span className="text-[9px] font-bold text-primary text-center">Ketuk untuk buka Desain A</span>
+                </div>
+              )}
 
-            {/* FULLSCREEN SWIPEABLE CANVAS (Framer Motion Elastic Drag) */}
-            <div className="relative w-full flex-1 min-h-[310px] flex items-center justify-center touch-pan-y">
+              {/* SIDE PEEKING CARD: CARD B (WHEN CARD A IS ACTIVE) */}
+              {activeCard === 'A' && (
+                <div
+                  onClick={() => setActiveCard('B')}
+                  className="absolute -right-14 top-4 bottom-4 w-[70%] bg-slate-200/90 border-2 border-slate-300 rounded-3xl p-3 shadow-md opacity-60 scale-90 rotate-3 cursor-pointer z-10 overflow-hidden flex flex-col justify-between pointer-events-auto transition-all"
+                >
+                  <div className="flex items-center gap-1.5 text-[11px] font-bold text-slate-600">
+                    <span className="w-5 h-5 rounded-md bg-indigo-600 text-white text-[10px] flex items-center justify-center">B</span>
+                    <span className="truncate">{currentSlide.optionB.title}</span>
+                  </div>
+                  <div className="my-auto opacity-50 pointer-events-none scale-75 origin-center">
+                    <Component variant="B" />
+                  </div>
+                  <span className="text-[9px] font-bold text-indigo-600 text-center">Ketuk untuk buka Desain B</span>
+                </div>
+              )}
+
+              {/* MAIN ACTIVE CARD (SPRING DRAG PHYSICS) */}
               <AnimatePresence mode="wait">
                 <motion.div
                   key={activeCard}
                   drag="x"
                   dragConstraints={{ left: 0, right: 0 }}
-                  dragElastic={0.2}
+                  dragElastic={0.25}
                   onDragEnd={handleDragEnd}
-                  initial={{ opacity: 0, scale: 0.96, x: activeCard === 'A' ? -20 : 20 }}
+                  initial={{ opacity: 0, scale: 0.94, x: activeCard === 'A' ? -30 : 30 }}
                   animate={{ opacity: 1, scale: 1, x: 0 }}
-                  exit={{ opacity: 0, scale: 0.96, x: activeCard === 'A' ? 20 : -20 }}
-                  transition={{ type: 'spring', damping: 25, stiffness: 300 }}
-                  className="w-full bg-white text-slate-900 rounded-3xl p-4 sm:p-5 shadow-lg border-2 border-slate-200/90 cursor-grab active:cursor-grabbing flex flex-col justify-between min-h-[300px]"
+                  exit={{ opacity: 0, scale: 0.94, x: activeCard === 'A' ? 30 : -30 }}
+                  transition={{ type: 'spring', damping: 24, stiffness: 280 }}
+                  className="relative z-20 w-full h-full bg-white text-slate-900 rounded-[32px] p-4 shadow-2xl border-2 border-slate-300/80 flex flex-col justify-between cursor-grab active:cursor-grabbing overflow-hidden"
                 >
-                  {/* Card Header */}
-                  <div className="flex items-center justify-between pb-2 border-b border-slate-100">
+                  {/* Floating Gesture Hint Pill (Top Right Corner) */}
+                  <div
+                    onClick={() => setActiveCard(activeCard === 'A' ? 'B' : 'A')}
+                    className="absolute top-3.5 right-3.5 z-30 bg-primary/10 hover:bg-primary/20 text-primary px-2.5 py-1 rounded-full text-[10px] font-bold flex items-center gap-1 cursor-pointer shadow-2xs border border-primary/20 active:scale-95 transition"
+                  >
+                    <Repeat className="w-3 h-3" />
+                    <span>Lihat {activeCard === 'A' ? 'Desain B' : 'Desain A'}</span>
+                  </div>
+
+                  {/* Card Header Info */}
+                  <div className="space-y-0.5 pr-20 pt-1">
                     <div className="flex items-center gap-2">
                       <span
-                        className={`w-6 h-6 rounded-lg text-white font-bold text-xs flex items-center justify-center ${
+                        className={`w-6 h-6 rounded-lg text-white font-bold text-xs flex items-center justify-center shadow-xs ${
                           activeCard === 'A' ? 'bg-primary' : 'bg-indigo-600'
                         }`}
                       >
                         {activeCard}
                       </span>
-                      <span className="text-xs font-bold text-slate-900">
+                      <h4 className="text-sm font-black text-slate-900 truncate">
                         {activeCard === 'A' ? currentSlide.optionA.title : currentSlide.optionB.title}
-                      </span>
+                      </h4>
                     </div>
-                    <span className="text-[10px] font-mono text-slate-400 flex items-center gap-1">
-                      <ChevronLeft className="w-3 h-3" /> Geser <ChevronRight className="w-3 h-3" />
-                    </span>
+                    <p className="text-[11px] text-muted-foreground pl-8">
+                      {activeCard === 'A' ? 'Sisi Kiri Proyektor' : 'Sisi Kanan Proyektor'}
+                    </p>
                   </div>
 
-                  {/* Render Actual UI Mockup */}
-                  <div className="py-3 my-auto">
+                  {/* Card Visual Content Showcase */}
+                  <div className="py-2 my-auto flex items-center justify-center overflow-y-auto max-h-[300px]">
                     <Component variant={activeCard} />
                   </div>
 
-                  {/* Card Footer Hint */}
-                  <div className="pt-2 border-t border-slate-100 flex items-center justify-between text-[10px] text-slate-500">
-                    <span>{activeCard === 'A' ? 'Sisi Kiri Proyektor' : 'Sisi Kanan Proyektor'}</span>
-                    <span className="font-semibold text-primary">
-                      {activeCard === 'A' ? 'Geser ➔ untuk Desain B' : '⬅ Geser untuk Desain A'}
-                    </span>
+                  {/* Card Bottom Area: Title Info + Dating App Floating Action Buttons */}
+                  <div className="pt-2 border-t border-slate-100 space-y-3">
+                    <div className="text-center">
+                      <div className="text-xs font-extrabold text-slate-900">
+                        {activeCard === 'A' ? 'Pilihan: Desain A' : 'Pilihan: Desain B'}
+                      </div>
+                      <div className="text-[10px] text-muted-foreground">
+                        {myVote === activeCard
+                          ? '✅ Anda memilih desain ini'
+                          : 'Geser kartu atau tekan tombol di bawah untuk vote'}
+                      </div>
+                    </div>
+
+                    {/* FLOATING ACTION BUTTONS (LIKE DATING APP X & 💜) */}
+                    <div className="flex items-center justify-center gap-4 pb-1">
+                      {/* Left Button: Switch Card (X / Switch) */}
+                      <button
+                        type="button"
+                        onClick={() => setActiveCard(activeCard === 'A' ? 'B' : 'A')}
+                        title={`Ganti ke Desain ${activeCard === 'A' ? 'B' : 'A'}`}
+                        className="w-13 h-13 rounded-2xl bg-slate-100 hover:bg-slate-200 active:scale-90 text-slate-600 flex items-center justify-center border border-slate-300 shadow-md transition-all cursor-pointer"
+                      >
+                        <X className="w-6 h-6 text-slate-500" />
+                      </button>
+
+                      {/* Right Button: Vote Active Card (Heart/Zap/Check) */}
+                      <button
+                        type="button"
+                        onClick={() => handleVote(activeCard)}
+                        title={`Vote Desain ${activeCard}`}
+                        className={`w-15 h-15 rounded-2xl text-white flex items-center justify-center shadow-xl active:scale-90 transition-all cursor-pointer ${
+                          activeCard === 'A'
+                            ? 'bg-primary hover:bg-primary/90 shadow-primary/30 ring-4 ring-primary/20'
+                            : 'bg-indigo-600 hover:bg-indigo-700 shadow-indigo-600/30 ring-4 ring-indigo-500/20'
+                        }`}
+                      >
+                        {myVote === activeCard ? (
+                          <Check className="w-8 h-8 stroke-[3]" />
+                        ) : (
+                          <Zap className="w-7 h-7 fill-white" />
+                        )}
+                      </button>
+                    </div>
+
+                    {/* Voted Confirmation Notice (If already voted) */}
+                    {myVote && (
+                      <div className="flex items-center justify-between text-[11px] bg-slate-50 p-2 rounded-xl border border-slate-200">
+                        <span className="font-semibold text-emerald-700 flex items-center gap-1">
+                          <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
+                          <span>Pilihan: Desain {myVote}</span>
+                        </span>
+                        <button
+                          type="button"
+                          onClick={cancelMyVote}
+                          className="text-rose-600 hover:underline font-bold cursor-pointer"
+                        >
+                          Batal
+                        </button>
+                      </div>
+                    )}
                   </div>
                 </motion.div>
               </AnimatePresence>
@@ -357,7 +425,7 @@ export const ParticipantView2: React.FC = () => {
         {/* STATE C: REVEAL & FEEDBACK                                                */}
         {/* ========================================================================= */}
         {roomState.status === 'REVEAL' && (
-          <Card className="p-6 text-center space-y-4 my-auto border-slate-200 bg-white text-slate-900 shadow-md animate-fade-in">
+          <Card className="p-6 text-center space-y-4 my-auto border-slate-200 bg-white text-slate-900 shadow-lg rounded-3xl animate-fade-in">
             <div
               className={`w-16 h-16 rounded-3xl flex items-center justify-center mx-auto shadow-sm ${
                 isCorrect
@@ -403,7 +471,7 @@ export const ParticipantView2: React.FC = () => {
         {/* STATE D: LEADERBOARD DISPLAY ON MOBILE                                    */}
         {/* ========================================================================= */}
         {roomState.status === 'LEADERBOARD' && (
-          <Card className="p-6 text-center space-y-5 my-auto border-slate-200 bg-white text-slate-900 shadow-md animate-fade-in">
+          <Card className="p-6 text-center space-y-5 my-auto border-slate-200 bg-white text-slate-900 shadow-lg rounded-3xl animate-fade-in">
             <div className="w-16 h-16 rounded-3xl bg-amber-100 text-amber-600 border border-amber-300 flex items-center justify-center mx-auto shadow-sm">
               <Trophy className="w-9 h-9" />
             </div>
@@ -430,7 +498,7 @@ export const ParticipantView2: React.FC = () => {
         {/* STATE E: FINISHED                                                         */}
         {/* ========================================================================= */}
         {roomState.status === 'FINISHED' && (
-          <Card className="p-6 text-center space-y-5 my-auto border-amber-300 bg-amber-50/40 text-slate-900 shadow-lg animate-fade-in">
+          <Card className="p-6 text-center space-y-5 my-auto border-amber-300 bg-amber-50/40 text-slate-900 shadow-lg rounded-3xl animate-fade-in">
             <div className="w-20 h-20 rounded-3xl bg-amber-400 text-white flex items-center justify-center mx-auto shadow-md">
               <Trophy className="w-10 h-10" />
             </div>
@@ -445,85 +513,6 @@ export const ParticipantView2: React.FC = () => {
           </Card>
         )}
       </main>
-
-      {/* ========================================================================= */}
-      {/* 3. CONTEXTUAL FLOATING ACTION BUTTON DOCK (LIGHT MODE SHADCN)              */}
-      {/* ========================================================================= */}
-      {(roomState.status === 'VOTING' || roomState.status === 'TUTORIAL') && (
-        <div className="fixed bottom-4 left-4 right-4 max-w-md mx-auto z-50 animate-fade-in">
-          {myVote ? (
-            /* STATE: ALREADY VOTED (CONFIRMATION & QUICK SWITCH) */
-            <div className="bg-white/95 backdrop-blur-xl border-2 border-slate-200 rounded-3xl p-3.5 shadow-xl text-center space-y-2">
-              <div className="flex items-center justify-between px-2 text-xs">
-                <div className="flex items-center gap-1.5 text-emerald-700 font-bold">
-                  <CheckCircle2 className="w-4 h-4 text-emerald-600" />
-                  <span>Pilihan Tercatat: Desain {myVote}</span>
-                </div>
-                <span className="text-[10px] text-slate-500 font-mono">Kecepatan Terhitung ⚡</span>
-              </div>
-
-              <div className="flex items-center gap-2 pt-1 border-t border-slate-100">
-                <Button
-                  size="sm"
-                  variant="outline"
-                  onClick={() => {
-                    const otherOption = myVote === 'A' ? 'B' : 'A';
-                    setActiveCard(otherOption);
-                    handleVote(otherOption);
-                  }}
-                  className="flex-1 text-xs font-bold text-primary border-primary/30 hover:bg-primary/5 rounded-2xl h-10"
-                >
-                  <RotateCcw className="w-3.5 h-3.5 mr-1" />
-                  <span>Ganti ke Desain {myVote === 'A' ? 'B' : 'A'}</span>
-                </Button>
-
-                <Button
-                  size="sm"
-                  variant="ghost"
-                  onClick={cancelMyVote}
-                  className="text-xs font-semibold text-rose-600 hover:text-rose-700 hover:bg-rose-50 rounded-2xl h-10 px-3"
-                >
-                  Batal
-                </Button>
-              </div>
-            </div>
-          ) : (
-            /* STATE: NOT VOTED YET (CONTEXTUAL VOTE CTA FOR ACTIVE PREVIEW CARD) */
-            <div className="bg-white/95 backdrop-blur-xl border-2 border-slate-200 rounded-3xl p-2.5 shadow-xl space-y-2">
-              <div className="flex items-center gap-2">
-                {/* Main Floating Vote Button for the actively viewed card */}
-                <Button
-                  size="lg"
-                  onClick={() => handleVote(activeCard)}
-                  className={`flex-1 h-13 rounded-2xl font-black text-sm shadow-md transition-all cursor-pointer flex items-center justify-center gap-2 ${
-                    activeCard === 'A'
-                      ? 'bg-primary hover:bg-primary/90 text-white shadow-primary/20'
-                      : 'bg-indigo-600 hover:bg-indigo-700 text-white shadow-indigo-600/20'
-                  }`}
-                >
-                  <Zap className="w-4 h-4 fill-white" />
-                  <span>Vote {activeCard === 'A' ? 'Desain A' : 'Desain B'}</span>
-                </Button>
-
-                {/* Quick Toggle to the other card */}
-                <Button
-                  variant="secondary"
-                  size="icon"
-                  onClick={() => setActiveCard(activeCard === 'A' ? 'B' : 'A')}
-                  className="w-13 h-13 rounded-2xl bg-slate-100 hover:bg-slate-200 text-slate-800 border border-slate-300 shrink-0 cursor-pointer"
-                  title={`Lihat Desain ${activeCard === 'A' ? 'B' : 'A'}`}
-                >
-                  {activeCard === 'A' ? <ChevronRight className="w-5 h-5" /> : <ChevronLeft className="w-5 h-5" />}
-                </Button>
-              </div>
-
-              <div className="text-[10px] text-center text-slate-500 font-medium flex items-center justify-center gap-1">
-                <span>Tekan tombol di atas untuk memilih <strong>Desain {activeCard}</strong></span>
-              </div>
-            </div>
-          )}
-        </div>
-      )}
     </div>
   );
 };
