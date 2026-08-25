@@ -211,44 +211,44 @@ export const ParticipantView2: React.FC = () => {
   }
 
   // =========================================================================
-  // 2. FULLSCREEN IMMERSIVE MOBILE GAME VIEW (ACCURATELY MATCHING REFERENCE)
+  // 2. FULLSCREEN IMMERSIVE MOBILE GAME VIEW (PURE LIGHT MODE)
   // =========================================================================
   return (
-    <div className="h-[100dvh] w-full bg-slate-900 text-white flex flex-col justify-between font-sans relative overflow-hidden select-none">
+    <div className="h-[100dvh] w-full bg-slate-100 text-slate-900 flex flex-col justify-between font-sans relative overflow-hidden select-none">
       {/* ----------------------------------------------------------------- */}
-      {/* TOP HEADER BAR (REFERENCE MATCH: Avatar + Hello Name! + Location) */}
+      {/* TOP HEADER BAR (PURE LIGHT MODE: Avatar + Hello Name! + Location) */}
       {/* ----------------------------------------------------------------- */}
       <header
-        className={`fixed top-0 left-0 right-0 z-40 px-4 py-3 bg-slate-950/80 backdrop-blur-md flex items-center justify-between transition-opacity duration-300 ${
+        className={`fixed top-0 left-0 right-0 z-40 px-4 py-3 bg-white/95 backdrop-blur-md border-b border-slate-200 flex items-center justify-between transition-opacity duration-300 ${
           isIdle && (roomState.status === 'VOTING' || roomState.status === 'TUTORIAL') ? 'opacity-20 hover:opacity-100' : 'opacity-100'
         }`}
       >
         {/* User Profile Avatar & Name */}
         <div className="flex items-center gap-2.5">
-          <div className="w-10 h-10 rounded-full bg-gradient-to-tr from-primary to-indigo-500 text-white font-black text-sm flex items-center justify-center shadow-md border-2 border-slate-700">
+          <div className="w-10 h-10 rounded-full bg-gradient-to-tr from-primary to-indigo-600 text-white font-black text-sm flex items-center justify-center shadow-xs border-2 border-white ring-1 ring-slate-200">
             {myParticipant.nickname.slice(0, 2).toUpperCase()}
           </div>
           <div className="flex flex-col text-left">
-            <span className="text-sm font-extrabold text-white tracking-tight leading-none">
+            <span className="text-sm font-extrabold text-slate-900 tracking-tight leading-none">
               Hello {myParticipant.nickname}!
             </span>
-            <span className="flex items-center gap-1 text-[11px] text-slate-400 font-medium pt-1">
+            <span className="flex items-center gap-1 text-[11px] text-muted-foreground font-medium pt-1">
               <MapPin className="w-3 h-3 text-primary" />
               <span>Room UI/UX 2.0</span>
-              <span className={`w-1.5 h-1.5 rounded-full ml-0.5 ${isFirebase ? 'bg-emerald-400 animate-pulse' : 'bg-amber-400'}`} />
+              <span className={`w-1.5 h-1.5 rounded-full ml-0.5 ${isFirebase ? 'bg-emerald-500 animate-pulse' : 'bg-amber-500'}`} />
             </span>
           </div>
         </div>
 
         {/* Right Circular Score / Rank Button */}
         <div className="flex items-center gap-2">
-          <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-slate-800/90 border border-slate-700 text-slate-200 shadow-sm">
-            <Trophy className="w-3.5 h-3.5 text-amber-400" />
+          <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-slate-50 border border-slate-200 text-slate-800 shadow-2xs">
+            <Trophy className="w-3.5 h-3.5 text-amber-500" />
             <span className="font-mono font-bold text-xs">{myScore} Pts</span>
           </div>
 
           {myRank > 0 && (
-            <div className="w-8 h-8 rounded-full bg-primary/20 border border-primary/40 text-primary font-bold text-xs flex items-center justify-center">
+            <div className="w-8 h-8 rounded-full bg-primary/10 border border-primary/20 text-primary font-bold text-xs flex items-center justify-center">
               #{myRank}
             </div>
           )}
@@ -261,19 +261,19 @@ export const ParticipantView2: React.FC = () => {
         {/* STATE A: LOBBY STANDBY                                                    */}
         {/* ========================================================================= */}
         {roomState.status === 'LOBBY' && (
-          <div className="flex-1 flex flex-col justify-center items-center p-6 text-center max-w-sm mx-auto space-y-4">
-            <div className="w-16 h-16 rounded-3xl bg-primary/20 text-primary flex items-center justify-center mx-auto animate-pulse">
+          <div className="flex-1 flex flex-col justify-center items-center p-6 text-center max-w-sm mx-auto space-y-4 bg-white text-slate-900 rounded-3xl m-4 border border-slate-200 shadow-md">
+            <div className="w-16 h-16 rounded-3xl bg-primary/10 text-primary flex items-center justify-center mx-auto animate-pulse">
               <Clock className="w-8 h-8" />
             </div>
             <div className="space-y-1">
-              <h3 className="text-xl font-bold text-white">
+              <h3 className="text-xl font-bold text-slate-900">
                 Menunggu Host Memulai Game...
               </h3>
-              <p className="text-xs text-slate-400 leading-relaxed">
+              <p className="text-xs text-muted-foreground leading-relaxed">
                 Anda sudah terhubung. Perhatikan layar proyektor saat sesi dimulai.
               </p>
             </div>
-            <Badge variant="secondary" className="font-mono text-xs bg-slate-800 text-slate-300 px-3 py-1">
+            <Badge variant="secondary" className="font-mono text-xs bg-slate-100 text-slate-700 px-3 py-1">
               {totalParticipants} Peserta Siap
             </Badge>
           </div>
