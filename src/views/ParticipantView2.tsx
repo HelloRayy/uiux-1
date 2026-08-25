@@ -41,7 +41,7 @@ export const ParticipantView2: React.FC = () => {
   const [isIdle, setIsIdle] = useState(false);
   const idleTimerRef = useRef<number | null>(null);
 
-  // Embla Carousel Engine for Smooth Gesture Swipe
+  // Embla Carousel Engine for Fullscreen Swipe
   const [emblaRef, emblaApi] = useEmblaCarousel({
     loop: false,
     duration: 25,
@@ -121,14 +121,14 @@ export const ParticipantView2: React.FC = () => {
   const isCorrect = myVote ? myVote === currentSlide.correctOption : false;
 
   // =========================================================================
-  // 1. INTEGRATED ONBOARDING SCREEN (LIGHT MODE SHADCN DATING APP HERO)
+  // 1. FULLSCREEN ONBOARDING SCREEN
   // =========================================================================
   if (!myParticipant) {
     return (
-      <div className="min-h-screen bg-slate-50 text-slate-900 flex flex-col justify-between p-4 sm:p-6 font-sans relative overflow-hidden selection:bg-primary selection:text-white">
-        {/* Subtle Ambient Light Gradients */}
-        <div className="absolute -top-32 -left-32 w-80 h-80 bg-blue-100/60 rounded-full blur-3xl pointer-events-none" />
-        <div className="absolute top-1/3 -right-32 w-80 h-80 bg-indigo-100/60 rounded-full blur-3xl pointer-events-none" />
+      <div className="h-[100dvh] w-full bg-slate-50 text-slate-900 flex flex-col justify-between p-5 font-sans relative overflow-hidden selection:bg-primary selection:text-white">
+        {/* Ambient Glows */}
+        <div className="absolute -top-32 -left-32 w-80 h-80 bg-blue-100/70 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute top-1/3 -right-32 w-80 h-80 bg-indigo-100/70 rounded-full blur-3xl pointer-events-none" />
 
         {/* Top Header */}
         <header className="relative z-10 pt-4 text-center space-y-2">
@@ -144,10 +144,9 @@ export const ParticipantView2: React.FC = () => {
           </h1>
         </header>
 
-        {/* Center Visual Mockup Cards Preview (Dating App Stack Style) */}
-        <div className="relative z-10 my-auto py-6 flex justify-center items-center">
+        {/* Center Visual Showcase */}
+        <div className="relative z-10 my-auto py-4 flex justify-center items-center">
           <div className="relative w-64 h-56 sm:w-72 sm:h-64">
-            {/* Background Layered Card A */}
             <div className="absolute inset-0 bg-slate-100 border-2 border-slate-300 rounded-3xl p-4 shadow-sm -rotate-6 scale-95 opacity-80 flex flex-col justify-between">
               <div className="flex justify-between items-center text-[10px] font-mono text-slate-500">
                 <span className="font-bold">DESAIN A</span>
@@ -161,7 +160,6 @@ export const ParticipantView2: React.FC = () => {
               </div>
             </div>
 
-            {/* Foreground Layered Card B */}
             <div className="absolute inset-0 bg-white border-2 border-primary/30 rounded-3xl p-4 shadow-xl rotate-3 flex flex-col justify-between">
               <div className="flex justify-between items-center text-[10px] font-mono">
                 <span className="font-bold text-primary">DESAIN B</span>
@@ -178,11 +176,11 @@ export const ParticipantView2: React.FC = () => {
           </div>
         </div>
 
-        {/* Bottom Form Card (Light Mode Shadcn Card) */}
+        {/* Bottom Form */}
         <Card className="relative z-10 w-full max-w-sm mx-auto bg-white border-2 border-slate-200 rounded-3xl p-5 shadow-xl space-y-4">
           <div className="space-y-1">
             <h3 className="text-sm font-bold text-slate-900">Mulai Bermain</h3>
-            <p className="text-xs text-muted-foreground">Masukkan nama Anda untuk join ke papan skor ronde:</p>
+            <p className="text-xs text-muted-foreground">Masukkan nama panggilan Anda untuk mulai ronde:</p>
           </div>
 
           <form onSubmit={handleJoin} className="space-y-3">
@@ -212,13 +210,13 @@ export const ParticipantView2: React.FC = () => {
   }
 
   // =========================================================================
-  // 2. MAIN PARTICIPANT GAME VIEW (EMBLA CAROUSEL TRACK WITH SIDE PEEK)
+  // 2. FULLSCREEN IMMERSIVE MOBILE GAME VIEW (NO POPUP / FULL EDGE-TO-EDGE)
   // =========================================================================
   return (
-    <div className="min-h-screen bg-slate-100 text-slate-900 flex flex-col justify-between font-sans relative overflow-x-hidden selection:bg-primary selection:text-white pb-6">
+    <div className="h-[100dvh] w-full bg-white text-slate-900 flex flex-col justify-between font-sans relative overflow-hidden select-none">
       {/* Top Floating App Bar with Idle Fade-Out */}
       <header
-        className={`fixed top-0 left-0 right-0 z-40 px-4 py-2.5 bg-white/90 backdrop-blur-md border-b border-slate-200 flex items-center justify-between transition-opacity duration-300 ${
+        className={`fixed top-0 left-0 right-0 z-40 px-4 py-2.5 bg-white/90 backdrop-blur-md border-b border-slate-200/80 flex items-center justify-between transition-opacity duration-300 ${
           isIdle && (roomState.status === 'VOTING' || roomState.status === 'TUTORIAL') ? 'opacity-20 hover:opacity-100' : 'opacity-100'
         }`}
       >
@@ -227,7 +225,7 @@ export const ParticipantView2: React.FC = () => {
             {myParticipant.nickname.slice(0, 2).toUpperCase()}
           </div>
           <div className="flex flex-col">
-            <span className="text-xs font-bold text-slate-900 truncate max-w-[110px]">
+            <span className="text-xs font-bold text-slate-900 truncate max-w-[120px]">
               {myParticipant.nickname}
             </span>
             <span className="flex items-center gap-1 text-[9px] text-slate-500 font-mono">
@@ -236,6 +234,34 @@ export const ParticipantView2: React.FC = () => {
             </span>
           </div>
         </div>
+
+        {/* Active Card Quick Switcher in Header */}
+        {(roomState.status === 'VOTING' || roomState.status === 'TUTORIAL') && (
+          <div className="flex items-center gap-1 bg-slate-100 p-0.5 rounded-full border border-slate-200">
+            <button
+              type="button"
+              onClick={() => scrollToCard('A')}
+              className={`px-2.5 py-0.5 rounded-full text-[10px] font-bold transition cursor-pointer ${
+                activeCard === 'A'
+                  ? 'bg-primary text-white shadow-2xs'
+                  : 'text-slate-500 hover:text-slate-800'
+              }`}
+            >
+              Desain A
+            </button>
+            <button
+              type="button"
+              onClick={() => scrollToCard('B')}
+              className={`px-2.5 py-0.5 rounded-full text-[10px] font-bold transition cursor-pointer ${
+                activeCard === 'B'
+                  ? 'bg-indigo-600 text-white shadow-2xs'
+                  : 'text-slate-500 hover:text-slate-800'
+              }`}
+            >
+              Desain B
+            </button>
+          </div>
+        )}
 
         {/* Realtime Player Score & Rank Badge */}
         <div className="flex items-center gap-2">
@@ -251,224 +277,215 @@ export const ParticipantView2: React.FC = () => {
         </div>
       </header>
 
-      {/* Main Container */}
-      <main className="flex-1 w-full max-w-sm mx-auto pt-14 px-2 flex flex-col justify-center">
+      {/* Main Fullscreen Body */}
+      <main className="flex-1 w-full h-full overflow-hidden flex flex-col justify-between">
         {/* ========================================================================= */}
         {/* STATE A: LOBBY STANDBY                                                    */}
         {/* ========================================================================= */}
         {roomState.status === 'LOBBY' && (
-          <Card className="p-6 text-center space-y-4 my-auto border-slate-200 bg-white text-slate-900 shadow-md rounded-3xl">
-            <div className="w-14 h-14 rounded-2xl bg-primary/10 text-primary flex items-center justify-center mx-auto animate-pulse">
-              <Clock className="w-7 h-7" />
+          <div className="flex-1 flex flex-col justify-center items-center p-6 text-center max-w-sm mx-auto space-y-4">
+            <div className="w-16 h-16 rounded-3xl bg-primary/10 text-primary flex items-center justify-center mx-auto animate-pulse">
+              <Clock className="w-8 h-8" />
             </div>
             <div className="space-y-1">
-              <h3 className="text-lg font-bold text-slate-900">
+              <h3 className="text-xl font-bold text-slate-900">
                 Menunggu Host Memulai Game...
               </h3>
               <p className="text-xs text-muted-foreground leading-relaxed">
-                Anda sudah terhubung. Amati layar proyektor saat sesi dimulai.
+                Anda sudah terhubung. Perhatikan layar proyektor saat sesi dimulai.
               </p>
             </div>
-            <Badge variant="secondary" className="font-mono text-xs bg-slate-100 text-slate-700">
+            <Badge variant="secondary" className="font-mono text-xs bg-slate-100 text-slate-700 px-3 py-1">
               {totalParticipants} Peserta Siap
             </Badge>
-          </Card>
+          </div>
         )}
 
         {/* ========================================================================= */}
-        {/* STATE B: TUTORIAL / VOTING - EMBLA FLUID CAROUSEL (NO SNAP JANK)           */}
+        {/* STATE B: TUTORIAL / VOTING - TRUE FULLSCREEN CAROUSEL SLIDER               */}
         {/* ========================================================================= */}
         {(roomState.status === 'VOTING' || roomState.status === 'TUTORIAL') && (
-          <div className="space-y-2 flex-1 flex flex-col justify-center animate-fade-in py-1">
-            {/* Header Question with Idle Fade-Out */}
-            <div
-              className={`text-center space-y-0.5 transition-opacity duration-300 ${
-                isIdle ? 'opacity-20 hover:opacity-100' : 'opacity-100'
-              }`}
-            >
-              <Badge variant="outline" className="text-[10px] font-semibold text-primary bg-white border-primary/20 shadow-2xs">
-                {currentSlide.topic}
-              </Badge>
-              <h3 className="text-xs sm:text-sm font-bold text-slate-900 leading-tight">
-                {currentSlide.title}
-              </h3>
-            </div>
+          <div className="h-full w-full overflow-hidden flex flex-col" ref={emblaRef}>
+            <div className="flex h-full w-full">
+              {/* ------------------------------------------------------------- */}
+              {/* SLIDE A: FULLSCREEN DESAIN A                                  */}
+              {/* ------------------------------------------------------------- */}
+              <div className="min-w-0 shrink-0 grow-0 basis-full h-full w-full flex flex-col justify-between pt-14 pb-3 px-4 bg-white relative">
+                {/* Top Info Bar */}
+                <div
+                  className={`flex items-center justify-between pb-1 transition-opacity duration-300 ${
+                    isIdle ? 'opacity-20 hover:opacity-100' : 'opacity-100'
+                  }`}
+                >
+                  <div className="flex items-center gap-1.5">
+                    <span className="w-6 h-6 rounded-lg bg-primary text-white font-bold text-xs flex items-center justify-center shadow-xs">
+                      A
+                    </span>
+                    <span className="text-xs font-bold text-slate-800">
+                      {currentSlide.topic}
+                    </span>
+                  </div>
 
-            {/* EMBLA CAROUSEL TRACK (SMOOTH HORIZONTAL SWIPE WITH SIDE PEEK) */}
-            <div className="overflow-hidden w-full select-none cursor-grab active:cursor-grabbing px-1" ref={emblaRef}>
-              <div className="flex -ml-3">
-                {/* ------------------------------------------------------------- */}
-                {/* SLIDE A: DESAIN A                                              */}
-                {/* ------------------------------------------------------------- */}
-                <div className="min-w-0 shrink-0 grow-0 basis-[88%] pl-3">
-                  <div
-                    className={`h-[495px] bg-white rounded-[32px] p-4 shadow-xl border-2 transition-all duration-300 flex flex-col justify-between overflow-hidden ${
-                      activeCard === 'A'
-                        ? 'border-primary/40 shadow-2xl scale-100 opacity-100'
-                        : 'border-slate-200 scale-95 opacity-60'
-                    }`}
+                  <button
+                    type="button"
+                    onClick={() => scrollToCard('B')}
+                    className="bg-slate-100 hover:bg-slate-200 text-slate-700 px-3 py-1 rounded-full text-xs font-bold flex items-center gap-1.5 cursor-pointer border border-slate-200 transition"
                   >
-                    {/* Top Pill Hint */}
-                    <div className="flex items-center justify-between">
-                      <span className="w-6 h-6 rounded-lg bg-primary text-white font-bold text-xs flex items-center justify-center shadow-xs">
-                        A
-                      </span>
-                      <button
-                        type="button"
-                        onClick={() => scrollToCard('B')}
-                        className="bg-primary/10 hover:bg-primary/20 text-primary px-2.5 py-1 rounded-full text-[10px] font-bold flex items-center gap-1 cursor-pointer transition border border-primary/20"
-                      >
-                        <Repeat className="w-3 h-3" />
-                        <span>Cek Desain B</span>
-                      </button>
-                    </div>
+                    <span>Buka Desain B</span>
+                    <Repeat className="w-3.5 h-3.5 text-primary" />
+                  </button>
+                </div>
 
-                    {/* Visual UI Mockup Canvas */}
-                    <div className="py-2 my-auto flex items-center justify-center overflow-y-auto max-h-[290px]">
-                      <Component variant="A" />
-                    </div>
-
-                    {/* Bottom Area: Title + Subtitle + FAB Button Pair (Image 2 Replica) */}
-                    <div className="pt-2 border-t border-slate-100 space-y-2">
-                      <div className="text-center space-y-0.5">
-                        <h3 className="text-base font-black tracking-tight text-slate-900 leading-tight">
-                          Desain A, Raw AI
-                        </h3>
-                        <p className="text-xs text-muted-foreground font-medium truncate">
-                          {currentSlide.optionA.title}
-                        </p>
-                      </div>
-
-                      {/* FAB Button Pair (Squircle X & Heart) */}
-                      <div className="flex items-center justify-center gap-3.5 pb-1">
-                        <button
-                          type="button"
-                          onClick={() => scrollToCard('B')}
-                          title="Lihat Desain B"
-                          className="w-13 h-13 rounded-2xl bg-slate-200 hover:bg-slate-300 active:scale-90 text-slate-600 flex items-center justify-center border border-slate-300 shadow-md transition-all cursor-pointer"
-                        >
-                          <X className="w-6 h-6 text-slate-600 stroke-[2.5]" />
-                        </button>
-
-                        <button
-                          type="button"
-                          onClick={() => handleVote('A')}
-                          title="Vote Desain A"
-                          className={`w-13 h-13 rounded-2xl text-white flex items-center justify-center shadow-xl active:scale-90 transition-all cursor-pointer bg-primary hover:bg-primary/90 shadow-primary/30 ring-4 ring-primary/20`}
-                        >
-                          <Heart
-                            className={`w-7 h-7 stroke-[2.5] ${
-                              myVote === 'A' ? 'fill-white' : 'fill-transparent'
-                            }`}
-                          />
-                        </button>
-                      </div>
-
-                      {/* Voted Notice */}
-                      {myVote === 'A' && (
-                        <div className="flex items-center justify-between text-[10px] bg-emerald-50 px-2.5 py-1 rounded-xl border border-emerald-200">
-                          <span className="font-semibold text-emerald-700 flex items-center gap-1">
-                            <CheckCircle2 className="w-3 h-3 text-emerald-600" />
-                            <span>Pilihan: Desain A</span>
-                          </span>
-                          <button
-                            type="button"
-                            onClick={cancelMyVote}
-                            className="text-rose-600 hover:underline font-bold cursor-pointer"
-                          >
-                            Batal
-                          </button>
-                        </div>
-                      )}
-                    </div>
+                {/* Center Visual Mockup Canvas (Full Height Flex) */}
+                <div className="flex-1 w-full my-auto flex items-center justify-center overflow-y-auto py-2">
+                  <div className="w-full max-w-sm mx-auto">
+                    <Component variant="A" />
                   </div>
                 </div>
 
-                {/* ------------------------------------------------------------- */}
-                {/* SLIDE B: DESAIN B                                              */}
-                {/* ------------------------------------------------------------- */}
-                <div className="min-w-0 shrink-0 grow-0 basis-[88%] pl-3">
-                  <div
-                    className={`h-[495px] bg-white rounded-[32px] p-4 shadow-xl border-2 transition-all duration-300 flex flex-col justify-between overflow-hidden ${
-                      activeCard === 'B'
-                        ? 'border-indigo-500/40 shadow-2xl scale-100 opacity-100'
-                        : 'border-slate-200 scale-95 opacity-60'
-                    }`}
-                  >
-                    {/* Top Pill Hint */}
-                    <div className="flex items-center justify-between">
-                      <span className="w-6 h-6 rounded-lg bg-indigo-600 text-white font-bold text-xs flex items-center justify-center shadow-xs">
-                        B
+                {/* Bottom Area: Title + Subtitle + FAB Button Pair (Image 2 Replica) */}
+                <div className="w-full max-w-sm mx-auto pt-2 space-y-2.5">
+                  <div className="text-center space-y-0.5">
+                    <h3 className="text-base sm:text-lg font-black tracking-tight text-slate-900 leading-tight">
+                      Desain A: {currentSlide.optionA.title}
+                    </h3>
+                    <p className="text-xs text-muted-foreground font-medium truncate">
+                      {currentSlide.optionA.description}
+                    </p>
+                  </div>
+
+                  {/* FAB Button Pair (Squircle X & Heart) */}
+                  <div className="flex items-center justify-center gap-4 pb-1">
+                    <button
+                      type="button"
+                      onClick={() => scrollToCard('B')}
+                      title="Lihat Desain B"
+                      className="w-14 h-14 rounded-2xl bg-slate-100 hover:bg-slate-200 active:scale-90 text-slate-600 flex items-center justify-center border border-slate-300 shadow-md transition-all cursor-pointer"
+                    >
+                      <X className="w-7 h-7 text-slate-600 stroke-[2.5]" />
+                    </button>
+
+                    <button
+                      type="button"
+                      onClick={() => handleVote('A')}
+                      title="Vote Desain A"
+                      className={`w-14 h-14 rounded-2xl text-white flex items-center justify-center shadow-xl active:scale-90 transition-all cursor-pointer bg-primary hover:bg-primary/90 shadow-primary/30 ring-4 ring-primary/20`}
+                    >
+                      <Heart
+                        className={`w-7 h-7 stroke-[2.5] ${
+                          myVote === 'A' ? 'fill-white' : 'fill-transparent'
+                        }`}
+                      />
+                    </button>
+                  </div>
+
+                  {/* Voted Notice */}
+                  {myVote === 'A' && (
+                    <div className="flex items-center justify-between text-[11px] bg-emerald-50 px-3 py-1.5 rounded-xl border border-emerald-200 animate-fade-in">
+                      <span className="font-semibold text-emerald-700 flex items-center gap-1">
+                        <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
+                        <span>Pilihan: Desain A Tercatat</span>
                       </span>
                       <button
                         type="button"
-                        onClick={() => scrollToCard('A')}
-                        className="bg-indigo-50 hover:bg-indigo-100 text-indigo-600 px-2.5 py-1 rounded-full text-[10px] font-bold flex items-center gap-1 cursor-pointer transition border border-indigo-200"
+                        onClick={cancelMyVote}
+                        className="text-rose-600 hover:underline font-bold cursor-pointer"
                       >
-                        <Repeat className="w-3 h-3" />
-                        <span>Cek Desain A</span>
+                        Batal
                       </button>
                     </div>
+                  )}
+                </div>
+              </div>
 
-                    {/* Visual UI Mockup Canvas */}
-                    <div className="py-2 my-auto flex items-center justify-center overflow-y-auto max-h-[290px]">
-                      <Component variant="B" />
-                    </div>
-
-                    {/* Bottom Area: Title + Subtitle + FAB Button Pair (Image 2 Replica) */}
-                    <div className="pt-2 border-t border-slate-100 space-y-2">
-                      <div className="text-center space-y-0.5">
-                        <h3 className="text-base font-black tracking-tight text-slate-900 leading-tight">
-                          Desain B, Human Taste
-                        </h3>
-                        <p className="text-xs text-muted-foreground font-medium truncate">
-                          {currentSlide.optionB.title}
-                        </p>
-                      </div>
-
-                      {/* FAB Button Pair (Squircle X & Heart) */}
-                      <div className="flex items-center justify-center gap-3.5 pb-1">
-                        <button
-                          type="button"
-                          onClick={() => scrollToCard('A')}
-                          title="Lihat Desain A"
-                          className="w-13 h-13 rounded-2xl bg-slate-200 hover:bg-slate-300 active:scale-90 text-slate-600 flex items-center justify-center border border-slate-300 shadow-md transition-all cursor-pointer"
-                        >
-                          <X className="w-6 h-6 text-slate-600 stroke-[2.5]" />
-                        </button>
-
-                        <button
-                          type="button"
-                          onClick={() => handleVote('B')}
-                          title="Vote Desain B"
-                          className={`w-13 h-13 rounded-2xl text-white flex items-center justify-center shadow-xl active:scale-90 transition-all cursor-pointer bg-[#6342ff] hover:bg-[#5233ea] shadow-indigo-500/30 ring-4 ring-indigo-500/20`}
-                        >
-                          <Heart
-                            className={`w-7 h-7 stroke-[2.5] ${
-                              myVote === 'B' ? 'fill-white' : 'fill-transparent'
-                            }`}
-                          />
-                        </button>
-                      </div>
-
-                      {/* Voted Notice */}
-                      {myVote === 'B' && (
-                        <div className="flex items-center justify-between text-[10px] bg-emerald-50 px-2.5 py-1 rounded-xl border border-emerald-200">
-                          <span className="font-semibold text-emerald-700 flex items-center gap-1">
-                            <CheckCircle2 className="w-3 h-3 text-emerald-600" />
-                            <span>Pilihan: Desain B</span>
-                          </span>
-                          <button
-                            type="button"
-                            onClick={cancelMyVote}
-                            className="text-rose-600 hover:underline font-bold cursor-pointer"
-                          >
-                            Batal
-                          </button>
-                        </div>
-                      )}
-                    </div>
+              {/* ------------------------------------------------------------- */}
+              {/* SLIDE B: FULLSCREEN DESAIN B                                  */}
+              {/* ------------------------------------------------------------- */}
+              <div className="min-w-0 shrink-0 grow-0 basis-full h-full w-full flex flex-col justify-between pt-14 pb-3 px-4 bg-white relative">
+                {/* Top Info Bar */}
+                <div
+                  className={`flex items-center justify-between pb-1 transition-opacity duration-300 ${
+                    isIdle ? 'opacity-20 hover:opacity-100' : 'opacity-100'
+                  }`}
+                >
+                  <div className="flex items-center gap-1.5">
+                    <span className="w-6 h-6 rounded-lg bg-indigo-600 text-white font-bold text-xs flex items-center justify-center shadow-xs">
+                      B
+                    </span>
+                    <span className="text-xs font-bold text-slate-800">
+                      {currentSlide.topic}
+                    </span>
                   </div>
+
+                  <button
+                    type="button"
+                    onClick={() => scrollToCard('A')}
+                    className="bg-slate-100 hover:bg-slate-200 text-slate-700 px-3 py-1 rounded-full text-xs font-bold flex items-center gap-1.5 cursor-pointer border border-slate-200 transition"
+                  >
+                    <span>Buka Desain A</span>
+                    <Repeat className="w-3.5 h-3.5 text-indigo-600" />
+                  </button>
+                </div>
+
+                {/* Center Visual Mockup Canvas (Full Height Flex) */}
+                <div className="flex-1 w-full my-auto flex items-center justify-center overflow-y-auto py-2">
+                  <div className="w-full max-w-sm mx-auto">
+                    <Component variant="B" />
+                  </div>
+                </div>
+
+                {/* Bottom Area: Title + Subtitle + FAB Button Pair (Image 2 Replica) */}
+                <div className="w-full max-w-sm mx-auto pt-2 space-y-2.5">
+                  <div className="text-center space-y-0.5">
+                    <h3 className="text-base sm:text-lg font-black tracking-tight text-slate-900 leading-tight">
+                      Desain B: {currentSlide.optionB.title}
+                    </h3>
+                    <p className="text-xs text-muted-foreground font-medium truncate">
+                      {currentSlide.optionB.description}
+                    </p>
+                  </div>
+
+                  {/* FAB Button Pair (Squircle X & Heart) */}
+                  <div className="flex items-center justify-center gap-4 pb-1">
+                    <button
+                      type="button"
+                      onClick={() => scrollToCard('A')}
+                      title="Lihat Desain A"
+                      className="w-14 h-14 rounded-2xl bg-slate-100 hover:bg-slate-200 active:scale-90 text-slate-600 flex items-center justify-center border border-slate-300 shadow-md transition-all cursor-pointer"
+                    >
+                      <X className="w-7 h-7 text-slate-600 stroke-[2.5]" />
+                    </button>
+
+                    <button
+                      type="button"
+                      onClick={() => handleVote('B')}
+                      title="Vote Desain B"
+                      className={`w-14 h-14 rounded-2xl text-white flex items-center justify-center shadow-xl active:scale-90 transition-all cursor-pointer bg-[#6342ff] hover:bg-[#5233ea] shadow-indigo-500/30 ring-4 ring-indigo-500/20`}
+                    >
+                      <Heart
+                        className={`w-7 h-7 stroke-[2.5] ${
+                          myVote === 'B' ? 'fill-white' : 'fill-transparent'
+                        }`}
+                      />
+                    </button>
+                  </div>
+
+                  {/* Voted Notice */}
+                  {myVote === 'B' && (
+                    <div className="flex items-center justify-between text-[11px] bg-emerald-50 px-3 py-1.5 rounded-xl border border-emerald-200 animate-fade-in">
+                      <span className="font-semibold text-emerald-700 flex items-center gap-1">
+                        <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
+                        <span>Pilihan: Desain B Tercatat</span>
+                      </span>
+                      <button
+                        type="button"
+                        onClick={cancelMyVote}
+                        className="text-rose-600 hover:underline font-bold cursor-pointer"
+                      >
+                        Batal
+                      </button>
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
@@ -479,7 +496,7 @@ export const ParticipantView2: React.FC = () => {
         {/* STATE C: REVEAL & FEEDBACK                                                */}
         {/* ========================================================================= */}
         {roomState.status === 'REVEAL' && (
-          <Card className="p-6 text-center space-y-4 my-auto border-slate-200 bg-white text-slate-900 shadow-lg rounded-3xl animate-fade-in">
+          <div className="flex-1 flex flex-col justify-center items-center p-6 text-center max-w-sm mx-auto space-y-4">
             <div
               className={`w-16 h-16 rounded-3xl flex items-center justify-center mx-auto shadow-sm ${
                 isCorrect
@@ -501,7 +518,7 @@ export const ParticipantView2: React.FC = () => {
             </div>
 
             {/* Score Earned Banner */}
-            <div className="p-3.5 bg-slate-50 border border-slate-200 rounded-2xl flex items-center justify-between text-xs">
+            <div className="w-full p-3.5 bg-slate-50 border border-slate-200 rounded-2xl flex items-center justify-between text-xs">
               <span className="font-medium text-slate-600">Poin Ronde Ini:</span>
               <span className={`font-mono font-black text-base ${isCorrect ? 'text-emerald-600' : 'text-rose-500'}`}>
                 {myLastEarned > 0 ? `+${myLastEarned} Pts` : '+0 Pts'}
@@ -509,7 +526,7 @@ export const ParticipantView2: React.FC = () => {
             </div>
 
             {/* Mentor Takeaway Summary */}
-            <div className="p-3.5 bg-blue-50/70 border border-blue-200 rounded-2xl text-left space-y-1.5 text-xs text-blue-950">
+            <div className="w-full p-3.5 bg-blue-50/70 border border-blue-200 rounded-2xl text-left space-y-1.5 text-xs text-blue-950">
               <div className="font-bold flex items-center gap-1.5 text-primary">
                 <HelpCircle className="w-4 h-4" />
                 <span>Kunci Insight Mentor:</span>
@@ -518,14 +535,14 @@ export const ParticipantView2: React.FC = () => {
                 {currentSlide.mentorExplanation.keyTakeaway}
               </p>
             </div>
-          </Card>
+          </div>
         )}
 
         {/* ========================================================================= */}
         {/* STATE D: LEADERBOARD DISPLAY ON MOBILE                                    */}
         {/* ========================================================================= */}
         {roomState.status === 'LEADERBOARD' && (
-          <Card className="p-6 text-center space-y-5 my-auto border-slate-200 bg-white text-slate-900 shadow-lg rounded-3xl animate-fade-in">
+          <div className="flex-1 flex flex-col justify-center items-center p-6 text-center max-w-sm mx-auto space-y-5">
             <div className="w-16 h-16 rounded-3xl bg-amber-100 text-amber-600 border border-amber-300 flex items-center justify-center mx-auto shadow-sm">
               <Trophy className="w-9 h-9" />
             </div>
@@ -542,17 +559,17 @@ export const ParticipantView2: React.FC = () => {
               </p>
             </div>
 
-            <p className="text-xs text-muted-foreground pt-3 border-t border-slate-100">
+            <p className="text-xs text-muted-foreground pt-3 border-t border-slate-100 w-full">
               Perhatikan layar proyektor untuk melihat podium dan papan klasemen lengkap!
             </p>
-          </Card>
+          </div>
         )}
 
         {/* ========================================================================= */}
         {/* STATE E: FINISHED                                                         */}
         {/* ========================================================================= */}
         {roomState.status === 'FINISHED' && (
-          <Card className="p-6 text-center space-y-5 my-auto border-amber-300 bg-amber-50/40 text-slate-900 shadow-lg rounded-3xl animate-fade-in">
+          <div className="flex-1 flex flex-col justify-center items-center p-6 text-center max-w-sm mx-auto space-y-5">
             <div className="w-20 h-20 rounded-3xl bg-amber-400 text-white flex items-center justify-center mx-auto shadow-md">
               <Trophy className="w-10 h-10" />
             </div>
@@ -564,7 +581,7 @@ export const ParticipantView2: React.FC = () => {
                 Selamat! Anda menyelesaikan game di <strong className="text-slate-900 font-bold">Peringkat #{myRank}</strong> dengan total skor <strong className="text-primary font-mono text-base">{myScore} Pts</strong>.
               </p>
             </div>
-          </Card>
+          </div>
         )}
       </main>
     </div>
