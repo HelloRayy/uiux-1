@@ -11,9 +11,9 @@ import {
   Clock,
   ArrowRight,
   HelpCircle,
-  Check,
   X,
   Repeat,
+  Heart,
 } from 'lucide-react';
 import { Button } from '../components/ui/button';
 import { Card } from '../components/ui/card';
@@ -354,53 +354,52 @@ export const ParticipantView2: React.FC = () => {
                     <Component variant={activeCard} />
                   </div>
 
-                  {/* Card Bottom Area: Title Info + Dating App Floating Action Buttons */}
-                  <div className="pt-2 border-t border-slate-100 space-y-3">
-                    <div className="text-center">
-                      <div className="text-xs font-extrabold text-slate-900">
-                        {activeCard === 'A' ? 'Pilihan: Desain A' : 'Pilihan: Desain B'}
-                      </div>
-                      <div className="text-[10px] text-muted-foreground">
-                        {myVote === activeCard
-                          ? '✅ Anda memilih desain ini'
-                          : 'Geser kartu atau tekan tombol di bawah untuk vote'}
-                      </div>
+                  {/* Card Bottom Area: Title + Subtitle + FAB Button Pair (Identical to reference image) */}
+                  <div className="pt-2 border-t border-slate-100 space-y-2.5">
+                    {/* Title & Subtitle like 'Brigitta Caroline, 24' & 'Creative Designer' */}
+                    <div className="text-center space-y-0.5">
+                      <h3 className="text-base sm:text-lg font-black tracking-tight text-slate-900 leading-tight">
+                        {activeCard === 'A' ? `Desain A: ${currentSlide.optionA.title}` : `Desain B: ${currentSlide.optionB.title}`}
+                      </h3>
+                      <p className="text-xs text-muted-foreground font-medium">
+                        {activeCard === 'A' ? currentSlide.optionA.description : currentSlide.optionB.description}
+                      </p>
                     </div>
 
-                    {/* FLOATING ACTION BUTTONS (LIKE DATING APP X & 💜) */}
-                    <div className="flex items-center justify-center gap-4 pb-1">
-                      {/* Left Button: Switch Card (X / Switch) */}
+                    {/* FAB Button Pair (Identical to dating-app X & 💜 squircle buttons) */}
+                    <div className="flex items-center justify-center gap-3.5 pb-1">
+                      {/* Left FAB: Switch Card (X Squircle) */}
                       <button
                         type="button"
                         onClick={() => setActiveCard(activeCard === 'A' ? 'B' : 'A')}
-                        title={`Ganti ke Desain ${activeCard === 'A' ? 'B' : 'A'}`}
-                        className="w-13 h-13 rounded-2xl bg-slate-100 hover:bg-slate-200 active:scale-90 text-slate-600 flex items-center justify-center border border-slate-300 shadow-md transition-all cursor-pointer"
+                        title={`Lihat Desain ${activeCard === 'A' ? 'B' : 'A'}`}
+                        className="w-14 h-14 rounded-2xl bg-slate-200 hover:bg-slate-300 active:scale-90 text-slate-600 flex items-center justify-center border border-slate-300 shadow-md transition-all cursor-pointer"
                       >
-                        <X className="w-6 h-6 text-slate-500" />
+                        <X className="w-7 h-7 text-slate-600 stroke-[2.5]" />
                       </button>
 
-                      {/* Right Button: Vote Active Card (Heart/Zap/Check) */}
+                      {/* Right FAB: Vote Active Card (Heart / 💜 Squircle) */}
                       <button
                         type="button"
                         onClick={() => handleVote(activeCard)}
-                        title={`Vote Desain ${activeCard}`}
-                        className={`w-15 h-15 rounded-2xl text-white flex items-center justify-center shadow-xl active:scale-90 transition-all cursor-pointer ${
+                        title={`Vote ${activeCard === 'A' ? 'Desain A' : 'Desain B'}`}
+                        className={`w-14 h-14 rounded-2xl text-white flex items-center justify-center shadow-xl active:scale-90 transition-all cursor-pointer ${
                           activeCard === 'A'
                             ? 'bg-primary hover:bg-primary/90 shadow-primary/30 ring-4 ring-primary/20'
-                            : 'bg-indigo-600 hover:bg-indigo-700 shadow-indigo-600/30 ring-4 ring-indigo-500/20'
+                            : 'bg-[#6342ff] hover:bg-[#5233ea] shadow-indigo-500/30 ring-4 ring-indigo-500/20'
                         }`}
                       >
-                        {myVote === activeCard ? (
-                          <Check className="w-8 h-8 stroke-[3]" />
-                        ) : (
-                          <Zap className="w-7 h-7 fill-white" />
-                        )}
+                        <Heart
+                          className={`w-7 h-7 stroke-[2.5] ${
+                            myVote === activeCard ? 'fill-white' : 'fill-transparent'
+                          }`}
+                        />
                       </button>
                     </div>
 
                     {/* Voted Confirmation Notice (If already voted) */}
                     {myVote && (
-                      <div className="flex items-center justify-between text-[11px] bg-slate-50 p-2 rounded-xl border border-slate-200">
+                      <div className="flex items-center justify-between text-[11px] bg-slate-50 px-3 py-1.5 rounded-xl border border-slate-200 animate-fade-in">
                         <span className="font-semibold text-emerald-700 flex items-center gap-1">
                           <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
                           <span>Pilihan: Desain {myVote}</span>
