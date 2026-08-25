@@ -13,6 +13,7 @@ import {
   HelpCircle,
   X,
   Heart,
+  MapPin,
 } from 'lucide-react';
 import { Button } from '../components/ui/button';
 import { Card } from '../components/ui/card';
@@ -40,10 +41,6 @@ export const ParticipantView2: React.FC = () => {
   const [activeCard, setActiveCard] = useState<'A' | 'B'>('A');
   const [isIdle, setIsIdle] = useState(false);
   const idleTimerRef = useRef<number | null>(null);
-
-  const slideInfoText = roomState.status === 'TUTORIAL'
-    ? 'Tutorial • Pemanasan'
-    : `Ronde ${(roomState.currentSlideIndex || 0) + 1} dari ${totalSlides} • ${currentSlide.topic}`;
 
   // Embla Carousel Engine for Fullscreen Swipe
   const [emblaRef, emblaApi] = useEmblaCarousel({
@@ -214,92 +211,69 @@ export const ParticipantView2: React.FC = () => {
   }
 
   // =========================================================================
-  // 2. FULLSCREEN IMMERSIVE MOBILE GAME VIEW (NO POPUP / FULL EDGE-TO-EDGE)
+  // 2. FULLSCREEN IMMERSIVE MOBILE GAME VIEW (ACCURATELY MATCHING REFERENCE)
   // =========================================================================
   return (
-    <div className="h-[100dvh] w-full bg-white text-slate-900 flex flex-col justify-between font-sans relative overflow-hidden select-none">
-      {/* Top Floating App Bar with Idle Fade-Out */}
+    <div className="h-[100dvh] w-full bg-slate-900 text-white flex flex-col justify-between font-sans relative overflow-hidden select-none">
+      {/* ----------------------------------------------------------------- */}
+      {/* TOP HEADER BAR (REFERENCE MATCH: Avatar + Hello Name! + Location) */}
+      {/* ----------------------------------------------------------------- */}
       <header
-        className={`fixed top-0 left-0 right-0 z-40 px-4 py-2.5 bg-white/90 backdrop-blur-md border-b border-slate-200/80 flex items-center justify-between transition-opacity duration-300 ${
+        className={`fixed top-0 left-0 right-0 z-40 px-4 py-3 bg-slate-950/80 backdrop-blur-md flex items-center justify-between transition-opacity duration-300 ${
           isIdle && (roomState.status === 'VOTING' || roomState.status === 'TUTORIAL') ? 'opacity-20 hover:opacity-100' : 'opacity-100'
         }`}
       >
-        <div className="flex items-center gap-2">
-          <div className="w-7 h-7 rounded-full bg-primary/10 text-primary font-bold text-xs flex items-center justify-center border border-primary/20">
+        {/* User Profile Avatar & Name */}
+        <div className="flex items-center gap-2.5">
+          <div className="w-10 h-10 rounded-full bg-gradient-to-tr from-primary to-indigo-500 text-white font-black text-sm flex items-center justify-center shadow-md border-2 border-slate-700">
             {myParticipant.nickname.slice(0, 2).toUpperCase()}
           </div>
-          <div className="flex flex-col">
-            <span className="text-xs font-bold text-slate-900 truncate max-w-[120px]">
-              {myParticipant.nickname}
+          <div className="flex flex-col text-left">
+            <span className="text-sm font-extrabold text-white tracking-tight leading-none">
+              Hello {myParticipant.nickname}!
             </span>
-            <span className="flex items-center gap-1 text-[9px] text-slate-500 font-mono">
-              <span className={`w-1.5 h-1.5 rounded-full ${isFirebase ? 'bg-emerald-500 animate-pulse' : 'bg-amber-500'}`} />
-              <span>{isFirebase ? 'Cloud' : 'Local'}</span>
+            <span className="flex items-center gap-1 text-[11px] text-slate-400 font-medium pt-1">
+              <MapPin className="w-3 h-3 text-primary" />
+              <span>Room UI/UX 2.0</span>
+              <span className={`w-1.5 h-1.5 rounded-full ml-0.5 ${isFirebase ? 'bg-emerald-400 animate-pulse' : 'bg-amber-400'}`} />
             </span>
           </div>
         </div>
 
-        {/* Active Card Quick Switcher in Header */}
-        {(roomState.status === 'VOTING' || roomState.status === 'TUTORIAL') && (
-          <div className="flex items-center gap-1 bg-slate-100 p-0.5 rounded-full border border-slate-200">
-            <button
-              type="button"
-              onClick={() => scrollToCard('A')}
-              className={`px-2.5 py-0.5 rounded-full text-[10px] font-bold transition cursor-pointer ${
-                activeCard === 'A'
-                  ? 'bg-primary text-white shadow-2xs'
-                  : 'text-slate-500 hover:text-slate-800'
-              }`}
-            >
-              Desain A
-            </button>
-            <button
-              type="button"
-              onClick={() => scrollToCard('B')}
-              className={`px-2.5 py-0.5 rounded-full text-[10px] font-bold transition cursor-pointer ${
-                activeCard === 'B'
-                  ? 'bg-indigo-600 text-white shadow-2xs'
-                  : 'text-slate-500 hover:text-slate-800'
-              }`}
-            >
-              Desain B
-            </button>
-          </div>
-        )}
-
-        {/* Realtime Player Score & Rank Badge */}
+        {/* Right Circular Score / Rank Button */}
         <div className="flex items-center gap-2">
-          <Badge variant="secondary" className="font-mono text-xs font-bold gap-1 bg-slate-50 border border-slate-200 text-slate-800 shadow-2xs">
-            <Trophy className="w-3.5 h-3.5 text-amber-500" />
-            <span>{myScore} Pts</span>
-          </Badge>
+          <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-slate-800/90 border border-slate-700 text-slate-200 shadow-sm">
+            <Trophy className="w-3.5 h-3.5 text-amber-400" />
+            <span className="font-mono font-bold text-xs">{myScore} Pts</span>
+          </div>
+
           {myRank > 0 && (
-            <Badge variant="outline" className="font-mono text-[10px] font-semibold text-primary bg-primary/5 border-primary/20">
-              Rank #{myRank}
-            </Badge>
+            <div className="w-8 h-8 rounded-full bg-primary/20 border border-primary/40 text-primary font-bold text-xs flex items-center justify-center">
+              #{myRank}
+            </div>
           )}
         </div>
       </header>
 
       {/* Main Fullscreen Body */}
-      <main className="flex-1 w-full h-full overflow-hidden flex flex-col justify-between">
+      <main className="flex-1 w-full h-full overflow-hidden flex flex-col justify-between pt-16">
         {/* ========================================================================= */}
         {/* STATE A: LOBBY STANDBY                                                    */}
         {/* ========================================================================= */}
         {roomState.status === 'LOBBY' && (
           <div className="flex-1 flex flex-col justify-center items-center p-6 text-center max-w-sm mx-auto space-y-4">
-            <div className="w-16 h-16 rounded-3xl bg-primary/10 text-primary flex items-center justify-center mx-auto animate-pulse">
+            <div className="w-16 h-16 rounded-3xl bg-primary/20 text-primary flex items-center justify-center mx-auto animate-pulse">
               <Clock className="w-8 h-8" />
             </div>
             <div className="space-y-1">
-              <h3 className="text-xl font-bold text-slate-900">
+              <h3 className="text-xl font-bold text-white">
                 Menunggu Host Memulai Game...
               </h3>
-              <p className="text-xs text-muted-foreground leading-relaxed">
+              <p className="text-xs text-slate-400 leading-relaxed">
                 Anda sudah terhubung. Perhatikan layar proyektor saat sesi dimulai.
               </p>
             </div>
-            <Badge variant="secondary" className="font-mono text-xs bg-slate-100 text-slate-700 px-3 py-1">
+            <Badge variant="secondary" className="font-mono text-xs bg-slate-800 text-slate-300 px-3 py-1">
               {totalParticipants} Peserta Siap
             </Badge>
           </div>
@@ -314,26 +288,34 @@ export const ParticipantView2: React.FC = () => {
               {/* ------------------------------------------------------------- */}
               {/* SLIDE A: FULLSCREEN DESAIN A                                  */}
               {/* ------------------------------------------------------------- */}
-              <div className="min-w-0 shrink-0 grow-0 basis-full h-full w-full flex flex-col justify-between pt-14 pb-3 px-4 bg-white relative">
+              <div className="min-w-0 shrink-0 grow-0 basis-full h-full w-full flex flex-col justify-between p-4 pb-3 bg-white text-slate-900 relative rounded-t-[32px]">
+                {/* Top-Left Pill Badge ("Match 86%" Replica) */}
+                <div className="absolute top-4 left-4 z-30">
+                  <div className="bg-slate-900/90 text-white text-[11px] font-bold px-3 py-1 rounded-full shadow-md backdrop-blur-md flex items-center gap-1.5">
+                    <span>Match {roomState.status === 'TUTORIAL' ? '100%' : '88%'}</span>
+                    <span className="text-primary">• {roomState.status === 'TUTORIAL' ? 'Tutorial' : `Ronde ${(roomState.currentSlideIndex || 0) + 1}/${totalSlides}`}</span>
+                  </div>
+                </div>
+
+                {/* Right Edge Slide Indicator Capsule */}
+                <div className="absolute right-2.5 top-1/2 -translate-y-1/2 z-30 flex flex-col gap-1 items-center">
+                  <div className={`w-1.5 h-6 rounded-full transition-all ${activeCard === 'A' ? 'bg-primary shadow-xs' : 'bg-slate-300'}`} />
+                  <div className={`w-1.5 h-2 rounded-full transition-all ${activeCard === 'B' ? 'bg-indigo-600 shadow-xs' : 'bg-slate-300'}`} />
+                </div>
+
                 {/* Center Visual Mockup Canvas (Full Height Flex) */}
-                <div className="flex-1 w-full my-auto flex items-center justify-center overflow-y-auto py-2">
+                <div className="flex-1 w-full my-auto flex items-center justify-center overflow-y-auto py-8">
                   <div className="w-full max-w-sm mx-auto">
                     <Component variant="A" />
                   </div>
                 </div>
 
-                {/* Bottom Area: Title + Subtitle + FAB Button Pair (Image 2 Replica) */}
+                {/* Bottom Area: Title with Green Dot + Subtitle + FAB Buttons (Image 2 Replica) */}
                 <div className="w-full max-w-sm mx-auto pt-2 space-y-2.5">
-                  <div className="text-center space-y-1">
-                    {/* Slide Info Chip above title */}
-                    <div className="flex items-center justify-center">
-                      <span className="text-[11px] font-bold text-primary bg-primary/10 px-3 py-0.5 rounded-full border border-primary/20 shadow-2xs">
-                        {slideInfoText}
-                      </span>
-                    </div>
-
-                    <h3 className="text-base sm:text-lg font-black tracking-tight text-slate-900 leading-tight">
-                      Desain A: {currentSlide.optionA.title}
+                  <div className="text-left space-y-0.5 pl-1">
+                    <h3 className="text-lg sm:text-xl font-black tracking-tight text-slate-900 flex items-center gap-2">
+                      <span>Desain A: {currentSlide.optionA.title}</span>
+                      <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse shrink-0" />
                     </h3>
                     <p className="text-xs text-muted-foreground font-medium truncate">
                       {currentSlide.optionA.description}
@@ -387,26 +369,34 @@ export const ParticipantView2: React.FC = () => {
               {/* ------------------------------------------------------------- */}
               {/* SLIDE B: FULLSCREEN DESAIN B                                  */}
               {/* ------------------------------------------------------------- */}
-              <div className="min-w-0 shrink-0 grow-0 basis-full h-full w-full flex flex-col justify-between pt-14 pb-3 px-4 bg-white relative">
+              <div className="min-w-0 shrink-0 grow-0 basis-full h-full w-full flex flex-col justify-between p-4 pb-3 bg-white text-slate-900 relative rounded-t-[32px]">
+                {/* Top-Left Pill Badge ("Match 86%" Replica) */}
+                <div className="absolute top-4 left-4 z-30">
+                  <div className="bg-slate-900/90 text-white text-[11px] font-bold px-3 py-1 rounded-full shadow-md backdrop-blur-md flex items-center gap-1.5">
+                    <span>Match {roomState.status === 'TUTORIAL' ? '100%' : '98%'}</span>
+                    <span className="text-indigo-400">• {roomState.status === 'TUTORIAL' ? 'Tutorial' : `Ronde ${(roomState.currentSlideIndex || 0) + 1}/${totalSlides}`}</span>
+                  </div>
+                </div>
+
+                {/* Right Edge Slide Indicator Capsule */}
+                <div className="absolute right-2.5 top-1/2 -translate-y-1/2 z-30 flex flex-col gap-1 items-center">
+                  <div className={`w-1.5 h-2 rounded-full transition-all ${activeCard === 'A' ? 'bg-primary shadow-xs' : 'bg-slate-300'}`} />
+                  <div className={`w-1.5 h-6 rounded-full transition-all ${activeCard === 'B' ? 'bg-indigo-600 shadow-xs' : 'bg-slate-300'}`} />
+                </div>
+
                 {/* Center Visual Mockup Canvas (Full Height Flex) */}
-                <div className="flex-1 w-full my-auto flex items-center justify-center overflow-y-auto py-2">
+                <div className="flex-1 w-full my-auto flex items-center justify-center overflow-y-auto py-8">
                   <div className="w-full max-w-sm mx-auto">
                     <Component variant="B" />
                   </div>
                 </div>
 
-                {/* Bottom Area: Title + Subtitle + FAB Button Pair (Image 2 Replica) */}
+                {/* Bottom Area: Title with Green Dot + Subtitle + FAB Buttons (Image 2 Replica) */}
                 <div className="w-full max-w-sm mx-auto pt-2 space-y-2.5">
-                  <div className="text-center space-y-1">
-                    {/* Slide Info Chip above title */}
-                    <div className="flex items-center justify-center">
-                      <span className="text-[11px] font-bold text-indigo-600 bg-indigo-50 px-3 py-0.5 rounded-full border border-indigo-200 shadow-2xs">
-                        {slideInfoText}
-                      </span>
-                    </div>
-
-                    <h3 className="text-base sm:text-lg font-black tracking-tight text-slate-900 leading-tight">
-                      Desain B: {currentSlide.optionB.title}
+                  <div className="text-left space-y-0.5 pl-1">
+                    <h3 className="text-lg sm:text-xl font-black tracking-tight text-slate-900 flex items-center gap-2">
+                      <span>Desain B: {currentSlide.optionB.title}</span>
+                      <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse shrink-0" />
                     </h3>
                     <p className="text-xs text-muted-foreground font-medium truncate">
                       {currentSlide.optionB.description}
@@ -464,7 +454,7 @@ export const ParticipantView2: React.FC = () => {
         {/* STATE C: REVEAL & FEEDBACK                                                */}
         {/* ========================================================================= */}
         {roomState.status === 'REVEAL' && (
-          <div className="flex-1 flex flex-col justify-center items-center p-6 text-center max-w-sm mx-auto space-y-4">
+          <div className="flex-1 flex flex-col justify-center items-center p-6 text-center max-w-sm mx-auto space-y-4 bg-white text-slate-900 rounded-3xl m-4 shadow-xl">
             <div
               className={`w-16 h-16 rounded-3xl flex items-center justify-center mx-auto shadow-sm ${
                 isCorrect
@@ -510,7 +500,7 @@ export const ParticipantView2: React.FC = () => {
         {/* STATE D: LEADERBOARD DISPLAY ON MOBILE                                    */}
         {/* ========================================================================= */}
         {roomState.status === 'LEADERBOARD' && (
-          <div className="flex-1 flex flex-col justify-center items-center p-6 text-center max-w-sm mx-auto space-y-5">
+          <div className="flex-1 flex flex-col justify-center items-center p-6 text-center max-w-sm mx-auto space-y-5 bg-white text-slate-900 rounded-3xl m-4 shadow-xl">
             <div className="w-16 h-16 rounded-3xl bg-amber-100 text-amber-600 border border-amber-300 flex items-center justify-center mx-auto shadow-sm">
               <Trophy className="w-9 h-9" />
             </div>
@@ -537,7 +527,7 @@ export const ParticipantView2: React.FC = () => {
         {/* STATE E: FINISHED                                                         */}
         {/* ========================================================================= */}
         {roomState.status === 'FINISHED' && (
-          <div className="flex-1 flex flex-col justify-center items-center p-6 text-center max-w-sm mx-auto space-y-5">
+          <div className="flex-1 flex flex-col justify-center items-center p-6 text-center max-w-sm mx-auto space-y-5 bg-white text-slate-900 rounded-3xl m-4 shadow-xl">
             <div className="w-20 h-20 rounded-3xl bg-amber-400 text-white flex items-center justify-center mx-auto shadow-md">
               <Trophy className="w-10 h-10" />
             </div>
