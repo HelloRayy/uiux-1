@@ -24,6 +24,7 @@ import { Card } from '../components/ui/card';
 import { Badge } from '../components/ui/badge';
 import { Table, TableHeader, TableBody, TableHead, TableRow, TableCell } from '../components/ui/table';
 import { Avatar, AvatarFallback } from '../components/ui/avatar';
+import { FirebaseSetupModal } from '../components/FirebaseSetupModal';
 
 export const HostView2: React.FC = () => {
   const {
@@ -37,6 +38,7 @@ export const HostView2: React.FC = () => {
     percentB,
     totalParticipants,
     leaderboard,
+    isFirebase,
     openTutorial,
     endRound,
     showLeaderboard,
@@ -47,6 +49,7 @@ export const HostView2: React.FC = () => {
   } = useGame2();
 
   const [showQRCode, setShowQRCode] = useState(false);
+  const [showFirebaseModal, setShowFirebaseModal] = useState(false);
 
   const joinUrl = typeof window !== 'undefined'
     ? `${window.location.origin}/uiux-2/play`
@@ -123,6 +126,21 @@ export const HostView2: React.FC = () => {
           </div>
 
           <div className="flex items-center gap-3">
+            {/* Firebase Connection Status Badge */}
+            <button
+              type="button"
+              onClick={() => setShowFirebaseModal(true)}
+              className={`flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-semibold border transition cursor-pointer ${
+                isFirebase
+                  ? 'bg-emerald-50 text-emerald-700 border-emerald-200 hover:bg-emerald-100'
+                  : 'bg-amber-50 text-amber-700 border-amber-200 hover:bg-amber-100'
+              }`}
+              title="Klik untuk konfigurasi Firebase Realtime DB"
+            >
+              <span className={`w-2 h-2 rounded-full ${isFirebase ? 'bg-emerald-500 animate-pulse' : 'bg-amber-500'}`} />
+              <span>{isFirebase ? 'Cloud Online' : 'Local Mode'}</span>
+            </button>
+
             <div className="flex items-center gap-2 px-3 py-1 bg-muted rounded-md text-xs font-semibold text-muted-foreground border">
               <Users className="w-3.5 h-3.5 text-primary" />
               <span>{totalParticipants} Peserta</span>
@@ -643,6 +661,11 @@ export const HostView2: React.FC = () => {
             </Button>
           </div>
         </div>
+      )}
+
+      {/* FIREBASE SETUP MODAL FOR GAME 2 */}
+      {showFirebaseModal && (
+        <FirebaseSetupModal onClose={() => setShowFirebaseModal(false)} />
       )}
     </div>
   );

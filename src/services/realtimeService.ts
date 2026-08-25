@@ -512,47 +512,111 @@ export class RealtimeService {
     }
   }
 
-  public async showTutorial2(roomId: string = DEFAULT_ROOM_2_ID) {
-    const now = Date.now();
-    const updates = {
-      status: 'TUTORIAL' as Game2Status,
-      currentSlideIndex: 0,
-      timerRunning: false,
-      timerRemaining: 30,
-      timerStartedAt: undefined,
-      votes: {},
-      updatedAt: now,
-    };
-
+  public async cancelVote2(participantId: string, roomId: string = DEFAULT_ROOM_2_ID) {
     if (this.isFirebase && this.db) {
-      const roomRef = ref(this.db, `rooms/${roomId}`);
-      await update(roomRef, updates);
+      const vRef = ref(this.db, `rooms/${roomId}/votes/${participantId}`);
+      await set(vRef, null);
     } else {
       const state = getLocalRoom2State();
-      const nextState = { ...state, ...updates };
+      const nextVotes = { ...state.votes };
+      delete nextVotes[participantId];
+      const nextState = {
+        ...state,
+        votes: nextVotes,
+        updatedAt: Date.now(),
+      };
+      saveLocalRoom2State(nextState);
+    }
+  }
+
+  public async fetchRoom2State(roomId: string = DEFAULT_ROOM_2_ID): Promise<Game2RoomState> {
+    if (this.isFirebase && this.db) {
+      try {
+        const roomRef = ref(this.db, `rooms/${roomId}`);
+        const snapshot = await get(roomRef);
+        if (snapshot.exists()) {
+          const val = snapshot.val();
+          const baseState: Game2RoomState = {
+            roomId: val.roomId || roomId,
+            status: val.status || 'LOBBY',
+            currentSlideIndex: typeof val.currentSlideIndex === 'number' ? val.currentSlideIndex : 0,
+            timerDuration: val.timerDuration || 30,
+            timerRemaining: typeof val.timerRemaining === 'number' ? val.timerRemaining : 30,
+            timerRunning: !!val.timerRunning,
+            timerStartedAt: val.timerStartedAt,
+            participants: val.participants || {},
+            votes: val.votes || {},
+            scores: val.scores || {},
+            lastRoundScores: val.lastRoundScores || {},
+            updatedAt: val.updatedAt || Date.now(),
+          };
+          return computeAccurateState2(baseState);
+        }
+      } catch (err) {
+        console.warn('Failed to fetch room2 state:', err);
+      }
+    }
+    return getLocalRoom2State();
+  }
+
+  public async showTutorial2(roomId: string = DEFAULT_ROOM_2_ID) {
+    const now = Date.now();
+    if (this.isFirebase && this.db) {
+      const roomRef = ref(this.db, `rooms/${roomId}`);
+      await update(roomRef, {
+        status: 'TUTORIAL' as Game2Status,
+        currentSlideIndex: 0,
+        timerRunning: false,
+        timerRemaining: 30,
+        timerStartedAt: null,
+        votes: null,
+        lastRoundScores: null,
+        updatedAt: now,
+      });
+    } else {
+      const state = getLocalRoom2State();
+      const nextState = {
+        ...state,
+        status: 'TUTORIAL' as Game2Status,
+        currentSlideIndex: 0,
+        timerRunning: false,
+        timerRemaining: 30,
+        timerStartedAt: undefined,
+        votes: {},
+        lastRoundScores: {},
+        updatedAt: now,
+      };
       saveLocalRoom2State(nextState);
     }
   }
 
   public async startVoting2(duration: number = 30, roomId: string = DEFAULT_ROOM_2_ID) {
     const now = Date.now();
-    const updates = {
-      status: 'VOTING' as Game2Status,
-      timerDuration: duration,
-      timerRemaining: duration,
-      timerRunning: true,
-      timerStartedAt: now,
-      votes: {}, // reset votes for new round
-      lastRoundScores: {},
-      updatedAt: now,
-    };
-
     if (this.isFirebase && this.db) {
       const roomRef = ref(this.db, `rooms/${roomId}`);
-      await update(roomRef, updates);
+      await update(roomRef, {
+        status: 'VOTING' as Game2Status,
+        timerDuration: duration,
+        timerRemaining: duration,
+        timerRunning: true,
+        timerStartedAt: now,
+        votes: null, // Clear previous votes in Firebase
+        lastRoundScores: null,
+        updatedAt: now,
+      });
     } else {
       const state = getLocalRoom2State();
-      const nextState = { ...state, ...updates };
+      const nextState = {
+        ...state,
+        status: 'VOTING' as Game2Status,
+        timerDuration: duration,
+        timerRemaining: duration,
+        timerRunning: true,
+        timerStartedAt: now,
+        votes: {},
+        lastRoundScores: {},
+        updatedAt: now,
+      };
       saveLocalRoom2State(nextState);
     }
   }
@@ -577,10 +641,8 @@ export class RealtimeService {
 
     Object.values(votes).forEach((vote) => {
       if (vote.option === correctOption) {
-        // Speed calculation: (0 to duration seconds)
         const elapsed = Math.max(0, Math.min(duration, (vote.timestamp - timerStartedAt) / 1000));
         const speedRatio = 1 - elapsed / duration;
-        // Points: 500 base + up to 500 speed bonus = 500 to 1000 pts
         const earned = Math.max(500, Math.round(500 + 500 * speedRatio));
         scores[vote.participantId] = (scores[vote.participantId] || 0) + earned;
         lastRoundScores[vote.participantId] = earned;
@@ -626,48 +688,66 @@ export class RealtimeService {
 
   public async nextSlide2(nextIndex: number, roomId: string = DEFAULT_ROOM_2_ID, autoStartVoting: boolean = true) {
     const now = Date.now();
-    const updates = {
-      status: (autoStartVoting ? 'VOTING' : 'LOBBY') as Game2Status,
-      currentSlideIndex: nextIndex,
-      timerRunning: autoStartVoting,
-      timerDuration: 30,
-      timerRemaining: 30,
-      timerStartedAt: autoStartVoting ? now : undefined,
-      votes: {},
-      lastRoundScores: {},
-      updatedAt: now,
-    };
-
     if (this.isFirebase && this.db) {
       const roomRef = ref(this.db, `rooms/${roomId}`);
-      await update(roomRef, updates);
+      await update(roomRef, {
+        status: (autoStartVoting ? 'VOTING' : 'LOBBY') as Game2Status,
+        currentSlideIndex: nextIndex,
+        timerRunning: autoStartVoting,
+        timerDuration: 30,
+        timerRemaining: 30,
+        timerStartedAt: autoStartVoting ? now : null,
+        votes: null,
+        lastRoundScores: null,
+        updatedAt: now,
+      });
     } else {
       const state = getLocalRoom2State();
-      const nextState = { ...state, ...updates };
+      const nextState = {
+        ...state,
+        status: (autoStartVoting ? 'VOTING' : 'LOBBY') as Game2Status,
+        currentSlideIndex: nextIndex,
+        timerRunning: autoStartVoting,
+        timerDuration: 30,
+        timerRemaining: 30,
+        timerStartedAt: autoStartVoting ? now : undefined,
+        votes: {},
+        lastRoundScores: {},
+        updatedAt: now,
+      };
       saveLocalRoom2State(nextState);
     }
   }
 
   public async prevSlide2(prevIndex: number, roomId: string = DEFAULT_ROOM_2_ID, autoStartVoting: boolean = true) {
     const now = Date.now();
-    const updates = {
-      status: (autoStartVoting ? 'VOTING' : 'LOBBY') as Game2Status,
-      currentSlideIndex: Math.max(0, prevIndex),
-      timerRunning: autoStartVoting,
-      timerDuration: 30,
-      timerRemaining: 30,
-      timerStartedAt: autoStartVoting ? now : undefined,
-      votes: {},
-      lastRoundScores: {},
-      updatedAt: now,
-    };
-
     if (this.isFirebase && this.db) {
       const roomRef = ref(this.db, `rooms/${roomId}`);
-      await update(roomRef, updates);
+      await update(roomRef, {
+        status: (autoStartVoting ? 'VOTING' : 'LOBBY') as Game2Status,
+        currentSlideIndex: Math.max(0, prevIndex),
+        timerRunning: autoStartVoting,
+        timerDuration: 30,
+        timerRemaining: 30,
+        timerStartedAt: autoStartVoting ? now : null,
+        votes: null,
+        lastRoundScores: null,
+        updatedAt: now,
+      });
     } else {
       const state = getLocalRoom2State();
-      const nextState = { ...state, ...updates };
+      const nextState = {
+        ...state,
+        status: (autoStartVoting ? 'VOTING' : 'LOBBY') as Game2Status,
+        currentSlideIndex: Math.max(0, prevIndex),
+        timerRunning: autoStartVoting,
+        timerDuration: 30,
+        timerRemaining: 30,
+        timerStartedAt: autoStartVoting ? now : undefined,
+        votes: {},
+        lastRoundScores: {},
+        updatedAt: now,
+      };
       saveLocalRoom2State(nextState);
     }
   }

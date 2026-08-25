@@ -26,14 +26,21 @@ export const ParticipantView2: React.FC = () => {
     myScore,
     myLastEarned,
     myRank,
+    isFirebase,
     totalParticipants,
     joinAsParticipant,
     submitMyVote,
+    cancelMyVote,
   } = useGame2();
 
   const [nicknameInput, setNicknameInput] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [activePreviewTab, setActivePreviewTab] = useState<'A' | 'B'>('A');
+
+  // Auto-reset preview tab to A when slide changes
+  React.useEffect(() => {
+    setActivePreviewTab('A');
+  }, [currentSlide.id]);
 
   const handleJoin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -44,7 +51,7 @@ export const ParticipantView2: React.FC = () => {
   };
 
   const handleVote = async (option: VoteOption) => {
-    if (!myParticipant || roomState.status !== 'VOTING' || myVote) return;
+    if (!myParticipant || roomState.status !== 'VOTING') return;
     await submitMyVote(option);
   };
 
@@ -118,9 +125,15 @@ export const ParticipantView2: React.FC = () => {
           <div className="w-7 h-7 rounded-full bg-primary/10 text-primary font-bold text-xs flex items-center justify-center border border-primary/20">
             {myParticipant.nickname.slice(0, 2).toUpperCase()}
           </div>
-          <span className="text-xs font-bold text-foreground truncate max-w-[120px]">
-            {myParticipant.nickname}
-          </span>
+          <div className="flex flex-col">
+            <span className="text-xs font-bold text-foreground truncate max-w-[120px]">
+              {myParticipant.nickname}
+            </span>
+            <span className="flex items-center gap-1 text-[9px] text-muted-foreground font-mono">
+              <span className={`w-1.5 h-1.5 rounded-full ${isFirebase ? 'bg-emerald-500 animate-pulse' : 'bg-amber-500'}`} />
+              <span>{isFirebase ? 'Cloud' : 'Local'}</span>
+            </span>
+          </div>
         </div>
 
         {/* Realtime Player Score & Rank Badge */}
@@ -215,7 +228,7 @@ export const ParticipantView2: React.FC = () => {
             {/* Touch Pads Controller */}
             <div className="space-y-2.5 pt-2">
               {myVote ? (
-                <div className="p-4 bg-primary/10 border border-primary/20 rounded-2xl text-center space-y-1.5 animate-fade-in">
+                <div className="p-4 bg-primary/10 border border-primary/20 rounded-2xl text-center space-y-2.5 animate-fade-in">
                   <div className="flex items-center justify-center gap-1.5 text-primary font-bold text-xs">
                     <CheckCircle2 className="w-4 h-4" />
                     <span>Pilihan Anda ({myVote === 'A' ? 'Desain A' : 'Desain B'}) Tercatat!</span>
@@ -223,6 +236,23 @@ export const ParticipantView2: React.FC = () => {
                   <p className="text-[11px] text-muted-foreground">
                     Menunggu ronde selesai untuk perhitungan skor kecepatan...
                   </p>
+                  <div className="flex items-center justify-center gap-3 pt-1 border-t border-primary/15">
+                    <button
+                      type="button"
+                      onClick={() => handleVote(myVote === 'A' ? 'B' : 'A')}
+                      className="text-xs font-bold text-primary hover:underline cursor-pointer"
+                    >
+                      Ganti ke Desain {myVote === 'A' ? 'B' : 'A'} ➔
+                    </button>
+                    <span className="text-slate-300">|</span>
+                    <button
+                      type="button"
+                      onClick={cancelMyVote}
+                      className="text-xs font-semibold text-rose-500 hover:underline cursor-pointer"
+                    >
+                      Batal Pilih
+                    </button>
+                  </div>
                 </div>
               ) : (
                 <>

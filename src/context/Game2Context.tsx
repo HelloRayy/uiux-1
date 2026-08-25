@@ -28,6 +28,7 @@ interface Game2ContextType {
   // User Actions
   joinAsParticipant: (nickname: string) => Promise<void>;
   submitMyVote: (option: VoteOption) => Promise<void>;
+  cancelMyVote: () => Promise<void>;
   // Host / Admin Actions
   openTutorial: () => Promise<void>;
   startRound: (duration?: number) => Promise<void>;
@@ -145,6 +146,36 @@ export const Game2Provider: React.FC<{ children: React.ReactNode }> = ({ childre
         realtimeService.nextSlide2(targetIdx, 'UIUX_2', true);
       }
     }
+  }, []);
+
+  // Visibility change & focus event listener for instant re-sync
+  useEffect(() => {
+    const syncNow = async () => {
+      try {
+        const fresh = await realtimeService.fetchRoom2State('UIUX_2');
+        setRoomState(fresh);
+      } catch {
+        // ignore
+      }
+    };
+
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === 'visible') {
+        syncNow();
+      }
+    };
+
+    const handleFocus = () => {
+      syncNow();
+    };
+
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+    window.addEventListener('focus', handleFocus);
+
+    return () => {
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
+      window.removeEventListener('focus', handleFocus);
+    };
   }, []);
 
   // Current Slide
@@ -301,9 +332,15 @@ export const Game2Provider: React.FC<{ children: React.ReactNode }> = ({ childre
   };
 
   const submitMyVote = async (option: VoteOption) => {
-    if (!myParticipant) return;
+    if (!myParticipant || roomState.status !== 'VOTING') return;
     soundEffects.playVoteSubmitted();
     await realtimeService.submitVote2(myParticipant.id, option, roomState.roomId);
+  };
+
+  const cancelMyVote = async () => {
+    if (!myParticipant || roomState.status !== 'VOTING') return;
+    soundEffects.playVoteSubmitted();
+    await realtimeService.cancelVote2(myParticipant.id, roomState.roomId);
   };
 
   // Host Actions
@@ -428,6 +465,7 @@ export const Game2Provider: React.FC<{ children: React.ReactNode }> = ({ childre
         leaderboard,
         joinAsParticipant,
         submitMyVote,
+        cancelMyVote,
         openTutorial,
         startRound,
         endRound,
