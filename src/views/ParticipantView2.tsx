@@ -12,7 +12,6 @@ import {
   ArrowRight,
   HelpCircle,
   X,
-  Repeat,
   Heart,
 } from 'lucide-react';
 import { Button } from '../components/ui/button';
@@ -311,31 +310,6 @@ export const ParticipantView2: React.FC = () => {
               {/* SLIDE A: FULLSCREEN DESAIN A                                  */}
               {/* ------------------------------------------------------------- */}
               <div className="min-w-0 shrink-0 grow-0 basis-full h-full w-full flex flex-col justify-between pt-14 pb-3 px-4 bg-white relative">
-                {/* Top Info Bar */}
-                <div
-                  className={`flex items-center justify-between pb-1 transition-opacity duration-300 ${
-                    isIdle ? 'opacity-20 hover:opacity-100' : 'opacity-100'
-                  }`}
-                >
-                  <div className="flex items-center gap-1.5">
-                    <span className="w-6 h-6 rounded-lg bg-primary text-white font-bold text-xs flex items-center justify-center shadow-xs">
-                      A
-                    </span>
-                    <span className="text-xs font-bold text-slate-800">
-                      {currentSlide.topic}
-                    </span>
-                  </div>
-
-                  <button
-                    type="button"
-                    onClick={() => scrollToCard('B')}
-                    className="bg-slate-100 hover:bg-slate-200 text-slate-700 px-3 py-1 rounded-full text-xs font-bold flex items-center gap-1.5 cursor-pointer border border-slate-200 transition"
-                  >
-                    <span>Buka Desain B</span>
-                    <Repeat className="w-3.5 h-3.5 text-primary" />
-                  </button>
-                </div>
-
                 {/* Center Visual Mockup Canvas (Full Height Flex) */}
                 <div className="flex-1 w-full my-auto flex items-center justify-center overflow-y-auto py-2">
                   <div className="w-full max-w-sm mx-auto">
@@ -402,31 +376,6 @@ export const ParticipantView2: React.FC = () => {
               {/* SLIDE B: FULLSCREEN DESAIN B                                  */}
               {/* ------------------------------------------------------------- */}
               <div className="min-w-0 shrink-0 grow-0 basis-full h-full w-full flex flex-col justify-between pt-14 pb-3 px-4 bg-white relative">
-                {/* Top Info Bar */}
-                <div
-                  className={`flex items-center justify-between pb-1 transition-opacity duration-300 ${
-                    isIdle ? 'opacity-20 hover:opacity-100' : 'opacity-100'
-                  }`}
-                >
-                  <div className="flex items-center gap-1.5">
-                    <span className="w-6 h-6 rounded-lg bg-indigo-600 text-white font-bold text-xs flex items-center justify-center shadow-xs">
-                      B
-                    </span>
-                    <span className="text-xs font-bold text-slate-800">
-                      {currentSlide.topic}
-                    </span>
-                  </div>
-
-                  <button
-                    type="button"
-                    onClick={() => scrollToCard('A')}
-                    className="bg-slate-100 hover:bg-slate-200 text-slate-700 px-3 py-1 rounded-full text-xs font-bold flex items-center gap-1.5 cursor-pointer border border-slate-200 transition"
-                  >
-                    <span>Buka Desain A</span>
-                    <Repeat className="w-3.5 h-3.5 text-indigo-600" />
-                  </button>
-                </div>
-
                 {/* Center Visual Mockup Canvas (Full Height Flex) */}
                 <div className="flex-1 w-full my-auto flex items-center justify-center overflow-y-auto py-2">
                   <div className="w-full max-w-sm mx-auto">
